@@ -1,0 +1,70 @@
+.notificaciones-container {
+  padding: 30px;
+  max-width: 700px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.notificaciones-container h1 {
+  color: #384179;
+  margin-bottom: 20px;
+}
+
+.notificaciones-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notificacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f8f8;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-left: 5px solid #384179;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.notificacion.leida {
+  background: #e0e0e0;
+  opacity: 0.8;
+}
+
+.contenido p {
+  margin: 0;
+  font-size: 15px;
+  color: #333;
+}
+
+.fecha {
+  font-size: 13px;
+  color: #777;
+}
+
+.acciones {
+  margin-left: 20px;
+}
+
+.boton-leer {
+  background-color: #384179;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.boton-leer:hover {
+  background-color: #2f3662;
+}
+
+.estado-leido {
+  color: green;
+  font-weight: bold;
+}

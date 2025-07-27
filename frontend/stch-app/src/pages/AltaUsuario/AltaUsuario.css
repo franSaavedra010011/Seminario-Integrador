@@ -1,0 +1,104 @@
+.content1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background-color: #f4f6fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.alta-form {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Título centrado en dos columnas */
+.alta-form h2 {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #384179;
+  margin-bottom: 10px;
+}
+
+/* Etiquetas */
+.alta-form label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Inputs y selects */
+.alta-form input,
+.alta-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 100%;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.alta-form input:focus,
+.alta-form select:focus {
+  border-color: #384179;
+  outline: none;
+}
+
+/* Botón: ocupa todo el ancho de las 2 columnas */
+.alta-form button {
+  grid-column: 1 / -1;
+  background-color: #384179;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.alta-form button:hover {
+  background-color: #2c3361;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 5px;
+  align-items: flex-start;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .alta-form {
+    grid-template-columns: 1fr;
+  }
+
+  .alta-form button {
+    grid-column: auto;
+  }
+}

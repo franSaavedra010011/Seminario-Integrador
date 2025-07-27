@@ -1,0 +1,33 @@
+.patient-card {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  margin: auto;
+  border: 5px solid #384179;
+}
+
+.patient-card h4 {
+  color: #384179;
+  margin-bottom: 10px;
+}
+
+.patient-card hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.patient-card p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.bloque-Register {
+  margin-bottom: 25px;
+}
+.bloque-Register p{
+  text-align: unset;
+}

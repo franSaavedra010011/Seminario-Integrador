@@ -1,0 +1,26 @@
+.footer {
+  margin-top: 50px;
+  padding-bottom: 20px;
+  background-color: rgb(60, 71, 122);
+  text-align: center;
+  font-size: 14px;
+  color: #f9f9f9;
+  border-top: 1px solid #f9f9f9;
+}
+.parrafo{
+    color: #f9f9f9;
+}
+.footer-links {
+  margin-top: 10px;
+}
+
+.footer-links a {
+  color: #f9f9f9;
+  text-decoration: none;
+  margin: 0 5px;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}

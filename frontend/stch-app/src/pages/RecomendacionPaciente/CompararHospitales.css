@@ -1,0 +1,74 @@
+.contenedor-comparacion {
+  padding: 30px;
+  max-width: 1000px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+h1, h2, h3 {
+  color: #384179;
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  min-width: 200px;
+}
+
+.tabla-hospitales, .tabla-comparacion {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabla-hospitales th, .tabla-hospitales td,
+.tabla-comparacion th, .tabla-comparacion td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla-hospitales th, .tabla-comparacion th {
+  background-color: #384179;
+  color: white;
+  text-align: left;
+}
+
+.resultados-comparacion {
+  margin-top: 30px;
+}
+
+.grafico-congestion {
+  margin-top: 40px;
+}
+.leyenda-grafico {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.color-box {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+.color-box.rojo {
+  background-color: #e74c3c;
+}
+
+.color-box.amarillo {
+  background-color: #ffcc00;
+}
+
+.color-box.verde {
+  background-color: #2ecc71;
+}

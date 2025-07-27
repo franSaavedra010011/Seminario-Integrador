@@ -1,0 +1,72 @@
+h1,
+h2 {
+  margin: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #244862; /* Azul fuerte como acento */
+  text-align: center;
+}
+
+#formulario {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0 50px 50px;
+  gap: 30px;
+  flex-wrap: wrap;
+
+  background-color: #cfcccc; /* Gris suave igual al fondo de la imagen */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#inicio,
+#registrar {
+  margin: 10px;
+  border-radius: 10px;
+  width: 80%;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s ease;
+}
+
+#inicio {
+  background-color: #f6f1df;
+  color: #244862;
+  border: 2px solid #384179;
+}
+
+#inicio:hover {
+  background-color: #e0dac4;
+}
+
+#registrar {
+  background-color: #244862;
+  color: white;
+  border: 2px solid white;
+}
+
+#registrar:hover {
+  background-color: #1b3550;
+}
+
+#turno {
+  width: 40%;
+  max-width: 380px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}

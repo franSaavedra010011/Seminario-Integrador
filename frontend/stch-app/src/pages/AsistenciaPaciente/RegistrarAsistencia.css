@@ -1,0 +1,105 @@
+#contenido {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f7f8fa;
+  padding: 20px;
+}
+
+#formulario2 {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+#botones2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#inicio2 {
+  font-size: 28px;
+  color: #384179;
+  margin: 0;
+}
+
+#datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+#campos > div {
+  flex: 1;
+  min-width: 300px;
+}
+
+.textdata {
+  font-weight: 600;
+  margin: 10px 0 5px;
+  color: #333;
+}
+
+input[type='text'],
+input[type='password'],
+input[type='date'] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+#ingresar {
+  margin-top: 25px;
+  display: block;
+  width: 100%;
+  background-color: #384179;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#ingresar:hover {
+  background-color: #2e3566;
+}
+
+p {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.barra-busqueda {
+  width: 250px;
+  padding: 8px 12px;
+  margin-bottom: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s ease;
+}
+
+.barra-busqueda:focus {
+  outline: none;
+  border-color: #384179;
+}
+
+/* Separación respecto a la tabla */
+.barra-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
