@@ -1,0 +1,34 @@
+nest generate module usuario
+nest generate service usuario
+nest generate controller usuario
+
+Luego creo la entidad en la carpeta que se genera, con lo siguiente dentro:
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+@Entity()
+export class Usuario {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  nombre: string;
+
+  @Column()
+  correo: string;
+}
+
+Despues modifico el entidadNueva.module.ts:
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Usuario } from './usuario.entity'; // importa la entidad
+import { UsuarioService } from './usuario.service';
+import { UsuarioController } from './usuario.controller';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Usuario])], // aquí se importa la entidad para este módulo
+  providers: [UsuarioService],
+  controllers: [UsuarioController],
+})
+export class UsuarioModule {}
+
+Luego ejecuto el comando --> npm run start:dev
