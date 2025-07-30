@@ -1,9 +1,9 @@
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { Usuario } from './entities/usuario.entity';
+import { Usuario } from '../domain/entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
 import { UsuarioRolService } from 'src/usuario-rol/usuario-rol.service';
-import { UsuarioRol } from 'src/usuario-rol/entities/usuario-rol.entity';
+import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
 import { MedicoService } from 'src/medico/medico.service';
 export declare class UsuariosService {
     private readonly usuarioRepository;

@@ -1,6 +1,6 @@
-import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
+import { Especialidad } from 'src/domain/entities/especialidad.entity';
 import { HospitalEspecialidadMedico } from 'src/hospital-especialidad-medico/entities/hospital-especialidad-medico.entity';
-import { Hospital } from 'src/hospital/entities/hospital.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
 export declare class HospitalEspecialidad {
     idHospitalEspecialidad: number;
     fechaDesdeHospitalEspecialidad: Date;

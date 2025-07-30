@@ -12,8 +12,8 @@ const turno_service_1 = require("./turno.service");
 const turno_controller_1 = require("./turno.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const turno_entity_1 = require("./entities/turno.entity");
-const paciente_entity_1 = require("../paciente/entities/paciente.entity");
-const medico_entity_1 = require("../medico/entities/medico.entity");
+const paciente_entity_1 = require("../domain/entities/paciente.entity");
+const medico_entity_1 = require("../domain/entities/medico.entity");
 let TurnoModule = class TurnoModule {
 };
 exports.TurnoModule = TurnoModule;

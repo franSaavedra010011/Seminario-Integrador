@@ -36,8 +36,8 @@ import { PermisoModule } from './permiso/permiso.module';
       port: 5432,
       username: 'postgres', // el que configuraste
       password: '1234', // reemplaza con la real
-      database: 'postgres',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      database: 'turnos_db',
+      entities: [__dirname + '/**/*.entity.{ts,js}'],
       synchronize: true, // ¡solo en desarrollo!
     }),
     PacienteModule,

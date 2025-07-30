@@ -10,7 +10,7 @@ exports.HospitalEspecialidadMedicoModule = void 0;
 const common_1 = require("@nestjs/common");
 const hospital_especialidad_medico_service_1 = require("./hospital-especialidad-medico.service");
 const typeorm_1 = require("@nestjs/typeorm");
-const hospital_especialidad_medico_entity_1 = require("./entities/hospital-especialidad-medico.entity");
+const hospital_especialidad_medico_entity_1 = require("../domain/entities/hospital-especialidad-medico.entity");
 const hospital_especialidad_medico_controller_1 = require("./hospital-especialidad-medico.controller");
 let HospitalEspecialidadMedicoModule = class HospitalEspecialidadMedicoModule {
 };

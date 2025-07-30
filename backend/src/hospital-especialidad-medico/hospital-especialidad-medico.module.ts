@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { HospitalEspecialidadMedicoService } from './hospital-especialidad-medico.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HospitalEspecialidadMedico } from './entities/hospital-especialidad-medico.entity';
+import { HospitalEspecialidadMedico } from '../domain/entities/hospital-especialidad-medico.entity';
 import { HospitalEspecialidadMedicoController } from './hospital-especialidad-medico.controller';
 
 @Module({

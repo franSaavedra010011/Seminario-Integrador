@@ -8,10 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TurnoAgendaDia = void 0;
-const agenda_dia_entity_1 = require("../../agenda-dia/entities/agenda-dia.entity");
-const turno_entity_1 = require("../../turno/entities/turno.entity");
+const agenda_dia_entity_1 = require("../../domain/entities/agenda-dia.entity");
+const turno_entity_1 = require("src/turno/entities/turno.entity");
 const typeorm_1 = require("typeorm");
 let TurnoAgendaDia = class TurnoAgendaDia {
     idTurnoAgendaDia;
@@ -83,7 +84,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToOne)(() => turno_entity_1.Turno, (turno) => turno.turnoAgendaDia),
     (0, typeorm_1.JoinColumn)(),
-    __metadata("design:type", turno_entity_1.Turno)
+    __metadata("design:type", typeof (_a = typeof turno_entity_1.Turno !== "undefined" && turno_entity_1.Turno) === "function" ? _a : Object)
 ], TurnoAgendaDia.prototype, "turno", void 0);
 exports.TurnoAgendaDia = TurnoAgendaDia = __decorate([
     (0, typeorm_1.Entity)()

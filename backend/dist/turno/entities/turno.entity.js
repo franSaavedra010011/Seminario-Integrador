@@ -11,15 +11,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Turno = void 0;
 const typeorm_1 = require("typeorm");
-const paciente_entity_1 = require("../../paciente/entities/paciente.entity");
-const medico_entity_1 = require("../../medico/entities/medico.entity");
-const estado_turno_entity_1 = require("../../estado-turno/entities/estado-turno.entity");
+const paciente_entity_1 = require("../../domain/entities/paciente.entity");
+const medico_entity_1 = require("../../domain/entities/medico.entity");
+const estado_turno_entity_1 = require("../../domain/entities/estado-turno.entity");
 const turno_estado_entity_1 = require("../../turno-estado/entities/turno-estado.entity");
-const especialidad_entity_1 = require("../../especialidad/entities/especialidad.entity");
-const historia_medica_entity_1 = require("../../historia-medica/entities/historia-medica.entity");
+const especialidad_entity_1 = require("../../domain/entities/especialidad.entity");
+const historia_medica_entity_1 = require("../../domain/entities/historia-medica.entity");
 const turno_agenda_dia_entity_1 = require("../../turno-agenda-dia/entities/turno-agenda-dia.entity");
-const hospital_entity_1 = require("../../hospital/entities/hospital.entity");
-const paciente_notificacion_entity_1 = require("../../paciente-notificacion/entities/paciente-notificacion.entity");
+const hospital_entity_1 = require("../../domain/entities/hospital.entity");
+const paciente_notificacion_entity_1 = require("../../domain/entities/paciente-notificacion.entity");
 let Turno = class Turno {
     idTurno;
     fechaAltaTurno;

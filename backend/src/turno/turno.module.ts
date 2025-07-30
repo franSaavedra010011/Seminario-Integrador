@@ -3,8 +3,8 @@ import { TurnoService } from './turno.service';
 import { TurnoController } from './turno.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Turno } from './entities/turno.entity';
-import { Paciente } from 'src/paciente/entities/paciente.entity';
-import { Medico } from 'src/medico/entities/medico.entity';
+import { Paciente } from 'src/domain/entities/paciente.entity';
+import { Medico } from 'src/domain/entities/medico.entity';
 
 @Module({
   providers: [TurnoService],

@@ -16,7 +16,7 @@ exports.PacienteService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const paciente_entity_1 = require("./entities/paciente.entity");
+const paciente_entity_1 = require("../domain/entities/paciente.entity");
 const auth_service_1 = require("../auth/auth.service");
 const rol_enum_1 = require("../common/enums/rol.enum");
 let PacienteService = class PacienteService {
@@ -28,7 +28,10 @@ let PacienteService = class PacienteService {
     }
     async create(pacienteDto, usuarioDto) {
         usuarioDto.rol = rol_enum_1.Role.PACIENTE;
-        const usuario = await this.authService.register(usuarioDto);
+        const usuario = await this.authService.register({
+            ...usuarioDto,
+            rol: usuarioDto.rol,
+        });
         const paciente = this.pacienteRepository.create(pacienteDto);
         usuario.setPacientes(paciente);
         return this.pacienteRepository.save(paciente);

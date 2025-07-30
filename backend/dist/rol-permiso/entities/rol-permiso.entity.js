@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RolPermiso = void 0;
-const permiso_entity_1 = require("../../permiso/entities/permiso.entity");
-const rol_entity_1 = require("../../rol/entities/rol.entity");
+const permiso_entity_1 = require("../../domain/entities/permiso.entity");
+const rol_entity_1 = require("../../domain/entities/rol.entity");
 const typeorm_1 = require("typeorm");
 let RolPermiso = class RolPermiso {
     idRolPermiso;

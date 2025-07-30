@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PacienteService } from './paciente.service';
 import { PacienteController } from './paciente.controller';
-import { Paciente } from './entities/paciente.entity';
+import { Paciente } from '../domain/entities/paciente.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Turno } from 'src/turno/entities/turno.entity';
-import { Usuario } from 'src/usuarios/entities/usuario.entity';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 import { UsuariosModule } from 'src/usuarios/usuarios.module';
 import { AuthService } from 'src/auth/auth.service';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PacienteNotificacion = void 0;
-const paciente_entity_1 = require("../../paciente/entities/paciente.entity");
+const paciente_entity_1 = require("../../domain/entities/paciente.entity");
 const turno_entity_1 = require("../../turno/entities/turno.entity");
 const typeorm_1 = require("typeorm");
 let PacienteNotificacion = class PacienteNotificacion {

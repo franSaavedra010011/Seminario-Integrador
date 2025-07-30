@@ -11,11 +11,11 @@ interface RequestWithUser extends Request {
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    register(registerDTO: RegisterDTO): Promise<import("../usuarios/entities/usuario.entity").Usuario>;
+    register(registerDTO: RegisterDTO): Promise<import("../domain/entities/usuario.entity").Usuario>;
     login(loginDto: LoginDTO): Promise<{
         token: string;
         email: string;
     }>;
-    profile(req: RequestWithUser): Promise<import("../usuarios/entities/usuario.entity").Usuario | null>;
+    profile(req: RequestWithUser): Promise<import("../domain/entities/usuario.entity").Usuario | null>;
 }
 export {};

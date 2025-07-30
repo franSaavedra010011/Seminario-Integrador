@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRolDto } from './dto/create-rol.dto';
 import { UpdateRolDto } from './dto/update-rol.dto';
-import { Rol } from './entities/rol.entity';
+import { Rol } from '../domain/entities/rol.entity';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
 import { BuscarRolesDTO } from './dto/buscarRoles.dto';
 import { Role } from 'src/common/enums/rol.enum';
 
 @Injectable()
 export class RolService {
+  
   constructor(private genericRepository: GenericRepositoryService) {}
+
   create(createRolDto: CreateRolDto) {
     return 'This action adds a new rol';
   }

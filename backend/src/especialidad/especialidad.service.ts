@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DTOCriterio } from 'src/common/utils/dtoCriterio.dto';
-import { Hospital } from 'src/hospital/entities/hospital.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
 import { BuscarEspecialidadesDTO } from './dtos/buscarEspecialidades.dto';
-import { HospitalEspecialidad } from 'src/hospital-especialidad/entities/hospital-especialidad.entity';
-import { Especialidad } from './entities/especialidad.entity';
+import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
+import { Especialidad } from '../domain/entities/especialidad.entity';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
 
 @Injectable()

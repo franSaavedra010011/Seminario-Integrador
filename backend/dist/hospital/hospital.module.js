@@ -11,8 +11,8 @@ const common_1 = require("@nestjs/common");
 const hospital_service_1 = require("./hospital.service");
 const hospital_controller_1 = require("./hospital.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const hospital_entity_1 = require("./entities/hospital.entity");
-const medico_entity_1 = require("../medico/entities/medico.entity");
+const hospital_entity_1 = require("../domain/entities/hospital.entity");
+const medico_entity_1 = require("../domain/entities/medico.entity");
 const genericRepository_service_1 = require("../common/utils/genericRepository.service");
 let HospitalModule = class HospitalModule {
 };

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Paciente } from './entities/paciente.entity';
+import { Paciente } from '../domain/entities/paciente.entity';
 import { PacienteDto } from './dto/createPaciente.dto';
 import { UpdatePacienteDto } from './dto/updatePaciente.dto';
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HospitalService = void 0;
 const common_1 = require("@nestjs/common");
 const genericRepository_service_1 = require("../common/utils/genericRepository.service");
-const hospital_entity_1 = require("./entities/hospital.entity");
+const hospital_entity_1 = require("../domain/entities/hospital.entity");
 let HospitalService = class HospitalService {
     genericRepository;
     constructor(genericRepository) {

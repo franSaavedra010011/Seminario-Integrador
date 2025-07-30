@@ -1,4 +1,4 @@
-import { Hospital } from 'src/hospital/entities/hospital.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

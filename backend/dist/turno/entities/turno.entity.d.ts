@@ -1,12 +1,12 @@
-import { Paciente } from '../../paciente/entities/paciente.entity';
-import { Medico } from 'src/medico/entities/medico.entity';
-import { EstadoTurno } from 'src/estado-turno/entities/estado-turno.entity';
+import { Paciente } from '../../domain/entities/paciente.entity';
+import { Medico } from 'src/domain/entities/medico.entity';
+import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
 import { TurnoEstado } from 'src/turno-estado/entities/turno-estado.entity';
-import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
-import { HistoriaMedica } from 'src/historia-medica/entities/historia-medica.entity';
+import { Especialidad } from 'src/domain/entities/especialidad.entity';
+import { HistoriaMedica } from 'src/domain/entities/historia-medica.entity';
 import { TurnoAgendaDia } from 'src/turno-agenda-dia/entities/turno-agenda-dia.entity';
-import { Hospital } from 'src/hospital/entities/hospital.entity';
-import { PacienteNotificacion } from 'src/paciente-notificacion/entities/paciente-notificacion.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
+import { PacienteNotificacion } from 'src/domain/entities/paciente-notificacion.entity';
 export declare class Turno {
     idTurno: number;
     fechaAltaTurno: Date;

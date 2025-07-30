@@ -1,4 +1,4 @@
-import { Rol } from 'src/rol/entities/rol.entity';
+import { Rol } from 'src/domain/entities/rol.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 export declare class UsuarioRol {
     idUsuarioRol: number;

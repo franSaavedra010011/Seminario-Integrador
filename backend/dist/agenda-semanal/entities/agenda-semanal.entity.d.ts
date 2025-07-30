@@ -1,4 +1,4 @@
-import { AgendaDia } from 'src/agenda-dia/entities/agenda-dia.entity';
+import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
 import { HospitalEspecialidadMedico } from 'src/hospital-especialidad-medico/entities/hospital-especialidad-medico.entity';
 export declare class AgendaSemanal {
     idAgendaSemanal: number;

@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Usuario } from './entities/usuario.entity';
+import { Usuario } from '../domain/entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
-import { Rol } from 'src/rol/entities/rol.entity';
+import { Rol } from 'src/domain/entities/rol.entity';
 import { UsuarioRolService } from 'src/usuario-rol/usuario-rol.service';
-import { UsuarioRol } from 'src/usuario-rol/entities/usuario-rol.entity';
+import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
 import { Role } from 'src/common/enums/rol.enum';
 import { MedicoService } from 'src/medico/medico.service';
 import { MedicoDTO } from 'src/medico/entities/dtos/CreateMedico.dto';
-import { Medico } from 'src/medico/entities/medico.entity';
+import { Medico } from 'src/domain/entities/medico.entity';
 import * as bcryptjs from 'bcryptjs';
 
 @Injectable()

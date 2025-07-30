@@ -10,7 +10,7 @@ exports.UsuarioRolModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const usuario_rol_service_1 = require("./usuario-rol.service");
-const usuario_rol_entity_1 = require("./entities/usuario-rol.entity");
+const usuario_rol_entity_1 = require("../domain/entities/usuario-rol.entity");
 let UsuarioRolModule = class UsuarioRolModule {
 };
 exports.UsuarioRolModule = UsuarioRolModule;

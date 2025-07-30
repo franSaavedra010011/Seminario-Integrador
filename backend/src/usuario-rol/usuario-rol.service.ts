@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUsuarioRolDto } from './dto/create-usuario-rol.dto';
 import { UpdateUsuarioRolDto } from './dto/update-usuario-rol.dto';
-import { UsuarioRol } from './entities/usuario-rol.entity';
+import { UsuarioRol } from '../domain/entities/usuario-rol.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

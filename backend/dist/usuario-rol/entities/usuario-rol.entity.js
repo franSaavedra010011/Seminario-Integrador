@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsuarioRol = void 0;
-const rol_entity_1 = require("../../rol/entities/rol.entity");
+const rol_entity_1 = require("../../domain/entities/rol.entity");
 const usuario_entity_1 = require("../../usuarios/entities/usuario.entity");
 const typeorm_1 = require("typeorm");
 let UsuarioRol = class UsuarioRol {

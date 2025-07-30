@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterDTO = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const rol_enum_1 = require("../../common/enums/rol.enum");
 class RegisterDTO {
     usernameUsuario;
     emailUsuario;
@@ -26,6 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDTO.prototype, "usernameUsuario", void 0);
 __decorate([
+    (0, class_transformer_1.Transform)(({ value }) => value.trim()),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], RegisterDTO.prototype, "emailUsuario", void 0);
@@ -35,4 +37,9 @@ __decorate([
     (0, class_validator_1.MinLength)(6),
     __metadata("design:type", String)
 ], RegisterDTO.prototype, "passwordUsuario", void 0);
+__decorate([
+    (0, class_transformer_1.Transform)(({ value }) => value.trim()),
+    (0, class_validator_1.IsEnum)(rol_enum_1.Role, { message: 'El rol debe ser uno de: usuario, admin o medico' }),
+    __metadata("design:type", String)
+], RegisterDTO.prototype, "rol", void 0);
 //# sourceMappingURL=register.dto.js.map

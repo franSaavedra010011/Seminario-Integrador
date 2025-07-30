@@ -8,10 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TurnoEstado = void 0;
-const estado_turno_entity_1 = require("../../estado-turno/entities/estado-turno.entity");
-const turno_entity_1 = require("../../turno/entities/turno.entity");
+const estado_turno_entity_1 = require("../../domain/entities/estado-turno.entity");
+const turno_entity_1 = require("src/turno/entities/turno.entity");
 const typeorm_1 = require("typeorm");
 let TurnoEstado = class TurnoEstado {
     idTurnoEstado;
@@ -56,7 +57,7 @@ __decorate([
 ], TurnoEstado.prototype, "fechaHastaTurnoEstado", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => turno_entity_1.Turno, (turno) => turno.turnosEstados),
-    __metadata("design:type", turno_entity_1.Turno)
+    __metadata("design:type", typeof (_a = typeof turno_entity_1.Turno !== "undefined" && turno_entity_1.Turno) === "function" ? _a : Object)
 ], TurnoEstado.prototype, "turno", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => estado_turno_entity_1.EstadoTurno, (estadoTurno) => estadoTurno.turnosEstados),

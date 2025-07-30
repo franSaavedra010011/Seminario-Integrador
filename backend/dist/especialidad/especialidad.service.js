@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EspecialidadService = void 0;
 const common_1 = require("@nestjs/common");
-const hospital_entity_1 = require("../hospital/entities/hospital.entity");
+const hospital_entity_1 = require("../domain/entities/hospital.entity");
 const genericRepository_service_1 = require("../common/utils/genericRepository.service");
 let EspecialidadService = class EspecialidadService {
     genericRepository;

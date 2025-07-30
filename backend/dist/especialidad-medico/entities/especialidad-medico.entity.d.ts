@@ -1,4 +1,4 @@
-import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
+import { Especialidad } from 'src/domain/entities/especialidad.entity';
 import { Medico } from 'src/medico/entities/medico.entity';
 export declare class EspecialidadMedico {
     idEspecialidadMedico: number;

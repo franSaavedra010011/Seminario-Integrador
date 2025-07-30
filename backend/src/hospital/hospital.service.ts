@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
-import { Hospital } from './entities/hospital.entity';
+import { Hospital } from '../domain/entities/hospital.entity';
 import { BuscarHospitalesDTO } from './dtos/buscarHospitales.dto';
 
 @Injectable()

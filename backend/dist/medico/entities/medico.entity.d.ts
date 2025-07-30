@@ -1,8 +1,8 @@
 import { Turno } from '../../turno/entities/turno.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
-import { EspecialidadMedico } from 'src/especialidad-medico/entities/especialidad-medico.entity';
-import { HistoriaMedica } from 'src/historia-medica/entities/historia-medica.entity';
-import { HospitalEspecialidadMedico } from 'src/hospital-especialidad-medico/entities/hospital-especialidad-medico.entity';
+import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
+import { HistoriaMedica } from 'src/domain/entities/historia-medica.entity';
+import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
 export declare class Medico {
     idMedico: number;
     nombreMedico: string;

@@ -13,9 +13,9 @@ exports.Medico = void 0;
 const typeorm_1 = require("typeorm");
 const turno_entity_1 = require("../../turno/entities/turno.entity");
 const usuario_entity_1 = require("../../usuarios/entities/usuario.entity");
-const especialidad_medico_entity_1 = require("../../especialidad-medico/entities/especialidad-medico.entity");
-const historia_medica_entity_1 = require("../../historia-medica/entities/historia-medica.entity");
-const hospital_especialidad_medico_entity_1 = require("../../hospital-especialidad-medico/entities/hospital-especialidad-medico.entity");
+const especialidad_medico_entity_1 = require("../../domain/entities/especialidad-medico.entity");
+const historia_medica_entity_1 = require("../../domain/entities/historia-medica.entity");
+const hospital_especialidad_medico_entity_1 = require("../../domain/entities/hospital-especialidad-medico.entity");
 let Medico = class Medico {
     idMedico;
     nombreMedico;

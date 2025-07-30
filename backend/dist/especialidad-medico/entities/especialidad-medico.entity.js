@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EspecialidadMedico = void 0;
-const especialidad_entity_1 = require("../../especialidad/entities/especialidad.entity");
+const especialidad_entity_1 = require("../../domain/entities/especialidad.entity");
 const medico_entity_1 = require("../../medico/entities/medico.entity");
 const typeorm_1 = require("typeorm");
 let EspecialidadMedico = class EspecialidadMedico {

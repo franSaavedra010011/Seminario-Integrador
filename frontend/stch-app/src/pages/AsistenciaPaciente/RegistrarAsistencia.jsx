@@ -57,13 +57,15 @@ export default function RegistrarAsistencia() {
               <td>{turno.fecha}</td>
               <td>{turno.hora}</td>
               <td>
-                {turno.asistio ? (
-                  'Asistió'
-                ) : (
-                  <button className="boton" onClick={() => registrarAsistencia(turno.id)}>
-                    Registrar
-                  </button>
-                )}
+                <div className="asistencia-cell">
+                  {turno.asistio ? (
+                    <div>Asistió</div>
+                    ) : (
+                      <button className="boton" onClick={() => registrarAsistencia(turno.id)}>
+                        Registrar
+                      </button>
+                    )}
+              </div>
               </td>
             </tr>
           ))}

@@ -2,10 +2,10 @@ import { forwardRef, Module } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { UsuariosController } from './usuarios.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Usuario } from './entities/usuario.entity';
+import { Usuario } from '../domain/entities/usuario.entity';
 import { UsuarioRolModule } from 'src/usuario-rol/usuario-rol.module';
 import { MedicoModule } from 'src/medico/medico.module';
-import { UsuarioRol } from 'src/usuario-rol/entities/usuario-rol.entity';
+import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
 import { PacienteModule } from 'src/paciente/paciente.module';
 

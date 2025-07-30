@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AgendaSemanal = void 0;
-const agenda_dia_entity_1 = require("../../agenda-dia/entities/agenda-dia.entity");
+const agenda_dia_entity_1 = require("../../domain/entities/agenda-dia.entity");
 const hospital_especialidad_medico_entity_1 = require("../../hospital-especialidad-medico/entities/hospital-especialidad-medico.entity");
 const typeorm_1 = require("typeorm");
 let AgendaSemanal = class AgendaSemanal {

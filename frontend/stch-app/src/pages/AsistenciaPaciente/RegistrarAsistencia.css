@@ -49,6 +49,7 @@ input[type='text'],
 input[type='password'],
 input[type='date'] {
   width: 100%;
+  color: #333;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -102,4 +103,22 @@ p {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
+}
+
+.boton {
+  background-color: #384179;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.asistencia-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Opcional, para centrar también horizontalmente */
+  height: 100%;
 }

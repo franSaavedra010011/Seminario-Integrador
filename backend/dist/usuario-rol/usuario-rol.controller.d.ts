@@ -4,7 +4,7 @@ import { UpdateUsuarioRolDto } from './dto/update-usuario-rol.dto';
 export declare class UsuarioRolController {
     private readonly usuarioRolService;
     constructor(usuarioRolService: UsuarioRolService);
-    create(createUsuarioRolDto: CreateUsuarioRolDto): Promise<import("./entities/usuario-rol.entity").UsuarioRol>;
+    create(createUsuarioRolDto: CreateUsuarioRolDto): Promise<import("../domain/entities/usuario-rol.entity").UsuarioRol>;
     findAll(): string;
     findOne(id: string): string;
     update(id: string, updateUsuarioRolDto: UpdateUsuarioRolDto): string;

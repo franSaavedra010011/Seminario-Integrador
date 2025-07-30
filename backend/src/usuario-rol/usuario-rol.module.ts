@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioRolService } from './usuario-rol.service';
-import { UsuarioRol } from './entities/usuario-rol.entity';
+import { UsuarioRol } from '../domain/entities/usuario-rol.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsuarioRol])], // ✅ IMPORTANTE

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonalHospital = void 0;
-const hospital_entity_1 = require("../../hospital/entities/hospital.entity");
+const hospital_entity_1 = require("../../domain/entities/hospital.entity");
 const usuario_entity_1 = require("../../usuarios/entities/usuario.entity");
 const typeorm_1 = require("typeorm");
 let PersonalHospital = class PersonalHospital {

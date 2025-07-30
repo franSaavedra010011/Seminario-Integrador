@@ -1,14 +1,24 @@
 .sidebar {
   width: 70px;
   background: #384179;
-  padding: 20px 10px;
+  padding: 20px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: width 0.3s;
   overflow: hidden;
   color: white;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.sidebar .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px; /* Controla separación vertical entre iconos */
+}
+
 
 .sidebar.expanded {
   width: 220px;
@@ -18,12 +28,15 @@
   background: none;
   border: none;
   cursor: pointer;
-  margin-bottom: 20px;
   color: white;
-  font-size: 18px;
+  font-size: 22px;
   display: flex;
-  padding-left: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
+
+
 
 .sidebar nav a {
   display: flex;
@@ -51,6 +64,23 @@ nav span {
 .sidebar.expanded nav span {
   display: inline;
 }
+
+.sidebar.expanded nav a {
+  justify-content: flex-start;
+}
+
+.sidebar:not(.expanded) nav a {
+  justify-content: center;
+}
+
+.sidebar:not(.expanded) .user {
+  justify-content: center;
+}
+
+.sidebar:not(.expanded) .logout {
+  justify-content: center;
+}
+
 
 /* ===== USER SECTION ===== */
 .user {

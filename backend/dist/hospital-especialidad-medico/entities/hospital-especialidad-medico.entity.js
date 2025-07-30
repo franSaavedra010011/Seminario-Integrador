@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HospitalEspecialidadMedico = void 0;
-const agenda_semanal_entity_1 = require("../../agenda-semanal/entities/agenda-semanal.entity");
-const hospital_especialidad_entity_1 = require("../../hospital-especialidad/entities/hospital-especialidad.entity");
+const agenda_semanal_entity_1 = require("../../domain/entities/agenda-semanal.entity");
+const hospital_especialidad_entity_1 = require("../../domain/entities/hospital-especialidad.entity");
 const medico_entity_1 = require("../../medico/entities/medico.entity");
 const typeorm_1 = require("typeorm");
 let HospitalEspecialidadMedico = class HospitalEspecialidadMedico {

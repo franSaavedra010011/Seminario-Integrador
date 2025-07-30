@@ -1,6 +1,6 @@
 import { CreateUsuarioRolDto } from './dto/create-usuario-rol.dto';
 import { UpdateUsuarioRolDto } from './dto/update-usuario-rol.dto';
-import { UsuarioRol } from './entities/usuario-rol.entity';
+import { UsuarioRol } from '../domain/entities/usuario-rol.entity';
 import { Repository } from 'typeorm';
 export declare class UsuarioRolService {
     private usuarioRolRepository;

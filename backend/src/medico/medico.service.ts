@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Medico } from './entities/medico.entity';
+import { Medico } from '../domain/entities/medico.entity';
 import { Repository } from 'typeorm';
-import { Hospital } from 'src/hospital/entities/hospital.entity';
-import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
+import { Especialidad } from 'src/domain/entities/especialidad.entity';
 import { MedicoDTO } from './entities/dtos/CreateMedico.dto';
 import { GenericRepositoryService } from 'src/common/utils/genericRepository.service';
-import { HospitalEspecialidad } from 'src/hospital-especialidad/entities/hospital-especialidad.entity';
-import { EspecialidadMedico } from 'src/especialidad-medico/entities/especialidad-medico.entity';
-import { HospitalEspecialidadMedico } from 'src/hospital-especialidad-medico/entities/hospital-especialidad-medico.entity';
+import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
+import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
+import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
 
 @Injectable()
 export class MedicoService {

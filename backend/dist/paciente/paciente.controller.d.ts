@@ -8,7 +8,7 @@ export declare class PacienteController {
     crearPaciente(body: {
         pacienteDto: PacienteDto;
         usuarioDto: CreateUsuarioDto;
-    }): Promise<import("./entities/paciente.entity").Paciente>;
+    }): Promise<import("../domain/entities/paciente.entity").Paciente>;
     update(id: number, updatePacienteDto: UpdatePacienteDto): Promise<import("typeorm").UpdateResult>;
     remove(id: number): Promise<import("typeorm").UpdateResult>;
 }

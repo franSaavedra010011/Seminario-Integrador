@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Paciente } from './entities/paciente.entity';
+import { Paciente } from '../domain/entities/paciente.entity';
 import { PacienteDto } from './dto/createPaciente.dto';
 import { UpdatePacienteDto } from './dto/updatePaciente.dto';
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { Role } from 'src/common/enums/rol.enum';
-import { Usuario } from 'src/usuarios/entities/usuario.entity';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 
 @Injectable()
 export class PacienteService {
@@ -20,7 +20,10 @@ export class PacienteService {
   async create(pacienteDto: PacienteDto, usuarioDto: CreateUsuarioDto) {
     usuarioDto.rol = Role.PACIENTE;
     // Crear usuario usando AuthService para validar y hashear contraseña
-    const usuario: Usuario = await this.authService.register(usuarioDto);
+    const usuario: Usuario = await this.authService.register({
+      ...usuarioDto,
+      rol: usuarioDto.rol as Role, // 👈 conversión segura si el string coincide
+    });
 
     // Crear el paciente con relación al usuario
     const paciente = this.pacienteRepository.create(pacienteDto);

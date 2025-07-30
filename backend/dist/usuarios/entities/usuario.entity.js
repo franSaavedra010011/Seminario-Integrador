@@ -10,11 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Usuario = void 0;
-const paciente_entity_1 = require("../../paciente/entities/paciente.entity");
+const paciente_entity_1 = require("../../domain/entities/paciente.entity");
 const typeorm_1 = require("typeorm");
-const medico_entity_1 = require("../../medico/entities/medico.entity");
-const usuario_rol_entity_1 = require("../../usuario-rol/entities/usuario-rol.entity");
-const personal_hospital_entity_1 = require("../../personal-hospital/entities/personal-hospital.entity");
+const medico_entity_1 = require("../../domain/entities/medico.entity");
+const usuario_rol_entity_1 = require("../../domain/entities/usuario-rol.entity");
+const personal_hospital_entity_1 = require("../../domain/entities/personal-hospital.entity");
 let Usuario = class Usuario {
     idUsuario;
     usernameUsuario;
