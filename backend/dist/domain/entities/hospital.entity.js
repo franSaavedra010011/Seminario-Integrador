@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hospital = void 0;
 const congestion_actual_entity_1 = require("./congestion-actual.entity");
-const congestion_historico_entity_1 = require("../../congestion-historico/entities/congestion-historico.entity");
+const congestion_historico_entity_1 = require("src/congestion-historico/entities/congestion-historico.entity");
 const hospital_especialidad_entity_1 = require("./hospital-especialidad.entity");
 const localidad_entity_1 = require("./localidad.entity");
 const personal_hospital_entity_1 = require("./personal-hospital.entity");

@@ -1,5 +1,5 @@
 import { CongestionActual } from 'src/domain/entities/congestion-actual.entity';
-import { CongestionHistorico } from 'src/congestion-historico/entities/congestion-historico.entity';
+import { CongestionHistorico } from 'src/domain/entities/congestion-historico.entity';
 import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
 import { Localidad } from 'src/domain/entities/localidad.entity';
 import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
