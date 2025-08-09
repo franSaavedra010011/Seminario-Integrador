@@ -5,51 +5,26 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  JoinColumn,
 } from 'typeorm';
+import { Base } from './base.entity';
+import { DiaSemanaEnum } from '../enums/dia-semana.enum';
 
 @Entity()
-export class AgendaDia {
-  @PrimaryGeneratedColumn()
-  idAgendaDia: number;
+export class AgendaDia extends Base {
+  @Column({
+    type: 'enum',
+    enum: DiaSemanaEnum,
+    nullable: false,
+  })
+  nombreAgendaDia: DiaSemanaEnum;
 
-  @Column()
-  nombreAgendaDia: string;
-
-  @Column({ nullable: true })
-  fechaHoraBajaAgendaDia: Date;
-
-  @ManyToOne(() => AgendaSemanal, (agendaSemanal) => agendaSemanal.agendasDia)
+  @ManyToOne(() => AgendaSemanal, agendaSemanal => agendaSemanal.agendasDia, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'idAgendaSemanal' }) // opcional
   agendaSemanal: AgendaSemanal;
 
-  @OneToMany(() => TurnoAgendaDia, (turnoAgendaDia) => turnoAgendaDia.agendaDia)
+  @OneToMany(() => TurnoAgendaDia, turnoAgendaDia => turnoAgendaDia.agendaDia)
   turnosAgendaDia: TurnoAgendaDia[];
-
-  public get getIdAgendaDia() {
-    return this.idAgendaDia;
-  }
-
-  public get getNombreAgendaDia() {
-    return this.nombreAgendaDia;
-  }
-
-  public set setNombreAgendaDia(nombreAgendaDia: string) {
-    this.nombreAgendaDia = nombreAgendaDia;
-  }
-
-  public get getFechaHoraBajaAgendaDia() {
-    return this.fechaHoraBajaAgendaDia;
-  }
-
-  public set setFechaHoraBajaAgendaDia(fechaHoraBajaAgendaDia: Date) {
-    this.fechaHoraBajaAgendaDia = fechaHoraBajaAgendaDia;
-  }
-
-  public get getTurnosAgendaDia() {
-    return this.turnosAgendaDia;
-  }
-
-  public set setTurnosAgendaDia(turnosAgendaDia: TurnoAgendaDia[]) {
-    this.turnosAgendaDia = turnosAgendaDia;
-  }
 }

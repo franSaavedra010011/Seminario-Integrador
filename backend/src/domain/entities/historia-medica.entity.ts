@@ -1,62 +1,21 @@
 import { Medico } from 'src/domain/entities/medico.entity';
-import { Turno } from 'src/turno/entities/turno.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Turno } from 'src/domain/entities/turno.entity';
+import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class HistoriaMedica {
-  @PrimaryGeneratedColumn()
-  idHistoriaMedica: number;
+export class HistoriaMedica extends Base {
+  @Column()
+  fecha: Date;
 
   @Column()
-  fechaHistoriaMedica: Date;
-
-  @Column()
-  observacionesHistoriaMedica: string;
-
-  @Column({ nullable: true })
-  fechaHoraBajaHistoriaMedica: Date;
+  observaciones: string;
 
   @ManyToOne(() => Turno, (turno) => turno.historiasMedica)
+  @JoinColumn({ name: 'idTurno' })
   turno: Turno;
 
   @ManyToOne(() => Medico, (medico) => medico.historiasMedica)
+  @JoinColumn({ name: 'idMedico' })
   medico: Medico;
-
-  public get getIdHistoriaMedica(): number {
-    return this.idHistoriaMedica;
-  }
-
-  public get getFechaHistoriaMedica(): Date {
-    return this.fechaHistoriaMedica;
-  }
-
-  public set setFechaHistoriaMedica(fechaHistoriaMedica: Date) {
-    this.fechaHistoriaMedica = fechaHistoriaMedica;
-  }
-
-  public get getObservacionesHistoriaMedica(): string {
-    return this.observacionesHistoriaMedica;
-  }
-
-  public set setObservacionesHistoriaMedica(
-    observacionesHistoriaMedica: string,
-  ) {
-    this.observacionesHistoriaMedica = observacionesHistoriaMedica.trim();
-  }
-
-  public get getFechaHoraBajaHistoriaMedica(): Date {
-    return this.fechaHoraBajaHistoriaMedica;
-  }
-
-  public set setFechaHoraBajaHistoriaMedica(fechaHoraBajaHistoriaMedica: Date) {
-    this.fechaHoraBajaHistoriaMedica = fechaHoraBajaHistoriaMedica;
-  }
-
-  public get getMedico(): Medico {
-    return this.medico;
-  }
-
-  public set setMedico(value: Medico) {
-    this.medico = value;
-  }
 }

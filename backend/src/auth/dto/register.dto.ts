@@ -1,9 +1,15 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsEnum, IsString, MinLength } from 'class-validator';
-import { Role } from 'src/common/enums/rol.enum';
+import {
+  IsEmail,
+  IsString,
+  MinLength,
+  IsArray,
+  ArrayMinSize,
+  IsEnum,
+} from 'class-validator';
+import { RolEnum } from 'src/domain/enums/rol.enum';
 
 export class RegisterDTO {
-
   @Transform(({ value }) => value.trim())
   @IsString()
   @MinLength(1)
@@ -18,7 +24,8 @@ export class RegisterDTO {
   @MinLength(6)
   passwordUsuario: string;
 
-  @Transform(({ value }) => value.trim())
-  @IsEnum(Role, { message: 'El rol debe ser uno de: usuario, admin o medico' })
-  rol: Role;
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsString({ each: true })
+  roles: string[];
 }

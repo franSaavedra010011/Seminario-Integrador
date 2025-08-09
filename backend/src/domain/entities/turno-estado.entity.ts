@@ -1,49 +1,19 @@
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
-import { Turno } from 'src/turno/entities/turno.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Turno } from 'src/domain/entities/turno.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class TurnoEstado {
-  @PrimaryGeneratedColumn()
-  idTurnoEstado: number;
-
+export class TurnoEstado extends Base {
   @Column()
-  fechaDesdeTurnoEstado: Date;
+  fechaDesde: Date;
 
   @Column({ nullable: true })
-  fechaHastaTurnoEstado: Date;
+  fechaHasta: Date;
 
   @ManyToOne(() => Turno, (turno) => turno.turnosEstados)
   turno: Turno;
 
   @ManyToOne(() => EstadoTurno, (estadoTurno) => estadoTurno.turnosEstados)
   estadoTurno: EstadoTurno;
-
-  public get getIdTurnoEstado(): number {
-    return this.idTurnoEstado;
-  }
-
-  public get getFechaDesdeTurnoEstado(): Date {
-    return this.fechaDesdeTurnoEstado;
-  }
-
-  public set setFechaDesdeTurnoEstado(value: Date) {
-    this.fechaDesdeTurnoEstado = value;
-  }
-
-  public get getFechaHastaTurnoEstado(): Date {
-    return this.fechaHastaTurnoEstado;
-  }
-
-  public set setFechaHastaTurnoEstado(value: Date) {
-    this.fechaHastaTurnoEstado = value;
-  }
-
-  public get getEstadoTurno(): EstadoTurno {
-    return this.estadoTurno;
-  }
-
-  public set setEstadoTurno(value: EstadoTurno) {
-    this.estadoTurno = value;
-  }
 }

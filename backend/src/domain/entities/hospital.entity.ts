@@ -5,141 +5,46 @@ import { Localidad } from 'src/domain/entities/localidad.entity';
 import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
 import { Turno } from 'src/domain/entities/turno.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  OneToMany,
+  Entity,
   ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class Hospital {
-  @PrimaryGeneratedColumn()
-  idHospital: number;
+export class Hospital extends Base {
+  @Column()
+  nombre: string;
 
   @Column()
-  nombreHospital: string;
+  direccion: string;
 
   @Column()
-  direccionHospital: string;
+  email: string;
 
   @Column()
-  emailHospital: string;
+  telefono: string;
 
-  @Column()
-  telHospital: string;
-
-  @Column({ nullable: true })
-  fechaHoraBajaHospital: Date;
-
-  @OneToMany(
-    () => HospitalEspecialidad,
-    (hospitalEspecialidad) => hospitalEspecialidad.hospital,
-    { eager: true },
-  )
+  @OneToMany(() => HospitalEspecialidad, (he) => he.hospital, {
+    eager: true,
+  })
   hospitalEspecialidades: HospitalEspecialidad[];
 
-  @OneToMany(
-    () => CongestionHistorico,
-    (congestionHistorico) => congestionHistorico.hospital,
-  )
+  @OneToMany(() => CongestionHistorico, (ch) => ch.hospital)
   congestionesHistorico: CongestionHistorico[];
 
-  @ManyToOne(() => Localidad, (localidad) => localidad.hospitales)
-  localidad: Localidad;
-
-  @OneToMany(
-    () => CongestionActual,
-    (congestionActual) => congestionActual.hospital,
-  )
+  @OneToMany(() => CongestionActual, (ca) => ca.hospital)
   congestionesActual: CongestionActual[];
 
-  @OneToMany(
-    () => PersonalHospital,
-    (personalHospital) => personalHospital.hospital,
-  )
+  @OneToMany(() => PersonalHospital, (ph) => ph.hospital)
   personalHospital: PersonalHospital[];
 
   @OneToMany(() => Turno, (turno) => turno.hospital)
   turnos: Turno[];
 
-  public get getIdHospital() {
-    return this.idHospital;
-  }
-
-  public get getNombreHospital() {
-    return this.nombreHospital;
-  }
-
-  public set setNombreHospital(nombreHospital: string) {
-    this.nombreHospital = nombreHospital;
-  }
-
-  public get getDireccionHospital() {
-    return this.direccionHospital;
-  }
-
-  public set setDireccionHospital(direccionHospital: string) {
-    this.direccionHospital = direccionHospital;
-  }
-
-  public get getEmailHospital() {
-    return this.emailHospital;
-  }
-
-  public set setEmailHospital(emailHospital: string) {
-    this.emailHospital = emailHospital;
-  }
-
-  public get getTelHospital() {
-    return this.telHospital;
-  }
-
-  public set setTelHospital(telHospital: string) {
-    this.telHospital = telHospital;
-  }
-
-  public get getFechaHoraBajaHospital() {
-    return this.fechaHoraBajaHospital;
-  }
-
-  public setFechaHoraBajaHospital(fechaHoraBajaHospital: Date): void {
-    this.fechaHoraBajaHospital = fechaHoraBajaHospital;
-  }
-
-  public getHospitalEspecialidades(): HospitalEspecialidad[] {
-    return this.hospitalEspecialidades;
-  }
-
-  public set setHospitalEspecialidades(
-    hospitalEspecialidades: HospitalEspecialidad[],
-  ) {
-    this.hospitalEspecialidades = hospitalEspecialidades;
-  }
-
-  public get getCongestionesHistorico() {
-    return this.congestionesHistorico;
-  }
-
-  public set setCongestionesHistorico(
-    congestionesHistorico: CongestionHistorico[],
-  ) {
-    this.congestionesHistorico = congestionesHistorico;
-  }
-
-  public get getLocalidad() {
-    return this.localidad;
-  }
-
-  public set setLocalidad(localidad: Localidad) {
-    this.localidad = localidad;
-  }
-
-  public get getCongestionesActual() {
-    return this.congestionesActual;
-  }
-
-  public set setCongestionesActual(congestionesActual: CongestionActual[]) {
-    this.congestionesActual = congestionesActual;
-  }
+  @ManyToOne(() => Localidad, (localidad) => localidad.hospitales)
+  @JoinColumn({ name: 'idLocalidad' })
+  localidad: Localidad;
 }

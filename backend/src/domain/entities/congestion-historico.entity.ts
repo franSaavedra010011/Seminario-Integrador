@@ -1,109 +1,33 @@
 import { Hospital } from 'src/domain/entities/hospital.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class CongestionHistorico {
-  @PrimaryGeneratedColumn()
-  idCongestionHistorico: number;
+export class CongestionHistorico extends Base {
+  @Column()
+  fecha: Date;
 
   @Column()
-  fechaCongestionHistorico: Date;
+  horaActualizacion: number;
 
   @Column()
-  horaActualizacionCongestionHistorico: number;
+  turnosCancelados: number;
 
   @Column()
-  turnosCanceladosCongestionHistorico: number;
+  turnosNoAsistidos: number;
 
   @Column()
-  turnosNoAsistidosCongestionHistorico: number;
+  turnosAsistidos: number;
 
   @Column()
-  turnosAsistidosCongestionHistorico: number;
-
-  @Column()
-  turnosMaximoDiaCongestionHistorico: number;
-
-  @Column({ nullable: true })
-  fechaHoraBajaCongestionHistorico: Date;
+  turnosMaximoDia: number;
 
   @ManyToOne(() => Hospital, (hospital) => hospital.congestionesHistorico)
+  @JoinColumn({ name: 'idHospital' })
   hospital: Hospital;
-
-  public get getIdCongestionHistorico() {
-    return this.idCongestionHistorico;
-  }
-
-  public get getFechaCongestionHistorico() {
-    return this.fechaCongestionHistorico;
-  }
-
-  public set setFechaCongestionHistorico(fechaCongestionHistorico: Date) {
-    this.fechaCongestionHistorico = fechaCongestionHistorico;
-  }
-
-  public get getHoraActualizacionCongestionHistorico() {
-    return this.horaActualizacionCongestionHistorico;
-  }
-
-  public set setHoraActualizacionCongestionHistorico(
-    horaActualizacionCongestionHistorico: number,
-  ) {
-    this.horaActualizacionCongestionHistorico =
-      horaActualizacionCongestionHistorico;
-  }
-
-  public get getTurnosCanceladosCongestionHistorico() {
-    return this.turnosCanceladosCongestionHistorico;
-  }
-
-  public set setTurnosCanceladosCongestionHistorico(
-    turnosCanceladosCongestionHistorico: number,
-  ) {
-    this.turnosCanceladosCongestionHistorico =
-      turnosCanceladosCongestionHistorico;
-  }
-
-  public get getTurnosNoAsistidosCongestionHistorico() {
-    return this.turnosNoAsistidosCongestionHistorico;
-  }
-
-  public set setTurnosNoAsistidosCongestionHistorico(
-    turnosNoAsistidosCongestionHistorico: number,
-  ) {
-    this.turnosNoAsistidosCongestionHistorico =
-      turnosNoAsistidosCongestionHistorico;
-  }
-
-  public get getTurnosAsistidosCongestionHistorico() {
-    return this.turnosAsistidosCongestionHistorico;
-  }
-
-  public set setTurnosAsistidosCongestionHistorico(
-    turnosAsistidosCongestionHistorico: number,
-  ) {
-    this.turnosAsistidosCongestionHistorico =
-      turnosAsistidosCongestionHistorico;
-  }
-
-  public get getTurnosMaximoDiaCongestionHistorico() {
-    return this.turnosMaximoDiaCongestionHistorico;
-  }
-
-  public set setTurnosMaximoDiaCongestionHistorico(
-    turnosMaximoDiaCongestionHistorico: number,
-  ) {
-    this.turnosMaximoDiaCongestionHistorico =
-      turnosMaximoDiaCongestionHistorico;
-  }
-
-  public get getFechaHoraBajaCongestionHistorico() {
-    return this.fechaHoraBajaCongestionHistorico;
-  }
-
-  public set setFechaHoraBajaCongestionHistorico(
-    fechaHoraBajaCongestionHistorico: Date,
-  ) {
-    this.fechaHoraBajaCongestionHistorico = fechaHoraBajaCongestionHistorico;
-  }
 }

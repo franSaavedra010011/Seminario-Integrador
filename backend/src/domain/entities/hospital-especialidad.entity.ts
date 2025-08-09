@@ -6,76 +6,31 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  JoinColumn,
 } from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class HospitalEspecialidad {
-  @PrimaryGeneratedColumn()
-  idHospitalEspecialidad: number;
-
+export class HospitalEspecialidad extends Base {
   @Column()
-  fechaDesdeHospitalEspecialidad: Date;
+  fechaDesde: Date;
 
   @Column({ nullable: true })
-  fechaHastaHospitalEspecialidad: Date;
+  fechaHasta: Date;
 
   @ManyToOne(() => Hospital, (hospital) => hospital.hospitalEspecialidades)
+  @JoinColumn({ name: 'idHospital' })
   hospital: Hospital;
 
-  @ManyToOne(
-    () => Especialidad,
-    (especialidad) => especialidad.hospitalEspecialidades,
-    { eager: true },
-  )
+  @ManyToOne(() => Especialidad, (especialidad) => especialidad.hospitalEspecialidades, {
+    eager: true,
+  })
+  @JoinColumn({ name: 'idEspecialidad' })
   especialidad: Especialidad;
 
   @OneToMany(
     () => HospitalEspecialidadMedico,
-    (hospitalEspecialidadMedico) =>
-      hospitalEspecialidadMedico.hospitalEspecialidad,
+    (heMedico) => heMedico.hospitalEspecialidad,
   )
   hospitalEspecialidadMedico: HospitalEspecialidadMedico[];
-
-  public get getIdHospitalEspecialidad() {
-    return this.idHospitalEspecialidad;
-  }
-
-  public get getFechaDesdeHospitalEspecialidad() {
-    return this.fechaDesdeHospitalEspecialidad;
-  }
-
-  public set setFechaDesdeHospitalEspecialidad(
-    fechaDesdeHospitalEspecialidad: Date,
-  ) {
-    this.fechaDesdeHospitalEspecialidad = fechaDesdeHospitalEspecialidad;
-  }
-
-  public get getFechaHastaHospitalEspecialidad() {
-    return this.fechaHastaHospitalEspecialidad;
-  }
-
-  public set setFechaHastaHospitalEspecialidad(
-    fechaHastaHospitalEspecialidad: Date,
-  ) {
-    this.fechaHastaHospitalEspecialidad = fechaHastaHospitalEspecialidad;
-  }
-
-  public getHospitalEspecialidadMedico(): HospitalEspecialidadMedico[] {
-    return this.hospitalEspecialidadMedico;
-  }
-
-  public setHospitalEspecialidadMedico(
-    hospitalEspecialidadMedico: HospitalEspecialidadMedico[],
-  ): void {
-    this.hospitalEspecialidadMedico = hospitalEspecialidadMedico;
-  }
-
-  public getEspecialidad(): Especialidad {
-    return this.especialidad;
-  }
-
-  public set setEspecialidad(especialidad: Especialidad) {
-    this.especialidad = especialidad;
-  }
 }

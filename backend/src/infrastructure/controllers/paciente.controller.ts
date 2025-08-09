@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { PacienteService } from './paciente.service';
 import { PacienteDto } from './dto/createPaciente.dto';
 import { UpdatePacienteDto } from './dto/updatePaciente.dto';
-import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
+import { CreateUsuarioDto } from 'src/temp/usuarios/dto/create-usuario.dto';
 
 @Controller('paciente')
 export class PacienteController {

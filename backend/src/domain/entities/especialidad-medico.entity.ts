@@ -1,59 +1,26 @@
 import { Especialidad } from 'src/domain/entities/especialidad.entity';
 import { Medico } from 'src/domain/entities/medico.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class EspecialidadMedico {
-  @PrimaryGeneratedColumn()
-  idEspecialidadMedico: number;
-
+export class EspecialidadMedico extends Base {
   @Column()
-  fechaDesdeEspecialidadMedico: Date;
+  fechaDesde: Date;
 
   @Column({ nullable: true })
-  fechaHastaEspecialidadMedico: Date;
+  fechaHasta: Date;
 
-  @ManyToOne(
-    () => Especialidad,
-    (especialidad) => especialidad.especialidadesMedico,
-  )
+  @ManyToOne(() => Especialidad, (especialidad) => especialidad.especialidadesMedico)
+  @JoinColumn({ name: 'idEspecialidad' }) // opcional, si querés especificar
   especialidad: Especialidad;
 
   @ManyToOne(() => Medico, (medico) => medico.especialidadesMedico)
+  @JoinColumn({ name: 'idMedico' }) // opcional
   medico: Medico;
-
-  public get getIdEspecialidadMedico() {
-    return this.idEspecialidadMedico;
-  }
-
-  public get getFechaDesdeEspecialidadMedico() {
-    return this.fechaDesdeEspecialidadMedico;
-  }
-
-  public set setFechaDesdeEspecialidadMedico(
-    fechaDesdeEspecialidadMedico: Date,
-  ) {
-    this.fechaDesdeEspecialidadMedico = fechaDesdeEspecialidadMedico;
-  }
-
-  public get getFechaHastaEspecialidadMedico() {
-    return this.fechaHastaEspecialidadMedico;
-  }
-
-  public set setFechaHastaEspecialidadMedico(
-    fechaHastaEspecialidadMedico: Date,
-  ) {
-    this.fechaHastaEspecialidadMedico = fechaHastaEspecialidadMedico;
-  }
-
-  public get getMedico() {
-    return this.medico;
-  }
-
-  public setMedico(medico: Medico): void {
-    this.medico = medico;
-  }
-  public setEspecialidad(especialidad: Especialidad): void {
-    this.especialidad = especialidad;
-  }
 }

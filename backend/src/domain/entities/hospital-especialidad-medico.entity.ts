@@ -6,27 +6,27 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  JoinColumn,
 } from 'typeorm';
+import { Base } from './base.entity';
 
 @Entity()
-export class HospitalEspecialidadMedico {
-  @PrimaryGeneratedColumn()
-  idHospitalEspecialidadMedico: number;
-
+export class HospitalEspecialidadMedico extends Base {
   @Column()
-  fechaDesdeHospitalEspecialidadMedico: Date;
+  fechaDesde: Date;
 
   @Column({ nullable: true })
-  fechaHastaHospitalEspecialidadMedico: Date;
+  fechaHasta: Date;
 
   @ManyToOne(
     () => HospitalEspecialidad,
     (hospitalEspecialidad) => hospitalEspecialidad.hospitalEspecialidadMedico,
   )
+  @JoinColumn({ name: 'idHospitalEspecialidad' })
   hospitalEspecialidad: HospitalEspecialidad;
 
   @ManyToOne(() => Medico, (medico) => medico.hospitalEspecialidadMedico)
+  @JoinColumn({ name: 'idMedico' })
   medico: Medico;
 
   @OneToMany(
@@ -34,40 +34,4 @@ export class HospitalEspecialidadMedico {
     (agendaSemanal) => agendaSemanal.hospitalEspecialidadMedico,
   )
   agendaSemanales: AgendaSemanal[];
-
-  public get getIdHospitalEspecialidadMedico() {
-    return this.idHospitalEspecialidadMedico;
-  }
-
-  public get getFechaDesdeHospitalEspecialidadMedico() {
-    return this.fechaDesdeHospitalEspecialidadMedico;
-  }
-
-  public set setFechaDesdeHospitalEspecialidadMedico(fechaDesde: Date) {
-    this.fechaDesdeHospitalEspecialidadMedico = fechaDesde;
-  }
-
-  public get getFechaHastaHospitalEspecialidadMedico() {
-    return this.fechaHastaHospitalEspecialidadMedico;
-  }
-
-  public set setFechaHastaHospitalEspecialidadMedico(fechaHasta: Date) {
-    this.fechaHastaHospitalEspecialidadMedico = fechaHasta;
-  }
-
-  public get getMedico() {
-    return this.medico;
-  }
-
-  public setMedico(medico: Medico): void {
-    this.medico = medico;
-  }
-
-  public get getAgendaSemanales() {
-    return this.agendaSemanales;
-  }
-
-  public set setAgendaSemanales(agendaSemanales: AgendaSemanal[]) {
-    this.agendaSemanales = agendaSemanales;
-  }
 }
