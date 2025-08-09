@@ -10,78 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Usuario = void 0;
+const base_entity_1 = require("./base.entity");
 const paciente_entity_1 = require("./paciente.entity");
-const typeorm_1 = require("typeorm");
 const medico_entity_1 = require("./medico.entity");
 const usuario_rol_entity_1 = require("./usuario-rol.entity");
 const personal_hospital_entity_1 = require("./personal-hospital.entity");
-let Usuario = class Usuario {
-    idUsuario;
+const typeorm_1 = require("typeorm");
+let Usuario = class Usuario extends base_entity_1.Base {
     usernameUsuario;
     emailUsuario;
     passwordUsuario;
-    fechaHoraBajaUsuario;
-    pacientes;
-    medicos;
+    paciente;
+    medico;
     usuarioRoles;
     personalHospital;
-    getIdUsuario() {
-        return this.idUsuario;
-    }
-    setUsernameUsuario(value) {
-        this.usernameUsuario = value;
-    }
-    getUsernameUsuario() {
-        return this.usernameUsuario;
-    }
-    setEmailUsuario(value) {
-        this.emailUsuario = value;
-    }
-    getEmailUsuario() {
-        return this.emailUsuario;
-    }
-    setPasswordUsuario(value) {
-        this.passwordUsuario = value;
-    }
-    getPasswordUsuario() {
-        return this.passwordUsuario;
-    }
-    setFechaHoraBajaUsuario(value) {
-        this.fechaHoraBajaUsuario = value;
-    }
-    getFechaHoraBajaUsuario() {
-        return this.fechaHoraBajaUsuario;
-    }
-    setPacientes(paciente) {
-        this.pacientes = paciente;
-    }
-    getPacientes() {
-        return this.pacientes;
-    }
-    setMedicos(medico) {
-        this.medicos = medico;
-    }
-    getMedicos() {
-        return this.medicos;
-    }
-    setUsuarioRoles(usuarioRoles) {
-        this.usuarioRoles = usuarioRoles;
-    }
-    getUsuarioRoles() {
-        return this.usuarioRoles;
-    }
-    setPersonalHospital(personal) {
-        this.personalHospital = personal;
-    }
-    getPersonalHospital() {
-        return this.personalHospital;
-    }
 };
 exports.Usuario = Usuario;
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Usuario.prototype, "idUsuario", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true, nullable: false }),
     __metadata("design:type", String)
@@ -95,17 +39,13 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "passwordUsuario", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Usuario.prototype, "fechaHoraBajaUsuario", void 0);
-__decorate([
     (0, typeorm_1.OneToOne)(() => paciente_entity_1.Paciente, (paciente) => paciente.usuario),
     __metadata("design:type", paciente_entity_1.Paciente)
-], Usuario.prototype, "pacientes", void 0);
+], Usuario.prototype, "paciente", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => medico_entity_1.Medico, (medico) => medico.usuario),
     __metadata("design:type", medico_entity_1.Medico)
-], Usuario.prototype, "medicos", void 0);
+], Usuario.prototype, "medico", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => usuario_rol_entity_1.UsuarioRol, (usuarioRol) => usuarioRol.usuario),
     __metadata("design:type", Array)

@@ -1,16 +1,9 @@
 import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
 import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
-export declare class AgendaDia {
-    idAgendaDia: number;
-    nombreAgendaDia: string;
-    fechaHoraBajaAgendaDia: Date;
+import { Base } from './base.entity';
+import { DiaSemanaEnum } from '../enums/dia-semana.enum';
+export declare class AgendaDia extends Base {
+    nombreAgendaDia: DiaSemanaEnum;
     agendaSemanal: AgendaSemanal;
     turnosAgendaDia: TurnoAgendaDia[];
-    get getIdAgendaDia(): number;
-    get getNombreAgendaDia(): string;
-    set setNombreAgendaDia(nombreAgendaDia: string);
-    get getFechaHoraBajaAgendaDia(): Date;
-    set setFechaHoraBajaAgendaDia(fechaHoraBajaAgendaDia: Date);
-    get getTurnosAgendaDia(): TurnoAgendaDia[];
-    set setTurnosAgendaDia(turnosAgendaDia: TurnoAgendaDia[]);
 }

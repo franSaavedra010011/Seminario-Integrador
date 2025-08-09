@@ -1,16 +1,8 @@
 import { Paciente } from 'src/domain/entities/paciente.entity';
-import { Turno } from 'src/turno/entities/turno.entity';
-export declare class PacienteNotificacion {
-    idPacienteNotificacion: number;
+import { Turno } from 'src/domain/entities/turno.entity';
+import { Base } from './base.entity';
+export declare class PacienteNotificacion extends Base {
     observacionPacienteNotificacion: string;
-    fechaHoraBajaPacienteNotificacion: Date;
     paciente: Paciente;
     turno: Turno;
-    get getIdPacienteNotificacion(): number;
-    get getObservacionPacienteNotificacion(): string;
-    set setObservacionPacienteNotificacion(observacion: string);
-    get getFechaHoraBajaPacienteNotificacion(): Date;
-    set setFechaHoraBajaPacienteNotificacion(fecha: Date);
-    get getTurno(): Turno;
-    set setTurno(turno: Turno);
 }

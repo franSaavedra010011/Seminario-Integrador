@@ -11,83 +11,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Medico = void 0;
 const typeorm_1 = require("typeorm");
-const turno_entity_1 = require("../../turno/entities/turno.entity");
+const base_entity_1 = require("./base.entity");
+const turno_entity_1 = require("./turno.entity");
 const usuario_entity_1 = require("./usuario.entity");
 const especialidad_medico_entity_1 = require("./especialidad-medico.entity");
 const historia_medica_entity_1 = require("./historia-medica.entity");
 const hospital_especialidad_medico_entity_1 = require("./hospital-especialidad-medico.entity");
-let Medico = class Medico {
-    idMedico;
+let Medico = class Medico extends base_entity_1.Base {
     nombreMedico;
     apellidoMedico;
     dniMedico;
     telMedico;
     matriculaMedico;
     tiempoConsulta;
-    fechaHoraBajaMedico;
-    fechaHastaMedico;
     turnos;
     usuario;
     especialidadesMedico;
     historiasMedica;
     hospitalEspecialidadMedico;
-    get getIdMedico() {
-        return this.idMedico;
-    }
-    get getNombreMedico() {
-        return this.nombreMedico;
-    }
-    set setNombreMedico(nombreMedico) {
-        this.nombreMedico = nombreMedico;
-    }
-    get getApellidoMedico() {
-        return this.apellidoMedico;
-    }
-    set setApellidoMedico(apellidoMedico) {
-        this.apellidoMedico = apellidoMedico;
-    }
-    get getDniMedico() {
-        return this.dniMedico;
-    }
-    set setDniMedico(dniMedico) {
-        this.dniMedico = dniMedico;
-    }
-    get getTelMedico() {
-        return this.telMedico;
-    }
-    set setTelMedico(telMedico) {
-        this.telMedico = telMedico;
-    }
-    get getMatriculaMedico() {
-        return this.matriculaMedico;
-    }
-    set setMatriculaMedico(matriculaMedico) {
-        this.matriculaMedico = matriculaMedico;
-    }
-    get getTiempoConsulta() {
-        return this.tiempoConsulta;
-    }
-    set setTiempoConsulta(tiempoConsulta) {
-        this.tiempoConsulta = tiempoConsulta;
-    }
-    get getFechaHoraBajaMedico() {
-        return this.fechaHoraBajaMedico;
-    }
-    set setFechaHoraBajaMedico(fechaHoraBajaMedico) {
-        this.fechaHoraBajaMedico = fechaHoraBajaMedico;
-    }
-    get getFechaHastaMedico() {
-        return this.fechaHastaMedico;
-    }
-    set setFechaHastaMedico(fechaHastaMedico) {
-        this.fechaHastaMedico = fechaHastaMedico;
-    }
 };
 exports.Medico = Medico;
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Medico.prototype, "idMedico", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -113,19 +56,11 @@ __decorate([
     __metadata("design:type", Number)
 ], Medico.prototype, "tiempoConsulta", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Medico.prototype, "fechaHoraBajaMedico", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Medico.prototype, "fechaHastaMedico", void 0);
-__decorate([
     (0, typeorm_1.OneToMany)(() => turno_entity_1.Turno, (turno) => turno.paciente),
     __metadata("design:type", Array)
 ], Medico.prototype, "turnos", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => usuario_entity_1.Usuario, (usuario) => usuario.medicos),
+    (0, typeorm_1.OneToOne)(() => usuario_entity_1.Usuario, (usuario) => usuario.medico),
     (0, typeorm_1.JoinColumn)({ name: 'userEmail', referencedColumnName: 'emailUsuario' }),
     __metadata("design:type", usuario_entity_1.Usuario)
 ], Medico.prototype, "usuario", void 0);

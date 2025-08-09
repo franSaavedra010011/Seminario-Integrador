@@ -1,9 +1,14 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
-import { Role } from '../../domain/enums/rol.enum';
 import { AuthGuard } from '../guard/auth.guard';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from './roles.decorator';
 
-export function Auth(role: Role) {
-  return applyDecorators(UseGuards(AuthGuard, RolesGuard), Roles(role));
+// Ahora acepta strings (y opcionalmente enum para compatibilidad)
+export function Auth(...roles: string[]) {
+  return applyDecorators(
+    UseGuards(AuthGuard, RolesGuard),
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    roles.length ? Roles(...roles.map(String)) : (target, key?, desc?) => desc!, // si no pasás roles, solo requiere estar logueado
+  );
 }

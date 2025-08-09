@@ -11,11 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Paciente = void 0;
 const typeorm_1 = require("typeorm");
-const turno_entity_1 = require("../../turno/entities/turno.entity");
+const base_entity_1 = require("./base.entity");
+const turno_entity_1 = require("./turno.entity");
 const usuario_entity_1 = require("./usuario.entity");
 const paciente_notificacion_entity_1 = require("./paciente-notificacion.entity");
-let Paciente = class Paciente {
-    id;
+const localidad_entity_1 = require("./localidad.entity");
+let Paciente = class Paciente extends base_entity_1.Base {
     nombrePaciente;
     apellidoPaciente;
     edadPaciente;
@@ -23,76 +24,12 @@ let Paciente = class Paciente {
     celularPaciente;
     correoPaciente;
     grupoSanguineoPaciente;
-    fechaHoraBajaPaciente;
     turnos;
     usuario;
     pacienteNotificaciones;
-    get getNombrePaciente() {
-        return this.nombrePaciente;
-    }
-    set setNombrePaciente(value) {
-        this.nombrePaciente = value.trim();
-    }
-    get getApellidoPaciente() {
-        return this.apellidoPaciente;
-    }
-    set setApellidoPaciente(value) {
-        this.apellidoPaciente = value.trim();
-    }
-    get getEdadPaciente() {
-        return this.edadPaciente;
-    }
-    set setEdadPaciente(value) {
-        this.edadPaciente = value;
-    }
-    get getFechaNacimientoPaciente() {
-        return this.fechaNacimientoPaciente;
-    }
-    set setFechaNacimientoPaciente(value) {
-        this.fechaNacimientoPaciente = value;
-    }
-    get getCelularPaciente() {
-        return this.celularPaciente;
-    }
-    set setCelularPaciente(value) {
-        this.celularPaciente = value.trim();
-    }
-    get getCorreoPaciente() {
-        return this.correoPaciente;
-    }
-    set setCorreoPaciente(value) {
-        this.correoPaciente = value.trim();
-    }
-    get getGrupoSanguineoPaciente() {
-        return this.grupoSanguineoPaciente;
-    }
-    set setGrupoSanguineoPaciente(value) {
-        this.grupoSanguineoPaciente = value.trim();
-    }
-    get getFechaHoraBajaPaciente() {
-        return this.fechaHoraBajaPaciente;
-    }
-    set setFechaHoraBajaPaciente(value) {
-        this.fechaHoraBajaPaciente = value;
-    }
-    get getTurnos() {
-        return this.turnos;
-    }
-    set setTurnos(value) {
-        this.turnos = value;
-    }
-    get getPacienteNotificacion() {
-        return this.pacienteNotificaciones;
-    }
-    set setPacienteNotificacion(pacienteNotificaciones) {
-        this.pacienteNotificaciones = pacienteNotificaciones;
-    }
+    localidad;
 };
 exports.Paciente = Paciente;
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Paciente.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -122,15 +59,11 @@ __decorate([
     __metadata("design:type", String)
 ], Paciente.prototype, "grupoSanguineoPaciente", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Paciente.prototype, "fechaHoraBajaPaciente", void 0);
-__decorate([
     (0, typeorm_1.OneToMany)(() => turno_entity_1.Turno, (turno) => turno.paciente, { nullable: true }),
     __metadata("design:type", Array)
 ], Paciente.prototype, "turnos", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => usuario_entity_1.Usuario, (usuario) => usuario.pacientes, { nullable: true }),
+    (0, typeorm_1.OneToOne)(() => usuario_entity_1.Usuario, (usuario) => usuario.paciente, { nullable: true }),
     (0, typeorm_1.JoinColumn)({ name: 'userEmail', referencedColumnName: 'emailUsuario' }),
     __metadata("design:type", usuario_entity_1.Usuario)
 ], Paciente.prototype, "usuario", void 0);
@@ -138,6 +71,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => paciente_notificacion_entity_1.PacienteNotificacion, (pacienteNotificacion) => pacienteNotificacion.paciente),
     __metadata("design:type", Array)
 ], Paciente.prototype, "pacienteNotificaciones", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => localidad_entity_1.Localidad, { nullable: false }),
+    __metadata("design:type", localidad_entity_1.Localidad)
+], Paciente.prototype, "localidad", void 0);
 exports.Paciente = Paciente = __decorate([
     (0, typeorm_1.Entity)()
 ], Paciente);

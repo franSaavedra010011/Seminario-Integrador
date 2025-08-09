@@ -1,8 +1,9 @@
-import { Turno } from '../../turno/entities/turno.entity';
+import { Base } from './base.entity';
+import { Turno } from 'src/domain/entities/turno.entity';
 import { Usuario } from 'src/domain/entities/usuario.entity';
 import { PacienteNotificacion } from 'src/domain/entities/paciente-notificacion.entity';
-export declare class Paciente {
-    id: number;
+import { Localidad } from './localidad.entity';
+export declare class Paciente extends Base {
     nombrePaciente: string;
     apellidoPaciente: string;
     edadPaciente: number;
@@ -10,28 +11,8 @@ export declare class Paciente {
     celularPaciente: string;
     correoPaciente: string;
     grupoSanguineoPaciente: string;
-    fechaHoraBajaPaciente: Date;
     turnos: Turno[];
     usuario: Usuario;
     pacienteNotificaciones: PacienteNotificacion[];
-    get getNombrePaciente(): string;
-    set setNombrePaciente(value: string);
-    get getApellidoPaciente(): string;
-    set setApellidoPaciente(value: string);
-    get getEdadPaciente(): number;
-    set setEdadPaciente(value: number);
-    get getFechaNacimientoPaciente(): Date;
-    set setFechaNacimientoPaciente(value: Date);
-    get getCelularPaciente(): string;
-    set setCelularPaciente(value: string);
-    get getCorreoPaciente(): string;
-    set setCorreoPaciente(value: string);
-    get getGrupoSanguineoPaciente(): string;
-    set setGrupoSanguineoPaciente(value: string);
-    get getFechaHoraBajaPaciente(): Date;
-    set setFechaHoraBajaPaciente(value: Date);
-    get getTurnos(): Turno[];
-    set setTurnos(value: Turno[]);
-    get getPacienteNotificacion(): PacienteNotificacion[];
-    set setPacienteNotificacion(pacienteNotificaciones: PacienteNotificacion[]);
+    localidad: Localidad;
 }

@@ -1,22 +1,10 @@
 import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
-import { Turno } from 'src/turno/entities/turno.entity';
-export declare class TurnoAgendaDia {
-    idTurnoAgendaDia: number;
-    disponibleTurnoAgendaDia: boolean;
-    horaDesdeTurnoAgendaDia: string;
-    horaHastaTurnoAgendaDia: string;
-    fechaHoraBajaTurnoAgendaDia: Date;
+import { Turno } from 'src/domain/entities/turno.entity';
+import { Base } from './base.entity';
+export declare class TurnoAgendaDia extends Base {
+    disponible: boolean;
+    horaDesde: string;
+    horaHasta: string;
     agendaDia: AgendaDia;
     turno: Turno;
-    get getIdTurnoAgendaDia(): number;
-    get getDisponibleTurnoAgendaDia(): boolean;
-    set setDisponibleTurnoAgendaDia(value: boolean);
-    get getHoraDesdeTurnoAgendaDia(): string;
-    set setHoraDesdeTurnoAgendaDia(value: string);
-    get getHoraHastaTurnoAgendaDia(): string;
-    set setHoraHastaTurnoAgendaDia(value: string);
-    get getFechaHoraBajaTurnoAgendaDia(): Date;
-    set setFechaHoraBajaTurnoAgendaDia(value: Date);
-    get getTurno(): Turno;
-    set setTurno(value: Turno);
 }

@@ -12,97 +12,54 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CongestionActual = void 0;
 const hospital_entity_1 = require("./hospital.entity");
 const typeorm_1 = require("typeorm");
-let CongestionActual = class CongestionActual {
-    idCongestionActual;
-    fechaCongestionActual;
-    horaActualizacionCongestionActual;
-    turnosCanceladosCongestionActual;
-    turnosNoAsistidosCongestionActual;
-    turnosAsistidosCongestionActual;
-    turnosEnProcesoCongestionActual;
-    fechaHoraBajaCongestionActual;
+const base_entity_1 = require("./base.entity");
+const nivel_congestion_enum_1 = require("../enums/nivel-congestion.enum");
+let CongestionActual = class CongestionActual extends base_entity_1.Base {
+    fecha;
+    horaActualizacion;
+    nivelCongestion;
+    turnosCancelados;
+    turnosNoAsistidos;
+    turnosAsistidos;
+    turnosEnProceso;
     hospital;
-    get getIdCongestionActual() {
-        return this.idCongestionActual;
-    }
-    get getFechaCongestionActual() {
-        return this.fechaCongestionActual;
-    }
-    set setFechaCongestionActual(fechaCongestionActual) {
-        this.fechaCongestionActual = fechaCongestionActual;
-    }
-    get getHoraActualizacionCongestionActual() {
-        return this.horaActualizacionCongestionActual;
-    }
-    set setHoraActualizacionCongestionActual(horaActualizacionCongestionActual) {
-        this.horaActualizacionCongestionActual = horaActualizacionCongestionActual;
-    }
-    get getTurnosCanceladosCongestionActual() {
-        return this.turnosCanceladosCongestionActual;
-    }
-    set setTurnosCanceladosCongestionActual(turnosCanceladosCongestionActual) {
-        this.turnosCanceladosCongestionActual = turnosCanceladosCongestionActual;
-    }
-    get getTurnosNoAsistidosCongestionActual() {
-        return this.turnosNoAsistidosCongestionActual;
-    }
-    set setTurnosNoAsistidosCongestionActual(turnosNoAsistidosCongestionActual) {
-        this.turnosNoAsistidosCongestionActual = turnosNoAsistidosCongestionActual;
-    }
-    get getTurnosAsistidosCongestionActual() {
-        return this.turnosAsistidosCongestionActual;
-    }
-    set setTurnosAsistidosCongestionActual(turnosAsistidosCongestionActual) {
-        this.turnosAsistidosCongestionActual = turnosAsistidosCongestionActual;
-    }
-    get getTurnosEnProcesoCongestionActual() {
-        return this.turnosEnProcesoCongestionActual;
-    }
-    set setTurnosEnProcesoCongestionActual(turnosEnProcesoCongestionActual) {
-        this.turnosEnProcesoCongestionActual = turnosEnProcesoCongestionActual;
-    }
-    get getFechaHoraBajaCongestionActual() {
-        return this.fechaHoraBajaCongestionActual;
-    }
-    set setFechaHoraBajaCongestionActual(fechaHoraBajaCongestionActual) {
-        this.fechaHoraBajaCongestionActual = fechaHoraBajaCongestionActual;
-    }
 };
 exports.CongestionActual = CongestionActual;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], CongestionActual.prototype, "idCongestionActual", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], CongestionActual.prototype, "fechaCongestionActual", void 0);
+], CongestionActual.prototype, "fecha", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionActual.prototype, "horaActualizacionCongestionActual", void 0);
+], CongestionActual.prototype, "horaActualizacion", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: nivel_congestion_enum_1.NivelCongestionEnum,
+        default: 'BAJA',
+    }),
+    __metadata("design:type", String)
+], CongestionActual.prototype, "nivelCongestion", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionActual.prototype, "turnosCanceladosCongestionActual", void 0);
+], CongestionActual.prototype, "turnosCancelados", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionActual.prototype, "turnosNoAsistidosCongestionActual", void 0);
+], CongestionActual.prototype, "turnosNoAsistidos", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionActual.prototype, "turnosAsistidosCongestionActual", void 0);
+], CongestionActual.prototype, "turnosAsistidos", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionActual.prototype, "turnosEnProcesoCongestionActual", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], CongestionActual.prototype, "fechaHoraBajaCongestionActual", void 0);
+], CongestionActual.prototype, "turnosEnProceso", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => hospital_entity_1.Hospital, (hospital) => hospital.congestionesActual),
+    (0, typeorm_1.JoinColumn)({ name: 'idHospital' }),
     __metadata("design:type", hospital_entity_1.Hospital)
 ], CongestionActual.prototype, "hospital", void 0);
 exports.CongestionActual = CongestionActual = __decorate([

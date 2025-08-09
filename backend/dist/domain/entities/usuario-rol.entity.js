@@ -13,47 +13,27 @@ exports.UsuarioRol = void 0;
 const rol_entity_1 = require("./rol.entity");
 const usuario_entity_1 = require("./usuario.entity");
 const typeorm_1 = require("typeorm");
-let UsuarioRol = class UsuarioRol {
-    idUsuarioRol;
-    fechaDesdeUsuarioRol;
-    fechaHastaUsuarioRol;
+const base_entity_1 = require("./base.entity");
+let UsuarioRol = class UsuarioRol extends base_entity_1.Base {
+    fechaDesde;
+    fechaHasta;
+    rolActivo;
     rol;
     usuario;
-    get getIdUsuarioRol() {
-        return this.idUsuarioRol;
-    }
-    get getFechaDesdeUsuarioRol() {
-        return this.fechaDesdeUsuarioRol;
-    }
-    set setFechaDesdeUsuarioRol(value) {
-        this.fechaDesdeUsuarioRol = value;
-    }
-    get getFechaHastaUsuarioRol() {
-        return this.fechaHastaUsuarioRol;
-    }
-    set setFechaHastaUsuarioRol(value) {
-        this.fechaHastaUsuarioRol = value;
-    }
-    get getRol() {
-        return this.rol;
-    }
-    setRol(value) {
-        this.rol = value;
-    }
 };
 exports.UsuarioRol = UsuarioRol;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], UsuarioRol.prototype, "idUsuarioRol", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], UsuarioRol.prototype, "fechaDesdeUsuarioRol", void 0);
+], UsuarioRol.prototype, "fechaDesde", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
-], UsuarioRol.prototype, "fechaHastaUsuarioRol", void 0);
+], UsuarioRol.prototype, "fechaHasta", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Boolean)
+], UsuarioRol.prototype, "rolActivo", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => rol_entity_1.Rol, (rol) => rol.usuarioRoles),
     __metadata("design:type", rol_entity_1.Rol)

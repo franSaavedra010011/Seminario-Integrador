@@ -12,102 +12,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CongestionHistorico = void 0;
 const hospital_entity_1 = require("./hospital.entity");
 const typeorm_1 = require("typeorm");
-let CongestionHistorico = class CongestionHistorico {
-    idCongestionHistorico;
-    fechaCongestionHistorico;
-    horaActualizacionCongestionHistorico;
-    turnosCanceladosCongestionHistorico;
-    turnosNoAsistidosCongestionHistorico;
-    turnosAsistidosCongestionHistorico;
-    turnosMaximoDiaCongestionHistorico;
-    fechaHoraBajaCongestionHistorico;
+const base_entity_1 = require("./base.entity");
+let CongestionHistorico = class CongestionHistorico extends base_entity_1.Base {
+    fecha;
+    horaActualizacion;
+    turnosCancelados;
+    turnosNoAsistidos;
+    turnosAsistidos;
+    turnosMaximoDia;
     hospital;
-    get getIdCongestionHistorico() {
-        return this.idCongestionHistorico;
-    }
-    get getFechaCongestionHistorico() {
-        return this.fechaCongestionHistorico;
-    }
-    set setFechaCongestionHistorico(fechaCongestionHistorico) {
-        this.fechaCongestionHistorico = fechaCongestionHistorico;
-    }
-    get getHoraActualizacionCongestionHistorico() {
-        return this.horaActualizacionCongestionHistorico;
-    }
-    set setHoraActualizacionCongestionHistorico(horaActualizacionCongestionHistorico) {
-        this.horaActualizacionCongestionHistorico =
-            horaActualizacionCongestionHistorico;
-    }
-    get getTurnosCanceladosCongestionHistorico() {
-        return this.turnosCanceladosCongestionHistorico;
-    }
-    set setTurnosCanceladosCongestionHistorico(turnosCanceladosCongestionHistorico) {
-        this.turnosCanceladosCongestionHistorico =
-            turnosCanceladosCongestionHistorico;
-    }
-    get getTurnosNoAsistidosCongestionHistorico() {
-        return this.turnosNoAsistidosCongestionHistorico;
-    }
-    set setTurnosNoAsistidosCongestionHistorico(turnosNoAsistidosCongestionHistorico) {
-        this.turnosNoAsistidosCongestionHistorico =
-            turnosNoAsistidosCongestionHistorico;
-    }
-    get getTurnosAsistidosCongestionHistorico() {
-        return this.turnosAsistidosCongestionHistorico;
-    }
-    set setTurnosAsistidosCongestionHistorico(turnosAsistidosCongestionHistorico) {
-        this.turnosAsistidosCongestionHistorico =
-            turnosAsistidosCongestionHistorico;
-    }
-    get getTurnosMaximoDiaCongestionHistorico() {
-        return this.turnosMaximoDiaCongestionHistorico;
-    }
-    set setTurnosMaximoDiaCongestionHistorico(turnosMaximoDiaCongestionHistorico) {
-        this.turnosMaximoDiaCongestionHistorico =
-            turnosMaximoDiaCongestionHistorico;
-    }
-    get getFechaHoraBajaCongestionHistorico() {
-        return this.fechaHoraBajaCongestionHistorico;
-    }
-    set setFechaHoraBajaCongestionHistorico(fechaHoraBajaCongestionHistorico) {
-        this.fechaHoraBajaCongestionHistorico = fechaHoraBajaCongestionHistorico;
-    }
 };
 exports.CongestionHistorico = CongestionHistorico;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], CongestionHistorico.prototype, "idCongestionHistorico", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], CongestionHistorico.prototype, "fechaCongestionHistorico", void 0);
+], CongestionHistorico.prototype, "fecha", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionHistorico.prototype, "horaActualizacionCongestionHistorico", void 0);
+], CongestionHistorico.prototype, "horaActualizacion", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionHistorico.prototype, "turnosCanceladosCongestionHistorico", void 0);
+], CongestionHistorico.prototype, "turnosCancelados", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionHistorico.prototype, "turnosNoAsistidosCongestionHistorico", void 0);
+], CongestionHistorico.prototype, "turnosNoAsistidos", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionHistorico.prototype, "turnosAsistidosCongestionHistorico", void 0);
+], CongestionHistorico.prototype, "turnosAsistidos", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], CongestionHistorico.prototype, "turnosMaximoDiaCongestionHistorico", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], CongestionHistorico.prototype, "fechaHoraBajaCongestionHistorico", void 0);
+], CongestionHistorico.prototype, "turnosMaximoDia", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => hospital_entity_1.Hospital, (hospital) => hospital.congestionesHistorico),
+    (0, typeorm_1.JoinColumn)({ name: 'idHospital' }),
     __metadata("design:type", hospital_entity_1.Hospital)
 ], CongestionHistorico.prototype, "hospital", void 0);
 exports.CongestionHistorico = CongestionHistorico = __decorate([

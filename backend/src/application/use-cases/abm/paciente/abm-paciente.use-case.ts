@@ -16,8 +16,6 @@ import { Rol } from 'src/domain/entities/rol.entity';
 export class AbmPacienteUseCase {
   constructor(
     @InjectRepository(Paciente)
-    private readonly pacienteRepository: Repository<Paciente>,
-    private readonly authService: AuthService,
     private readonly genericRepository: GenericRepositoryService,
   ) {}
 

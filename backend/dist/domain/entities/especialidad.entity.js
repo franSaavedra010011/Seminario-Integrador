@@ -14,69 +14,33 @@ const especialidad_medico_entity_1 = require("./especialidad-medico.entity");
 const hospital_especialidad_entity_1 = require("./hospital-especialidad.entity");
 const turno_entity_1 = require("./turno.entity");
 const typeorm_1 = require("typeorm");
-let Especialidad = class Especialidad {
-    idEspecialidad;
-    nombreEspecialidad;
-    descripcionEspecialidad;
-    fechaHoraBajaEspecialidad;
+const base_entity_1 = require("./base.entity");
+let Especialidad = class Especialidad extends base_entity_1.Base {
+    nombre;
+    descripcion;
     turnos;
     especialidadesMedico;
     hospitalEspecialidades;
-    getIdEspecialidad() {
-        return this.idEspecialidad;
-    }
-    get getNombreEspecialidad() {
-        return this.nombreEspecialidad;
-    }
-    set setNombreEspecialidad(nombreEspecialidad) {
-        this.nombreEspecialidad = nombreEspecialidad;
-    }
-    get getDescripcionEspecialidad() {
-        return this.descripcionEspecialidad;
-    }
-    set setDescripcionEspecialidad(descripcionEspecialidad) {
-        this.descripcionEspecialidad = descripcionEspecialidad;
-    }
-    get getFechaHoraBajaEspecialidad() {
-        return this.fechaHoraBajaEspecialidad;
-    }
-    set setFechaHoraBajaEspecialidad(fechaHoraBajaEspecialidad) {
-        this.fechaHoraBajaEspecialidad = fechaHoraBajaEspecialidad;
-    }
-    getEspecialidadesMedico() {
-        return this.especialidadesMedico;
-    }
-    setEspecialidadesMedico(especialidadesMedico) {
-        this.especialidadesMedico = especialidadesMedico;
-    }
 };
 exports.Especialidad = Especialidad;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Especialidad.prototype, "idEspecialidad", void 0);
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Especialidad.prototype, "nombre", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Especialidad.prototype, "nombreEspecialidad", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Especialidad.prototype, "descripcionEspecialidad", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Especialidad.prototype, "fechaHoraBajaEspecialidad", void 0);
+], Especialidad.prototype, "descripcion", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => turno_entity_1.Turno, (turno) => turno.especialidad),
     __metadata("design:type", Array)
 ], Especialidad.prototype, "turnos", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => especialidad_medico_entity_1.EspecialidadMedico, (especialidadMedico) => especialidadMedico.especialidad),
+    (0, typeorm_1.OneToMany)(() => especialidad_medico_entity_1.EspecialidadMedico, (em) => em.especialidad),
     __metadata("design:type", Array)
 ], Especialidad.prototype, "especialidadesMedico", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => hospital_especialidad_entity_1.HospitalEspecialidad, (hospitalEspecialidad) => hospitalEspecialidad.especialidad),
+    (0, typeorm_1.OneToMany)(() => hospital_especialidad_entity_1.HospitalEspecialidad, (he) => he.especialidad),
     __metadata("design:type", Array)
 ], Especialidad.prototype, "hospitalEspecialidades", void 0);
 exports.Especialidad = Especialidad = __decorate([

@@ -10,50 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RolPermiso = void 0;
+const typeorm_1 = require("typeorm");
+const base_entity_1 = require("./base.entity");
 const permiso_entity_1 = require("./permiso.entity");
 const rol_entity_1 = require("./rol.entity");
-const typeorm_1 = require("typeorm");
-let RolPermiso = class RolPermiso {
-    idRolPermiso;
-    fechaDesdeRolPermiso;
-    fechaHastaRolPermiso;
+let RolPermiso = class RolPermiso extends base_entity_1.Base {
+    fechaDesde;
+    fechaHasta;
     permiso;
     rol;
-    get getIdRolPermiso() {
-        return this.idRolPermiso;
-    }
-    get getFechaDesdeRolPermiso() {
-        return this.fechaDesdeRolPermiso;
-    }
-    set setFechaDesdeRolPermiso(fecha) {
-        this.fechaDesdeRolPermiso = fecha;
-    }
-    get getFechaHastaRolPermiso() {
-        return this.fechaHastaRolPermiso;
-    }
-    set setFechaHastaRolPermiso(fecha) {
-        this.fechaHastaRolPermiso = fecha;
-    }
-    get getPermiso() {
-        return this.permiso;
-    }
-    set setPermiso(permiso) {
-        this.permiso = permiso;
-    }
 };
 exports.RolPermiso = RolPermiso;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], RolPermiso.prototype, "idRolPermiso", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], RolPermiso.prototype, "fechaDesdeRolPermiso", void 0);
+], RolPermiso.prototype, "fechaDesde", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
-], RolPermiso.prototype, "fechaHastaRolPermiso", void 0);
+], RolPermiso.prototype, "fechaHasta", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => permiso_entity_1.Permiso, (permiso) => permiso.rolesPermiso),
     __metadata("design:type", permiso_entity_1.Permiso)

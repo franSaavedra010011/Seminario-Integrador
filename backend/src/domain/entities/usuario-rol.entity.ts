@@ -11,6 +11,9 @@ export class UsuarioRol extends Base{
   @Column({ nullable: true })
   fechaHasta: Date;
 
+  @Column()
+  rolActivo: boolean;
+
   @ManyToOne(() => Rol, (rol) => rol.usuarioRoles)
   rol: Rol;
 

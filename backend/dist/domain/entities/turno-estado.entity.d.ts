@@ -1,16 +1,9 @@
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
-import { Turno } from 'src/turno/entities/turno.entity';
-export declare class TurnoEstado {
-    idTurnoEstado: number;
-    fechaDesdeTurnoEstado: Date;
-    fechaHastaTurnoEstado: Date;
+import { Turno } from 'src/domain/entities/turno.entity';
+import { Base } from './base.entity';
+export declare class TurnoEstado extends Base {
+    fechaDesde: Date;
+    fechaHasta: Date;
     turno: Turno;
     estadoTurno: EstadoTurno;
-    get getIdTurnoEstado(): number;
-    get getFechaDesdeTurnoEstado(): Date;
-    set setFechaDesdeTurnoEstado(value: Date);
-    get getFechaHastaTurnoEstado(): Date;
-    set setFechaHastaTurnoEstado(value: Date);
-    get getEstadoTurno(): EstadoTurno;
-    set setEstadoTurno(value: EstadoTurno);
 }

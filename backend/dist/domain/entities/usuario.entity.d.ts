@@ -1,32 +1,14 @@
+import { Base } from 'src/domain/entities/base.entity';
 import { Paciente } from 'src/domain/entities/paciente.entity';
 import { Medico } from 'src/domain/entities/medico.entity';
 import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
 import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
-export declare class Usuario {
-    idUsuario: number;
+export declare class Usuario extends Base {
     usernameUsuario: string;
     emailUsuario: string;
     passwordUsuario: string;
-    fechaHoraBajaUsuario: Date;
-    pacientes: Paciente;
-    medicos: Medico;
+    paciente: Paciente;
+    medico: Medico;
     usuarioRoles: UsuarioRol[];
     personalHospital: PersonalHospital[];
-    getIdUsuario(): number;
-    setUsernameUsuario(value: string): void;
-    getUsernameUsuario(): string;
-    setEmailUsuario(value: string): void;
-    getEmailUsuario(): string;
-    setPasswordUsuario(value: string): void;
-    getPasswordUsuario(): string;
-    setFechaHoraBajaUsuario(value: Date): void;
-    getFechaHoraBajaUsuario(): Date;
-    setPacientes(paciente: Paciente): void;
-    getPacientes(): Paciente;
-    setMedicos(medico: Medico): void;
-    getMedicos(): Medico;
-    setUsuarioRoles(usuarioRoles: UsuarioRol[]): void;
-    getUsuarioRoles(): UsuarioRol[];
-    setPersonalHospital(personal: PersonalHospital[]): void;
-    getPersonalHospital(): PersonalHospital[];
 }

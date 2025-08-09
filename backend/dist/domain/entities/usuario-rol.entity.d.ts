@@ -1,16 +1,10 @@
 import { Rol } from 'src/domain/entities/rol.entity';
 import { Usuario } from 'src/domain/entities/usuario.entity';
-export declare class UsuarioRol {
-    idUsuarioRol: number;
-    fechaDesdeUsuarioRol: Date;
-    fechaHastaUsuarioRol: Date;
+import { Base } from './base.entity';
+export declare class UsuarioRol extends Base {
+    fechaDesde: Date;
+    fechaHasta: Date;
+    rolActivo: boolean;
     rol: Rol;
     usuario: Usuario;
-    get getIdUsuarioRol(): number;
-    get getFechaDesdeUsuarioRol(): Date;
-    set setFechaDesdeUsuarioRol(value: Date);
-    get getFechaHastaUsuarioRol(): Date;
-    set setFechaHastaUsuarioRol(value: Date);
-    get getRol(): Rol;
-    setRol(value: Rol): void;
 }

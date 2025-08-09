@@ -13,25 +13,31 @@ exports.RolesGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const roles_decorator_1 = require("../decorators/roles.decorator");
-const rol_enum_1 = require("../../common/enums/rol.enum");
 let RolesGuard = class RolesGuard {
     reflector;
     constructor(reflector) {
         this.reflector = reflector;
     }
     canActivate(context) {
-        const role = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [
+        const requiredRoles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [
             context.getHandler(),
-            context.getClass,
+            context.getClass(),
         ]);
-        if (!role) {
+        if (!requiredRoles || requiredRoles.length === 0) {
             return true;
         }
         const { usuario } = context.switchToHttp().getRequest();
-        if (usuario.role === rol_enum_1.Role.ADMIN) {
+        if (usuario.rol?.toUpperCase() === 'ADMIN' ||
+            usuario.roles?.some((r) => r.toUpperCase() === 'ADMIN')) {
             return true;
         }
-        return role === usuario.role;
+        if (usuario.rol) {
+            return requiredRoles.some((rol) => usuario.rol.toUpperCase() === rol.toUpperCase());
+        }
+        if (usuario.roles) {
+            return requiredRoles.some((rol) => usuario.roles.map((r) => r.toUpperCase()).includes(rol.toUpperCase()));
+        }
+        return false;
     }
 };
 exports.RolesGuard = RolesGuard;

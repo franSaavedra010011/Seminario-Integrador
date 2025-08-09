@@ -1,27 +1,13 @@
 import { Hospital } from 'src/domain/entities/hospital.entity';
-export declare class CongestionActual {
-    idCongestionActual: number;
-    fechaCongestionActual: Date;
-    horaActualizacionCongestionActual: number;
-    turnosCanceladosCongestionActual: number;
-    turnosNoAsistidosCongestionActual: number;
-    turnosAsistidosCongestionActual: number;
-    turnosEnProcesoCongestionActual: number;
-    fechaHoraBajaCongestionActual: Date;
+import { Base } from './base.entity';
+import { NivelCongestionEnum } from '../enums/nivel-congestion.enum';
+export declare class CongestionActual extends Base {
+    fecha: Date;
+    horaActualizacion: number;
+    nivelCongestion: NivelCongestionEnum;
+    turnosCancelados: number;
+    turnosNoAsistidos: number;
+    turnosAsistidos: number;
+    turnosEnProceso: number;
     hospital: Hospital;
-    get getIdCongestionActual(): number;
-    get getFechaCongestionActual(): Date;
-    set setFechaCongestionActual(fechaCongestionActual: Date);
-    get getHoraActualizacionCongestionActual(): number;
-    set setHoraActualizacionCongestionActual(horaActualizacionCongestionActual: number);
-    get getTurnosCanceladosCongestionActual(): number;
-    set setTurnosCanceladosCongestionActual(turnosCanceladosCongestionActual: number);
-    get getTurnosNoAsistidosCongestionActual(): number;
-    set setTurnosNoAsistidosCongestionActual(turnosNoAsistidosCongestionActual: number);
-    get getTurnosAsistidosCongestionActual(): number;
-    set setTurnosAsistidosCongestionActual(turnosAsistidosCongestionActual: number);
-    get getTurnosEnProcesoCongestionActual(): number;
-    set setTurnosEnProcesoCongestionActual(turnosEnProcesoCongestionActual: number);
-    get getFechaHoraBajaCongestionActual(): Date;
-    set setFechaHoraBajaCongestionActual(fechaHoraBajaCongestionActual: Date);
 }

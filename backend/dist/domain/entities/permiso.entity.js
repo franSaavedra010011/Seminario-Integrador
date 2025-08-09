@@ -10,42 +10,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Permiso = void 0;
-const rol_permiso_entity_1 = require("./rol-permiso.entity");
 const typeorm_1 = require("typeorm");
-let Permiso = class Permiso {
-    idPermiso;
+const base_entity_1 = require("./base.entity");
+const rol_permiso_entity_1 = require("./rol-permiso.entity");
+let Permiso = class Permiso extends base_entity_1.Base {
     rutaPermiso;
-    fechaHoraBajaPermiso;
     rolesPermiso;
-    get getIdPermiso() {
-        return this.idPermiso;
-    }
-    get getRutaPermiso() {
-        return this.rutaPermiso;
-    }
-    set setRutaPermiso(ruta) {
-        this.rutaPermiso = ruta;
-    }
-    get getFechaHoraBajaPermiso() {
-        return this.fechaHoraBajaPermiso;
-    }
-    set setFechaHoraBajaPermiso(fecha) {
-        this.fechaHoraBajaPermiso = fecha;
-    }
 };
 exports.Permiso = Permiso;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Permiso.prototype, "idPermiso", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        type: 'varchar',
+        length: 100,
+        nullable: false,
+        unique: true,
+    }),
     __metadata("design:type", String)
 ], Permiso.prototype, "rutaPermiso", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Permiso.prototype, "fechaHoraBajaPermiso", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => rol_permiso_entity_1.RolPermiso, (rolPermiso) => rolPermiso.permiso),
     __metadata("design:type", Array)

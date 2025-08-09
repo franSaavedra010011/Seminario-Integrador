@@ -1,18 +1,16 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDTO } from './dto/register.dto';
-import { LoginDTO } from './dto/login.dto';
-import { AuthGuard } from './guard/auth.guard';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { AuthService } from '../../auth/auth.service';
+import { RegisterDTO } from '../../auth/dto/register.dto';
+import { LoginDTO } from '../../auth/dto/login.dto';
 import { Request } from 'express';
-import { Roles } from './decorators/roles.decorator';
-import { RolesGuard } from './guard/roles.guard';
-import { Role } from '../common/enums/rol.enum';
-import { Auth } from './decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 
+// Adaptar para soportar rol único o lista de roles
 interface RequestWithUser extends Request {
   usuario: {
     email: string;
-    role: string;
+    rol?: string;     // cuando es único
+    roles?: string[]; // cuando son varios
   };
 }
 
@@ -21,35 +19,18 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(
-    @Body()
-    registerDTO: RegisterDTO,
-  ) {
-    console.log(registerDTO);
+  register(@Body() registerDTO: RegisterDTO) {
     return this.authService.register(registerDTO);
   }
+
   @Post('login')
-  login(
-    @Body()
-    loginDto: LoginDTO,
-  ) {
+  login(@Body() loginDto: LoginDTO) {
     return this.authService.login(loginDto);
   }
-  /*@Get('profile')
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard, RolesGuard)
-  profile(
-    @Req()
-    req: RequestWithUser,
-  ) {
-    return this.authService.profile(req.usuario);
-  }*/
+
   @Get('profile')
-  @Auth(Role.USER)
-  profile(
-    @Req()
-    req: RequestWithUser,
-  ) {
+  @Auth('USER') // ahora recibe string en lugar de enum
+  profile(@Req() req: RequestWithUser) {
     return this.authService.profile(req.usuario);
   }
 }

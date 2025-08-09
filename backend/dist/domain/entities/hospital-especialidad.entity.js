@@ -14,64 +14,37 @@ const especialidad_entity_1 = require("./especialidad.entity");
 const hospital_especialidad_medico_entity_1 = require("./hospital-especialidad-medico.entity");
 const hospital_entity_1 = require("./hospital.entity");
 const typeorm_1 = require("typeorm");
-let HospitalEspecialidad = class HospitalEspecialidad {
-    idHospitalEspecialidad;
-    fechaDesdeHospitalEspecialidad;
-    fechaHastaHospitalEspecialidad;
+const base_entity_1 = require("./base.entity");
+let HospitalEspecialidad = class HospitalEspecialidad extends base_entity_1.Base {
+    fechaDesde;
+    fechaHasta;
     hospital;
     especialidad;
     hospitalEspecialidadMedico;
-    get getIdHospitalEspecialidad() {
-        return this.idHospitalEspecialidad;
-    }
-    get getFechaDesdeHospitalEspecialidad() {
-        return this.fechaDesdeHospitalEspecialidad;
-    }
-    set setFechaDesdeHospitalEspecialidad(fechaDesdeHospitalEspecialidad) {
-        this.fechaDesdeHospitalEspecialidad = fechaDesdeHospitalEspecialidad;
-    }
-    get getFechaHastaHospitalEspecialidad() {
-        return this.fechaHastaHospitalEspecialidad;
-    }
-    set setFechaHastaHospitalEspecialidad(fechaHastaHospitalEspecialidad) {
-        this.fechaHastaHospitalEspecialidad = fechaHastaHospitalEspecialidad;
-    }
-    getHospitalEspecialidadMedico() {
-        return this.hospitalEspecialidadMedico;
-    }
-    setHospitalEspecialidadMedico(hospitalEspecialidadMedico) {
-        this.hospitalEspecialidadMedico = hospitalEspecialidadMedico;
-    }
-    getEspecialidad() {
-        return this.especialidad;
-    }
-    set setEspecialidad(especialidad) {
-        this.especialidad = especialidad;
-    }
 };
 exports.HospitalEspecialidad = HospitalEspecialidad;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], HospitalEspecialidad.prototype, "idHospitalEspecialidad", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], HospitalEspecialidad.prototype, "fechaDesdeHospitalEspecialidad", void 0);
+], HospitalEspecialidad.prototype, "fechaDesde", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
-], HospitalEspecialidad.prototype, "fechaHastaHospitalEspecialidad", void 0);
+], HospitalEspecialidad.prototype, "fechaHasta", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => hospital_entity_1.Hospital, (hospital) => hospital.hospitalEspecialidades),
+    (0, typeorm_1.JoinColumn)({ name: 'idHospital' }),
     __metadata("design:type", hospital_entity_1.Hospital)
 ], HospitalEspecialidad.prototype, "hospital", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => especialidad_entity_1.Especialidad, (especialidad) => especialidad.hospitalEspecialidades, { eager: true }),
+    (0, typeorm_1.ManyToOne)(() => especialidad_entity_1.Especialidad, (especialidad) => especialidad.hospitalEspecialidades, {
+        eager: true,
+    }),
+    (0, typeorm_1.JoinColumn)({ name: 'idEspecialidad' }),
     __metadata("design:type", especialidad_entity_1.Especialidad)
 ], HospitalEspecialidad.prototype, "especialidad", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => hospital_especialidad_medico_entity_1.HospitalEspecialidadMedico, (hospitalEspecialidadMedico) => hospitalEspecialidadMedico.hospitalEspecialidad),
+    (0, typeorm_1.OneToMany)(() => hospital_especialidad_medico_entity_1.HospitalEspecialidadMedico, (heMedico) => heMedico.hospitalEspecialidad),
     __metadata("design:type", Array)
 ], HospitalEspecialidad.prototype, "hospitalEspecialidadMedico", void 0);
 exports.HospitalEspecialidad = HospitalEspecialidad = __decorate([

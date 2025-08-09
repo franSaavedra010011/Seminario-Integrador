@@ -12,40 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Localidad = void 0;
 const hospital_entity_1 = require("./hospital.entity");
 const typeorm_1 = require("typeorm");
-let Localidad = class Localidad {
-    idLocalidad;
-    nombreLocalidad;
-    fechaHoraBajaLocalidad;
+const base_entity_1 = require("./base.entity");
+let Localidad = class Localidad extends base_entity_1.Base {
+    nombre;
     hospitales;
-    get getIdLocalidad() {
-        return this.idLocalidad;
-    }
-    get getNombreLocalidad() {
-        return this.nombreLocalidad;
-    }
-    set setNombreLocalidad(nombreLocalidad) {
-        this.nombreLocalidad = nombreLocalidad;
-    }
-    get getFechaHoraBajaLocalidad() {
-        return this.fechaHoraBajaLocalidad;
-    }
-    set setFechaHoraBajaLocalidad(fechaHoraBaja) {
-        this.fechaHoraBajaLocalidad = fechaHoraBaja;
-    }
 };
 exports.Localidad = Localidad;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Localidad.prototype, "idLocalidad", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Localidad.prototype, "nombreLocalidad", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Localidad.prototype, "fechaHoraBajaLocalidad", void 0);
+], Localidad.prototype, "nombre", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => hospital_entity_1.Hospital, (hospital) => hospital.localidad),
     __metadata("design:type", Array)

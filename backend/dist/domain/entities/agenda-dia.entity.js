@@ -13,53 +13,31 @@ exports.AgendaDia = void 0;
 const agenda_semanal_entity_1 = require("./agenda-semanal.entity");
 const turno_agenda_dia_entity_1 = require("./turno-agenda-dia.entity");
 const typeorm_1 = require("typeorm");
-let AgendaDia = class AgendaDia {
-    idAgendaDia;
+const base_entity_1 = require("./base.entity");
+const dia_semana_enum_1 = require("../enums/dia-semana.enum");
+let AgendaDia = class AgendaDia extends base_entity_1.Base {
     nombreAgendaDia;
-    fechaHoraBajaAgendaDia;
     agendaSemanal;
     turnosAgendaDia;
-    get getIdAgendaDia() {
-        return this.idAgendaDia;
-    }
-    get getNombreAgendaDia() {
-        return this.nombreAgendaDia;
-    }
-    set setNombreAgendaDia(nombreAgendaDia) {
-        this.nombreAgendaDia = nombreAgendaDia;
-    }
-    get getFechaHoraBajaAgendaDia() {
-        return this.fechaHoraBajaAgendaDia;
-    }
-    set setFechaHoraBajaAgendaDia(fechaHoraBajaAgendaDia) {
-        this.fechaHoraBajaAgendaDia = fechaHoraBajaAgendaDia;
-    }
-    get getTurnosAgendaDia() {
-        return this.turnosAgendaDia;
-    }
-    set setTurnosAgendaDia(turnosAgendaDia) {
-        this.turnosAgendaDia = turnosAgendaDia;
-    }
 };
 exports.AgendaDia = AgendaDia;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], AgendaDia.prototype, "idAgendaDia", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: dia_semana_enum_1.DiaSemanaEnum,
+        nullable: false,
+    }),
     __metadata("design:type", String)
 ], AgendaDia.prototype, "nombreAgendaDia", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], AgendaDia.prototype, "fechaHoraBajaAgendaDia", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => agenda_semanal_entity_1.AgendaSemanal, (agendaSemanal) => agendaSemanal.agendasDia),
+    (0, typeorm_1.ManyToOne)(() => agenda_semanal_entity_1.AgendaSemanal, agendaSemanal => agendaSemanal.agendasDia, {
+        nullable: false,
+    }),
+    (0, typeorm_1.JoinColumn)({ name: 'idAgendaSemanal' }),
     __metadata("design:type", agenda_semanal_entity_1.AgendaSemanal)
 ], AgendaDia.prototype, "agendaSemanal", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => turno_agenda_dia_entity_1.TurnoAgendaDia, (turnoAgendaDia) => turnoAgendaDia.agendaDia),
+    (0, typeorm_1.OneToMany)(() => turno_agenda_dia_entity_1.TurnoAgendaDia, turnoAgendaDia => turnoAgendaDia.agendaDia),
     __metadata("design:type", Array)
 ], AgendaDia.prototype, "turnosAgendaDia", void 0);
 exports.AgendaDia = AgendaDia = __decorate([

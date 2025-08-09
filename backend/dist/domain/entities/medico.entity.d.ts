@@ -1,38 +1,19 @@
-import { Turno } from '../../turno/entities/turno.entity';
+import { Base } from './base.entity';
+import { Turno } from 'src/domain/entities/turno.entity';
 import { Usuario } from 'src/domain/entities/usuario.entity';
 import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
 import { HistoriaMedica } from 'src/domain/entities/historia-medica.entity';
 import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
-export declare class Medico {
-    idMedico: number;
+export declare class Medico extends Base {
     nombreMedico: string;
     apellidoMedico: string;
     dniMedico: string;
     telMedico: string;
     matriculaMedico: string;
     tiempoConsulta: number;
-    fechaHoraBajaMedico: Date;
-    fechaHastaMedico: Date;
     turnos: Turno[];
     usuario: Usuario;
     especialidadesMedico: EspecialidadMedico[];
     historiasMedica: HistoriaMedica[];
     hospitalEspecialidadMedico: HospitalEspecialidadMedico[];
-    get getIdMedico(): number;
-    get getNombreMedico(): string;
-    set setNombreMedico(nombreMedico: string);
-    get getApellidoMedico(): string;
-    set setApellidoMedico(apellidoMedico: string);
-    get getDniMedico(): string;
-    set setDniMedico(dniMedico: string);
-    get getTelMedico(): string;
-    set setTelMedico(telMedico: string);
-    get getMatriculaMedico(): string;
-    set setMatriculaMedico(matriculaMedico: string);
-    get getTiempoConsulta(): number;
-    set setTiempoConsulta(tiempoConsulta: number);
-    get getFechaHoraBajaMedico(): Date;
-    set setFechaHoraBajaMedico(fechaHoraBajaMedico: Date);
-    get getFechaHastaMedico(): Date;
-    set setFechaHastaMedico(fechaHastaMedico: Date);
 }

@@ -10,56 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AgendaSemanal = void 0;
+const typeorm_1 = require("typeorm");
+const base_entity_1 = require("./base.entity");
 const agenda_dia_entity_1 = require("./agenda-dia.entity");
 const hospital_especialidad_medico_entity_1 = require("./hospital-especialidad-medico.entity");
-const typeorm_1 = require("typeorm");
-let AgendaSemanal = class AgendaSemanal {
-    idAgendaSemanal;
+let AgendaSemanal = class AgendaSemanal extends base_entity_1.Base {
     fechaDesdeAgendaSemanal;
     fechaHastaAgendaSemanal;
-    fechaHoraBajaAgendaSemanal;
     nroSemana;
     hospitalEspecialidadMedico;
     agendasDia;
-    get getIdAgendaSemanal() {
-        return this.idAgendaSemanal;
-    }
-    get getFechaDesdeAgendaSemanal() {
-        return this.fechaDesdeAgendaSemanal;
-    }
-    set setFechaDesdeAgendaSemanal(fechaDesdeAgendaSemanal) {
-        this.fechaDesdeAgendaSemanal = fechaDesdeAgendaSemanal;
-    }
-    get getFechaHastaAgendaSemanal() {
-        return this.fechaHastaAgendaSemanal;
-    }
-    set setFechaHastaAgendaSemanal(fechaHastaAgendaSemanal) {
-        this.fechaHastaAgendaSemanal = fechaHastaAgendaSemanal;
-    }
-    get getFechaHoraBajaAgendaSemanal() {
-        return this.fechaHoraBajaAgendaSemanal;
-    }
-    set setFechaHoraBajaAgendaSemanal(fechaHoraBajaAgendaSemanal) {
-        this.fechaHoraBajaAgendaSemanal = fechaHoraBajaAgendaSemanal;
-    }
-    get getNroSemana() {
-        return this.nroSemana;
-    }
-    set setNroSemana(nroSemana) {
-        this.nroSemana = nroSemana;
-    }
-    get getAgendasDia() {
-        return this.agendasDia;
-    }
-    set setAgendasDia(agendasDia) {
-        this.agendasDia = agendasDia;
-    }
 };
 exports.AgendaSemanal = AgendaSemanal;
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], AgendaSemanal.prototype, "idAgendaSemanal", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
@@ -69,15 +31,12 @@ __decorate([
     __metadata("design:type", Date)
 ], AgendaSemanal.prototype, "fechaHastaAgendaSemanal", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], AgendaSemanal.prototype, "fechaHoraBajaAgendaSemanal", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], AgendaSemanal.prototype, "nroSemana", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => hospital_especialidad_medico_entity_1.HospitalEspecialidadMedico, (hospitalEspecialidadMedico) => hospitalEspecialidadMedico.agendaSemanales),
+    (0, typeorm_1.JoinColumn)({ name: 'idHospitalEspecialidadMedico' }),
     __metadata("design:type", hospital_especialidad_medico_entity_1.HospitalEspecialidadMedico)
 ], AgendaSemanal.prototype, "hospitalEspecialidadMedico", void 0);
 __decorate([

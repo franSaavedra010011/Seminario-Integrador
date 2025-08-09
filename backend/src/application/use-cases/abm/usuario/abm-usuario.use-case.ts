@@ -7,11 +7,14 @@ import * as bcryptjs from 'bcryptjs';
 import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
 import { Repository } from 'typeorm';
 import { Rol } from 'src/domain/entities/rol.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AbmUsuarioUseCase {
   constructor(
+    
     private readonly genericRepository: GenericRepositoryService,
+    @InjectRepository(UsuarioRol)
     private readonly usuarioRolRepo: Repository<UsuarioRol>,
   ) {}
 

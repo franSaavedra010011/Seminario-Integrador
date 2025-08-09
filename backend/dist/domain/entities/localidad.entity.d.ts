@@ -1,12 +1,6 @@
 import { Hospital } from 'src/domain/entities/hospital.entity';
-export declare class Localidad {
-    idLocalidad: number;
-    nombreLocalidad: string;
-    fechaHoraBajaLocalidad: Date;
+import { Base } from './base.entity';
+export declare class Localidad extends Base {
+    nombre: string;
     hospitales: Hospital[];
-    get getIdLocalidad(): number;
-    get getNombreLocalidad(): string;
-    set setNombreLocalidad(nombreLocalidad: string);
-    get getFechaHoraBajaLocalidad(): Date;
-    set setFechaHoraBajaLocalidad(fechaHoraBaja: Date);
 }

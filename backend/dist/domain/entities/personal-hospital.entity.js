@@ -10,50 +10,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonalHospital = void 0;
+const typeorm_1 = require("typeorm");
+const base_entity_1 = require("./base.entity");
 const hospital_entity_1 = require("./hospital.entity");
 const usuario_entity_1 = require("./usuario.entity");
-const typeorm_1 = require("typeorm");
-let PersonalHospital = class PersonalHospital {
-    idPersonalHospital;
-    fechaDesdePersonalHospital;
-    fechaHastaPersonalHospital;
+let PersonalHospital = class PersonalHospital extends base_entity_1.Base {
+    fechaDesde;
     hospital;
     usuario;
-    get getIdPersonalHospital() {
-        return this.idPersonalHospital;
-    }
-    get getFechaDesdePersonalHospital() {
-        return this.fechaDesdePersonalHospital;
-    }
-    set setFechaDesdePersonalHospital(fecha) {
-        this.fechaDesdePersonalHospital = fecha;
-    }
-    get getFechaHastaPersonalHospital() {
-        return this.fechaHastaPersonalHospital;
-    }
-    set setFechaHastaPersonalHospital(fecha) {
-        this.fechaHastaPersonalHospital = fecha;
-    }
-    get getHospital() {
-        return this.hospital;
-    }
-    set setHospital(hospital) {
-        this.hospital = hospital;
-    }
 };
 exports.PersonalHospital = PersonalHospital;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], PersonalHospital.prototype, "idPersonalHospital", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], PersonalHospital.prototype, "fechaDesdePersonalHospital", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], PersonalHospital.prototype, "fechaHastaPersonalHospital", void 0);
+], PersonalHospital.prototype, "fechaDesde", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => hospital_entity_1.Hospital, (hospital) => hospital.personalHospital),
     __metadata("design:type", hospital_entity_1.Hospital)

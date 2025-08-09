@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Turno = void 0;
-const typeorm_1 = require("typeorm");
-const paciente_entity_1 = require("../../domain/entities/paciente.entity");
+const base_entity_1 = require("./base.entity");
+const paciente_entity_1 = require("./paciente.entity");
 const medico_entity_1 = require("./medico.entity");
 const estado_turno_entity_1 = require("./estado-turno.entity");
 const turno_estado_entity_1 = require("./turno-estado.entity");
@@ -20,14 +20,12 @@ const historia_medica_entity_1 = require("./historia-medica.entity");
 const turno_agenda_dia_entity_1 = require("./turno-agenda-dia.entity");
 const hospital_entity_1 = require("./hospital.entity");
 const paciente_notificacion_entity_1 = require("./paciente-notificacion.entity");
-let Turno = class Turno {
-    idTurno;
-    fechaAltaTurno;
-    fechaTurno;
-    horaTurno;
-    observaconesTurno;
-    presentismoTurno;
-    fechaHoraBajaTurno;
+const typeorm_1 = require("typeorm");
+let Turno = class Turno extends base_entity_1.Base {
+    fecha;
+    hora;
+    observaciones;
+    presentismo;
     paciente;
     medico;
     estadoTurno;
@@ -37,111 +35,24 @@ let Turno = class Turno {
     turnoAgendaDia;
     hospital;
     pacienteNotificaciones;
-    get getIdTurno() {
-        return this.idTurno;
-    }
-    get getFechaAltaTurno() {
-        return this.fechaAltaTurno;
-    }
-    set setFechaAltaTurno(value) {
-        this.fechaAltaTurno = value;
-    }
-    get getFechaTurno() {
-        return this.fechaTurno;
-    }
-    set setFechaTurno(value) {
-        this.fechaTurno = value;
-    }
-    get getHoraTurno() {
-        return this.horaTurno;
-    }
-    set setHoraTurno(value) {
-        this.horaTurno = value;
-    }
-    get getObservaconesTurno() {
-        return this.observaconesTurno;
-    }
-    set setObservaconesTurno(value) {
-        this.observaconesTurno = value;
-    }
-    get getPresentismoTurno() {
-        return this.presentismoTurno;
-    }
-    set setPresentismoTurno(value) {
-        this.presentismoTurno = value;
-    }
-    get getFechaHoraBajaTurno() {
-        return this.fechaHoraBajaTurno;
-    }
-    set setFechaHoraBajaTurno(value) {
-        this.fechaHoraBajaTurno = value;
-    }
-    get getMedico() {
-        return this.medico;
-    }
-    set setMedico(value) {
-        this.medico = value;
-    }
-    get getEstadoTurno() {
-        return this.estadoTurno;
-    }
-    set setEstadoTurno(value) {
-        this.estadoTurno = value;
-    }
-    get getTurnosEstados() {
-        return this.turnosEstados;
-    }
-    set setTurnosEstados(value) {
-        this.turnosEstados = value;
-    }
-    get getEspecialidad() {
-        return this.especialidad;
-    }
-    set setEspecialidad(value) {
-        this.especialidad = value;
-    }
-    get getHistoriasMedica() {
-        return this.historiasMedica;
-    }
-    set setHistoriasMedica(value) {
-        this.historiasMedica = value;
-    }
-    get getHospital() {
-        return this.hospital;
-    }
-    set setHospital(value) {
-        this.hospital = value;
-    }
 };
 exports.Turno = Turno;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Turno.prototype, "idTurno", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], Turno.prototype, "fechaAltaTurno", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Date)
-], Turno.prototype, "fechaTurno", void 0);
+], Turno.prototype, "fecha", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Turno.prototype, "horaTurno", void 0);
+], Turno.prototype, "hora", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Turno.prototype, "observaconesTurno", void 0);
+], Turno.prototype, "observaciones", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
-], Turno.prototype, "presentismoTurno", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], Turno.prototype, "fechaHoraBajaTurno", void 0);
+], Turno.prototype, "presentismo", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => paciente_entity_1.Paciente, (paciente) => paciente.turnos),
     __metadata("design:type", paciente_entity_1.Paciente)
@@ -151,7 +62,7 @@ __decorate([
     __metadata("design:type", medico_entity_1.Medico)
 ], Turno.prototype, "medico", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => estado_turno_entity_1.EstadoTurno, (estadoTurno) => estadoTurno.turno),
+    (0, typeorm_1.OneToOne)(() => estado_turno_entity_1.EstadoTurno, (estadoTurno) => estadoTurno.turnos),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", estado_turno_entity_1.EstadoTurno)
 ], Turno.prototype, "estadoTurno", void 0);

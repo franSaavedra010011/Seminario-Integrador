@@ -8,56 +8,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TurnoEstado = void 0;
 const estado_turno_entity_1 = require("./estado-turno.entity");
-const turno_entity_1 = require("src/turno/entities/turno.entity");
+const turno_entity_1 = require("./turno.entity");
 const typeorm_1 = require("typeorm");
-let TurnoEstado = class TurnoEstado {
-    idTurnoEstado;
-    fechaDesdeTurnoEstado;
-    fechaHastaTurnoEstado;
+const base_entity_1 = require("./base.entity");
+let TurnoEstado = class TurnoEstado extends base_entity_1.Base {
+    fechaDesde;
+    fechaHasta;
     turno;
     estadoTurno;
-    get getIdTurnoEstado() {
-        return this.idTurnoEstado;
-    }
-    get getFechaDesdeTurnoEstado() {
-        return this.fechaDesdeTurnoEstado;
-    }
-    set setFechaDesdeTurnoEstado(value) {
-        this.fechaDesdeTurnoEstado = value;
-    }
-    get getFechaHastaTurnoEstado() {
-        return this.fechaHastaTurnoEstado;
-    }
-    set setFechaHastaTurnoEstado(value) {
-        this.fechaHastaTurnoEstado = value;
-    }
-    get getEstadoTurno() {
-        return this.estadoTurno;
-    }
-    set setEstadoTurno(value) {
-        this.estadoTurno = value;
-    }
 };
 exports.TurnoEstado = TurnoEstado;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], TurnoEstado.prototype, "idTurnoEstado", void 0);
-__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], TurnoEstado.prototype, "fechaDesdeTurnoEstado", void 0);
+], TurnoEstado.prototype, "fechaDesde", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
-], TurnoEstado.prototype, "fechaHastaTurnoEstado", void 0);
+], TurnoEstado.prototype, "fechaHasta", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => turno_entity_1.Turno, (turno) => turno.turnosEstados),
-    __metadata("design:type", typeof (_a = typeof turno_entity_1.Turno !== "undefined" && turno_entity_1.Turno) === "function" ? _a : Object)
+    __metadata("design:type", turno_entity_1.Turno)
 ], TurnoEstado.prototype, "turno", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => estado_turno_entity_1.EstadoTurno, (estadoTurno) => estadoTurno.turnosEstados),

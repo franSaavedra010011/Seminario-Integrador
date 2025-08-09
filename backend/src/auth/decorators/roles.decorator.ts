@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { Role } from '../../domain/enums/rol.enum';
 
 export const ROLES_KEY = 'roles';
-export const Roles = (role: Role) => SetMetadata(ROLES_KEY, role);
+// Acepta roles dinámicos (strings). Si querés, también podés aceptar number (idRol).
+export const Roles = (...roles: string[]) => SetMetadata(ROLES_KEY, roles);
