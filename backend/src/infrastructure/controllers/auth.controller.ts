@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  @Auth('USER') // ahora recibe string en lugar de enum
+  @Auth(['USER']) // ahora recibe string en lugar de enum
   profile(@Req() req: RequestWithUser) {
     return this.authService.profile(req.usuario);
   }

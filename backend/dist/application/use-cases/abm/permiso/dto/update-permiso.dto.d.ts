@@ -1,3 +1,5 @@
 export declare class UpdatePermisoDto {
-    rutaPermiso?: string;
+    codigo?: string;
+    descripcion?: string;
+    categoria?: string;
 }

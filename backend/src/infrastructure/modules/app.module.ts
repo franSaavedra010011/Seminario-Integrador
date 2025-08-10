@@ -16,7 +16,7 @@ import { AuthModule } from '../../infrastructure/modules/auth.module';
       username: 'postgres', // el que configuraste
       password: '1234', // reemplaza con la real
       database: 'turnos_db',
-      entities: [__dirname + '/**/*.entity.{ts,js}'],
+      autoLoadEntities: true,
       synchronize: true, // ¡solo en desarrollo!
     }),
     AuthModule,

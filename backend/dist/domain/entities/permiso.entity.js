@@ -14,19 +14,37 @@ const typeorm_1 = require("typeorm");
 const base_entity_1 = require("./base.entity");
 const rol_permiso_entity_1 = require("./rol-permiso.entity");
 let Permiso = class Permiso extends base_entity_1.Base {
-    rutaPermiso;
+    codigo;
+    descripcion;
+    categoria;
     rolesPermiso;
 };
 exports.Permiso = Permiso;
 __decorate([
     (0, typeorm_1.Column)({
         type: 'varchar',
-        length: 100,
+        length: 50,
         nullable: false,
         unique: true,
     }),
     __metadata("design:type", String)
-], Permiso.prototype, "rutaPermiso", void 0);
+], Permiso.prototype, "codigo", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'varchar',
+        length: 255,
+        nullable: false,
+    }),
+    __metadata("design:type", String)
+], Permiso.prototype, "descripcion", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'varchar',
+        length: 50,
+        nullable: true,
+    }),
+    __metadata("design:type", String)
+], Permiso.prototype, "categoria", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => rol_permiso_entity_1.RolPermiso, (rolPermiso) => rolPermiso.permiso),
     __metadata("design:type", Array)

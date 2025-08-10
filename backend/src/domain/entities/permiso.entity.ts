@@ -6,11 +6,25 @@ import { RolPermiso } from 'src/domain/entities/rol-permiso.entity';
 export class Permiso extends Base {
   @Column({
     type: 'varchar',
-    length: 100,
+    length: 50,
     nullable: false,
     unique: true,
   })
-  rutaPermiso: string;
+  codigo: string; 
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+  })
+  descripcion: string;
+
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  categoria: string;
 
   @OneToMany(() => RolPermiso, (rolPermiso) => rolPermiso.permiso)
   rolesPermiso: RolPermiso[];

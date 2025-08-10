@@ -50,7 +50,7 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.Get)('profile'),
-    (0, auth_decorator_1.Auth)('USER'),
+    (0, auth_decorator_1.Auth)(['USER']),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

@@ -1,3 +1,5 @@
 export declare class CreatePermisoDto {
-    rutaPermiso: string;
+    codigo: string;
+    descripcion: string;
+    categoria?: string;
 }

@@ -15,15 +15,17 @@ export class AbmPermisoUseCase {
     const duplicados = await this.genericRepository.buscar(
       Permiso,
       'permiso',
-      [{ atributo: 'rutaPermiso', operacion: '=', valor: dto.rutaPermiso }],
+      [{ atributo: 'codigo', operacion: '=', valor: dto.codigo }],
     );
 
-    if (duplicados.some(p => p.rutaPermiso.trim().toLowerCase() === dto.rutaPermiso.trim().toLowerCase())) {
-      throw new BadRequestException(`El permiso con ruta "${dto.rutaPermiso}" ya existe`);
+    if (duplicados.some(p => p.codigo.trim().toLowerCase() === dto.codigo.trim().toLowerCase())) {
+      throw new BadRequestException(`El permiso con código "${dto.codigo}" ya existe`);
     }
 
     const permiso = new Permiso();
-    permiso.rutaPermiso = dto.rutaPermiso.trim();
+    permiso.codigo = dto.codigo.trim();
+    permiso.descripcion = dto.descripcion.trim();
+    permiso.categoria = dto.categoria?.trim() || "";
 
     return await this.genericRepository.guardarCambios(Permiso, permiso);
   }
@@ -42,19 +44,27 @@ export class AbmPermisoUseCase {
 
     const permiso = encontrados[0];
 
-    if (dto.rutaPermiso && dto.rutaPermiso.trim().toLowerCase() !== permiso.rutaPermiso.trim().toLowerCase()) {
+    if (dto.codigo && dto.codigo.trim().toLowerCase() !== permiso.codigo.trim().toLowerCase()) {
       const duplicados = await this.genericRepository.buscar(
         Permiso,
         'permiso',
-        [{ atributo: 'rutaPermiso', operacion: '=', valor: dto.rutaPermiso }],
+        [{ atributo: 'codigo', operacion: '=', valor: dto.codigo }],
       );
 
       if (duplicados.some(p => p.id !== permiso.id &&
-        p.rutaPermiso.trim().toLowerCase() === dto.rutaPermiso!.trim().toLowerCase())) {
-        throw new BadRequestException(`El permiso con ruta "${dto.rutaPermiso}" ya existe`);
+        p.codigo.trim().toLowerCase() === dto.codigo!.trim().toLowerCase())) {
+        throw new BadRequestException(`El permiso con código "${dto.codigo}" ya existe`);
       }
 
-      permiso.rutaPermiso = dto.rutaPermiso.trim();
+      permiso.codigo = dto.codigo.trim();
+    }
+
+    if (dto.descripcion) {
+      permiso.descripcion = dto.descripcion.trim();
+    }
+
+    if (dto.categoria !== undefined) {
+      permiso.categoria = dto.categoria?.trim() || "";
     }
 
     return await this.genericRepository.guardarCambios(Permiso, permiso);

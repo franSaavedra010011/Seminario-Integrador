@@ -25,7 +25,7 @@ exports.AppModule = AppModule = __decorate([
                 username: 'postgres',
                 password: '1234',
                 database: 'turnos_db',
-                entities: [__dirname + '/**/*.entity.{ts,js}'],
+                autoLoadEntities: true,
                 synchronize: true,
             }),
             auth_module_1.AuthModule,

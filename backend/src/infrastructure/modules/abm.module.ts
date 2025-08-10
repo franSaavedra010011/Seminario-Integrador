@@ -1,19 +1,33 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// Entidades
-import { Usuario } from 'src/domain/entities/usuario.entity';
-import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
-import { Rol } from 'src/domain/entities/rol.entity';
-import { Permiso } from 'src/domain/entities/permiso.entity';
-import { RolPermiso } from 'src/domain/entities/rol-permiso.entity';
-import { Paciente } from 'src/domain/entities/paciente.entity';
-import { Medico } from 'src/domain/entities/medico.entity';
-import { Hospital } from 'src/domain/entities/hospital.entity';
+// ENTIDADES
+import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
+import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
+import { CongestionActual } from 'src/domain/entities/congestion-actual.entity';
+import { CongestionHistorico } from 'src/domain/entities/congestion-historico.entity';
+import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
 import { Especialidad } from 'src/domain/entities/especialidad.entity';
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
+import { HistoriaMedica } from 'src/domain/entities/historia-medica.entity';
+import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
+import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
+import { Localidad } from 'src/domain/entities/localidad.entity';
+import { Medico } from 'src/domain/entities/medico.entity';
+import { PacienteNotificacion } from 'src/domain/entities/paciente-notificacion.entity';
+import { Paciente } from 'src/domain/entities/paciente.entity';
+import { Permiso } from 'src/domain/entities/permiso.entity';
+import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
+import { RolPermiso } from 'src/domain/entities/rol-permiso.entity';
+import { Rol } from 'src/domain/entities/rol.entity';
+import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
+import { TurnoEstado } from 'src/domain/entities/turno-estado.entity';
+import { Turno } from 'src/domain/entities/turno.entity';
+import { UsuarioRol } from 'src/domain/entities/usuario-rol.entity';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 
-// Casos de uso ABM
+// CASOS DE USO ABM
 import { AbmUsuarioUseCase } from 'src/application/use-cases/abm/usuario/abm-usuario.use-case';
 import { AbmRolUseCase } from 'src/application/use-cases/abm/rol/abm-rol.use-case';
 import { AbmPermisoUseCase } from 'src/application/use-cases/abm/permiso/abm-permiso.use-case';
@@ -23,28 +37,36 @@ import { AbmHospitalUseCase } from 'src/application/use-cases/abm/hospital/abm-h
 import { AbmEspecialidadUseCase } from 'src/application/use-cases/abm/especialidad/abm-especialidad.use-case';
 import { AbmEstadoTurnoUseCase } from 'src/application/use-cases/abm/estado-turno/abm-estado-turno.use-case';
 
-// Servicios compartidos
+// SERVICIOS
 import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
-import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
-import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
-import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Usuario,
-      UsuarioRol,
-      Rol,
-      Permiso,
-      RolPermiso,
-      Paciente,
-      Medico,
-      Hospital,
+      AgendaDia,
+      AgendaSemanal,
+      CongestionActual,
+      CongestionHistorico,
       EspecialidadMedico,
+      Especialidad,
+      EstadoTurno,
+      HistoriaMedica,
       HospitalEspecialidadMedico,
       HospitalEspecialidad,
-      Especialidad,
-      EstadoTurno
+      Hospital,
+      Localidad,
+      Medico,
+      PacienteNotificacion,
+      Paciente,
+      Permiso,
+      PersonalHospital,
+      RolPermiso,
+      Rol,
+      TurnoAgendaDia,
+      TurnoEstado,
+      Turno,
+      UsuarioRol,
+      Usuario
     ])
   ],
   providers: [

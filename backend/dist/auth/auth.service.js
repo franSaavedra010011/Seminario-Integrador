@@ -55,7 +55,7 @@ let AuthService = class AuthService {
     async login({ email, password }) {
         const usuarios = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'emailUsuario', operacion: '=', valor: email }], ['usuarioRoles', 'usuarioRoles.rol', 'usuarioRoles.rol.rolPermisos', 'usuarioRoles.rol.rolPermisos.permiso']);
         if (!usuarios.length) {
-            throw new common_1.UnauthorizedException('El email ingresado no coincide con ningún email registrado');
+            throw new common_1.UnauthorizedException('El email ingresado no coincide con ningún usuario registrado');
         }
         const usuario = usuarios[0];
         const usuarioConPassword = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'id', operacion: '=', valor: usuario.id }]);
@@ -71,7 +71,7 @@ let AuthService = class AuthService {
             nombreRol: ur.rol.nombre,
             permisos: (ur.rol.rolPermisos || [])
                 .filter(rp => !rp.fechaHasta)
-                .map(rp => rp.permiso.rutaPermiso.trim().toLowerCase())
+                .map(rp => rp.permiso.codigo.trim().toLowerCase())
         }));
         if (roles.length === 1) {
             const rol = roles[0];
@@ -110,7 +110,7 @@ let AuthService = class AuthService {
         }
         const permisos = usuarioRolSeleccionado.rol.rolPermisos
             .filter(rp => !rp.fechaHasta)
-            .map(rp => rp.permiso.rutaPermiso.trim().toLowerCase());
+            .map(rp => rp.permiso.codigo.trim().toLowerCase());
         const payload = {
             sub: usuario.id,
             email: usuario.emailUsuario,

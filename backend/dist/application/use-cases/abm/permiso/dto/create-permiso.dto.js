@@ -12,13 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreatePermisoDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreatePermisoDto {
-    rutaPermiso;
+    codigo;
+    descripcion;
+    categoria;
 }
 exports.CreatePermisoDto = CreatePermisoDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(3),
-    (0, class_validator_1.MaxLength)(100),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
-], CreatePermisoDto.prototype, "rutaPermiso", void 0);
+], CreatePermisoDto.prototype, "codigo", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(5),
+    (0, class_validator_1.MaxLength)(255),
+    __metadata("design:type", String)
+], CreatePermisoDto.prototype, "descripcion", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], CreatePermisoDto.prototype, "categoria", void 0);
 //# sourceMappingURL=create-permiso.dto.js.map
