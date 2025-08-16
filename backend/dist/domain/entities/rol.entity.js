@@ -16,6 +16,7 @@ const usuario_rol_entity_1 = require("./usuario-rol.entity");
 const rol_permiso_entity_1 = require("./rol-permiso.entity");
 let Rol = class Rol extends base_entity_1.Base {
     nombre;
+    descripcion;
     usuarioRoles;
     rolPermisos;
 };
@@ -24,6 +25,10 @@ __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], Rol.prototype, "nombre", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Rol.prototype, "descripcion", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => usuario_rol_entity_1.UsuarioRol, (usuarioRol) => usuarioRol.rol),
     __metadata("design:type", Array)

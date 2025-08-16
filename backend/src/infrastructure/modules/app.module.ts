@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 // Módulos de infraestructura (vía imports relativos)
 import { AuthModule } from '../../infrastructure/modules/auth.module';
+import path from 'path';
+import { AbmModule } from './abm.module';
+import { RouterModule } from '@nestjs/core';
 
 
 @Module({
@@ -19,7 +22,14 @@ import { AuthModule } from '../../infrastructure/modules/auth.module';
       autoLoadEntities: true,
       synchronize: true, // ¡solo en desarrollo!
     }),
+    RouterModule.register([
+      {
+        path: 'abm',
+        module: AbmModule, // Asegúrate de que AbmModule esté importado correctamente
+      }
+    ]),
     AuthModule,
+    AbmModule,
   ],
   controllers: [AppController],
   providers: [AppService],

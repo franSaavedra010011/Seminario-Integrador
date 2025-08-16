@@ -10,7 +10,7 @@ import { DTOCriterio } from '../../shared/dto/dtoCriterio.dto';
 
 @Injectable()
 export class GenericRepositoryService {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) { }
 
   async buscar<T extends ObjectLiteral>(
     entidad: EntityTarget<T>,
@@ -115,19 +115,20 @@ export class GenericRepositoryService {
   async eliminar<T extends ObjectLiteral>(
     entidad: EntityTarget<T>,
     id: number,
-  ): Promise<void> {
+  ): Promise<T> {  // <-- devolvemos el objeto actualizado
     const repository: Repository<T> = this.dataSource.getRepository(entidad);
     const objeto = await repository.findOneBy({ id } as any);
 
     if (!objeto) {
-      throw new Error('Entidad no encontrada');
+      throw new NotFoundException('Entidad no encontrada');
     }
 
     (objeto as any).fechaHoraBaja = new Date();
-    await repository.save(objeto);
+    return await repository.save(objeto); // <-- devolvemos el objeto
   }
 
-  
+
+
 
 
 }

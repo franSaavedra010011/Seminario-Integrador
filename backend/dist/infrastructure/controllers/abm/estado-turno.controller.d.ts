@@ -3,11 +3,7 @@ import { CreateEstadoTurnoDto } from "src/application/use-cases/abm/estado-turno
 import { UpdateEstadoTurnoDto } from "src/application/use-cases/abm/estado-turno/dto/update-estado-turno.dto";
 import { EstadoTurno } from "src/domain/entities/estado-turno.entity";
 import { GenericRepositoryService } from "src/shared/utils/genericRepository.service";
-export declare class EstadoTurnoController {
-    private readonly abmEstadoTurnoUseCase;
-    private readonly genericRepositoryService;
+import { AbmBaseController } from "./abm-base.controller";
+export declare class EstadoTurnoController extends AbmBaseController<EstadoTurno, CreateEstadoTurnoDto, UpdateEstadoTurnoDto> {
     constructor(abmEstadoTurnoUseCase: AbmEstadoTurnoUseCase, genericRepositoryService: GenericRepositoryService);
-    alta(dto: CreateEstadoTurnoDto): Promise<EstadoTurno>;
-    modificacion(id: number, dto: UpdateEstadoTurnoDto): Promise<EstadoTurno>;
-    baja(id: number): Promise<void>;
 }

@@ -8,56 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EspecialidadController = void 0;
 const genericRepository_service_1 = require("./../../../shared/utils/genericRepository.service");
 const common_1 = require("@nestjs/common");
 const especialidad_entity_1 = require("./../../../domain/entities/especialidad.entity");
 const abm_especialidad_use_case_1 = require("../../../application/use-cases/abm/especialidad/abm-especialidad.use-case");
-const create_especialidad_dto_1 = require("../../../application/use-cases/abm/especialidad/dto/create-especialidad.dto");
-let EspecialidadController = class EspecialidadController {
-    abmEspecialidadUseCase;
-    genericRepositoryService;
+const abm_base_controller_1 = require("./abm-base.controller");
+let EspecialidadController = class EspecialidadController extends abm_base_controller_1.AbmBaseController {
     constructor(abmEspecialidadUseCase, genericRepositoryService) {
-        this.abmEspecialidadUseCase = abmEspecialidadUseCase;
-        this.genericRepositoryService = genericRepositoryService;
-    }
-    async alta(dto) {
-        return this.abmEspecialidadUseCase.crear(dto);
-    }
-    async modificacion(id, dto) {
-        return this.abmEspecialidadUseCase.actualizar(id, dto);
-    }
-    async baja(id) {
-        return this.genericRepositoryService.eliminar(especialidad_entity_1.Especialidad, id);
+        super(abmEspecialidadUseCase, genericRepositoryService, especialidad_entity_1.Especialidad);
     }
 };
 exports.EspecialidadController = EspecialidadController;
-__decorate([
-    (0, common_1.Post)('alta'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_especialidad_dto_1.CreateEspecialidadDto]),
-    __metadata("design:returntype", Promise)
-], EspecialidadController.prototype, "alta", null);
-__decorate([
-    (0, common_1.Put)('modificacion/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_especialidad_dto_1.CreateEspecialidadDto]),
-    __metadata("design:returntype", Promise)
-], EspecialidadController.prototype, "modificacion", null);
-__decorate([
-    (0, common_1.Delete)('baja/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], EspecialidadController.prototype, "baja", null);
 exports.EspecialidadController = EspecialidadController = __decorate([
     (0, common_1.Controller)('especialidad'),
     __metadata("design:paramtypes", [abm_especialidad_use_case_1.AbmEspecialidadUseCase,

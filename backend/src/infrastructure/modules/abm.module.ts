@@ -39,6 +39,8 @@ import { AbmEstadoTurnoUseCase } from 'src/application/use-cases/abm/estado-turn
 
 // SERVICIOS
 import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { PermisoController } from '../controllers/abm/permiso.controller';
+import { EspecialidadController } from '../controllers/abm/especialidad.controller';
 
 @Module({
   imports: [
@@ -68,6 +70,10 @@ import { GenericRepositoryService } from 'src/shared/utils/genericRepository.ser
       UsuarioRol,
       Usuario
     ])
+  ],
+  controllers: [
+    PermisoController,
+    EspecialidadController,
   ],
   providers: [
     GenericRepositoryService,

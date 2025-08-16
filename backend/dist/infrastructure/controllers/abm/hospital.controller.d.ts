@@ -3,11 +3,7 @@ import { AbmHospitalUseCase } from './../../../application/use-cases/abm/hospita
 import { CreateHospitalDto } from 'src/application/use-cases/abm/hospital/dto/create-hospital.dto';
 import { UpdateHospitalDto } from 'src/application/use-cases/abm/hospital/dto/update-hospital.dto';
 import { Hospital } from 'src/domain/entities/hospital.entity';
-export declare class HospitalController {
-    private readonly abmHospitalUseCase;
-    private readonly GenericRepositoryService;
-    constructor(abmHospitalUseCase: AbmHospitalUseCase, GenericRepositoryService: GenericRepositoryService);
-    alta(dto: CreateHospitalDto): Promise<Hospital>;
-    modificacion(id: number, dto: UpdateHospitalDto): Promise<Hospital>;
-    baja(id: number): Promise<void>;
+import { AbmBaseController } from './abm-base.controller';
+export declare class HospitalController extends AbmBaseController<Hospital, CreateHospitalDto, UpdateHospitalDto> {
+    constructor(abmHospitalUseCase: AbmHospitalUseCase, genericRepositoryService: GenericRepositoryService);
 }

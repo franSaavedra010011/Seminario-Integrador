@@ -7,5 +7,5 @@ export declare class AbmPacienteUseCase {
     constructor(genericRepository: GenericRepositoryService);
     crear(dto: CreatePacienteDto): Promise<Paciente>;
     actualizar(id: number, dto: UpdatePacienteDto): Promise<Paciente>;
-    eliminar(id: number): Promise<void>;
+    eliminar(id: number): Promise<Paciente>;
 }

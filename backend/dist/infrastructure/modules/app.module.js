@@ -12,6 +12,8 @@ const app_controller_1 = require("../../infrastructure/controllers/app.controlle
 const app_service_1 = require("../../app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_module_1 = require("../../infrastructure/modules/auth.module");
+const abm_module_1 = require("./abm.module");
+const core_1 = require("@nestjs/core");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,7 +30,14 @@ exports.AppModule = AppModule = __decorate([
                 autoLoadEntities: true,
                 synchronize: true,
             }),
+            core_1.RouterModule.register([
+                {
+                    path: 'abm',
+                    module: abm_module_1.AbmModule,
+                }
+            ]),
             auth_module_1.AuthModule,
+            abm_module_1.AbmModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

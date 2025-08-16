@@ -8,53 +8,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RolController = void 0;
 const common_1 = require("@nestjs/common");
-const create_rol_dto_1 = require("../../../application/use-cases/abm/rol/dto/create-rol.dto");
-const update_rol_dto_1 = require("../../../application/use-cases/abm/rol/dto/update-rol.dto");
+const abm_rol_use_case_1 = require("../../../application/use-cases/abm/rol/abm-rol.use-case");
 const rol_entity_1 = require("../../../domain/entities/rol.entity");
-class RolController {
-    abmRolUseCase;
-    genericRepositoryService;
+const genericRepository_service_1 = require("../../../shared/utils/genericRepository.service");
+const abm_base_controller_1 = require("./abm-base.controller");
+let RolController = class RolController extends abm_base_controller_1.AbmBaseController {
     constructor(abmRolUseCase, genericRepositoryService) {
-        this.abmRolUseCase = abmRolUseCase;
-        this.genericRepositoryService = genericRepositoryService;
+        super(abmRolUseCase, genericRepositoryService, rol_entity_1.Rol);
     }
-    async alta(createRolDto) {
-        return this.abmRolUseCase.crear(createRolDto);
-    }
-    async modificar(id, updateRolDto) {
-        return this.abmRolUseCase.actualizar(id, updateRolDto);
-    }
-    async baja(id) {
-        return this.genericRepositoryService.eliminar(rol_entity_1.Rol, id);
-    }
-}
+};
 exports.RolController = RolController;
-__decorate([
-    (0, common_1.Post)('alta'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_rol_dto_1.CreateRolDto]),
-    __metadata("design:returntype", Promise)
-], RolController.prototype, "alta", null);
-__decorate([
-    (0, common_1.Put)('modificar/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_rol_dto_1.UpdateRolDto]),
-    __metadata("design:returntype", Promise)
-], RolController.prototype, "modificar", null);
-__decorate([
-    (0, common_1.Delete)('baja/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], RolController.prototype, "baja", null);
+exports.RolController = RolController = __decorate([
+    (0, common_1.Controller)('rol'),
+    __metadata("design:paramtypes", [abm_rol_use_case_1.AbmRolUseCase,
+        genericRepository_service_1.GenericRepositoryService])
+], RolController);
 //# sourceMappingURL=rol.controller.js.map

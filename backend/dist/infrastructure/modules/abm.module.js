@@ -42,6 +42,8 @@ const abm_hospital_use_case_1 = require("../../application/use-cases/abm/hospita
 const abm_especialidad_use_case_1 = require("../../application/use-cases/abm/especialidad/abm-especialidad.use-case");
 const abm_estado_turno_use_case_1 = require("../../application/use-cases/abm/estado-turno/abm-estado-turno.use-case");
 const genericRepository_service_1 = require("../../shared/utils/genericRepository.service");
+const permiso_controller_1 = require("../controllers/abm/permiso.controller");
+const especialidad_controller_1 = require("../controllers/abm/especialidad.controller");
 let AbmModule = class AbmModule {
 };
 exports.AbmModule = AbmModule;
@@ -74,6 +76,10 @@ exports.AbmModule = AbmModule = __decorate([
                 usuario_rol_entity_1.UsuarioRol,
                 usuario_entity_1.Usuario
             ])
+        ],
+        controllers: [
+            permiso_controller_1.PermisoController,
+            especialidad_controller_1.EspecialidadController,
         ],
         providers: [
             genericRepository_service_1.GenericRepositoryService,

@@ -4,27 +4,19 @@ import { CreateEstadoTurnoDto } from "src/application/use-cases/abm/estado-turno
 import { UpdateEstadoTurnoDto } from "src/application/use-cases/abm/estado-turno/dto/update-estado-turno.dto";
 import { EstadoTurno } from "src/domain/entities/estado-turno.entity";
 import { GenericRepositoryService } from "src/shared/utils/genericRepository.service";
+import { AbmBaseController } from "./abm-base.controller";
 
 @Controller('estado-turno')
-export class EstadoTurnoController {
-
+export class EstadoTurnoController extends AbmBaseController<
+    EstadoTurno,
+    CreateEstadoTurnoDto,
+    UpdateEstadoTurnoDto
+> {
     constructor(
-        private readonly abmEstadoTurnoUseCase: AbmEstadoTurnoUseCase,
-        private readonly genericRepositoryService: GenericRepositoryService,
-    ) {}
-
-    @Post('alta')
-    async alta(@Body() dto: CreateEstadoTurnoDto) {
-        return this.abmEstadoTurnoUseCase.crear(dto);
+        abmEstadoTurnoUseCase: AbmEstadoTurnoUseCase,
+        genericRepositoryService: GenericRepositoryService,
+    ) {
+        super(abmEstadoTurnoUseCase, genericRepositoryService, EstadoTurno);
     }
 
-    @Put('modificacion/:id')
-    async modificacion(@Param('id') id: number, @Body() dto: UpdateEstadoTurnoDto) {
-        return this.abmEstadoTurnoUseCase.actualizar(id, dto);
-    }
-
-    @Delete('baja/:id')
-    async baja(@Param('id') id: number) {
-        return this.genericRepositoryService.eliminar(EstadoTurno, id);
-    }
 }

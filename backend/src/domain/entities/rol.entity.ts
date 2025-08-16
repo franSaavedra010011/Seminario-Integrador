@@ -9,6 +9,9 @@ export class Rol extends Base {
   @Column({ unique: true })
   nombre: string;
 
+  @Column()
+  descripcion: string;
+
   @OneToMany(() => UsuarioRol, (usuarioRol) => usuarioRol.rol)
   usuarioRoles: UsuarioRol[];
 

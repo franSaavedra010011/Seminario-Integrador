@@ -8,53 +8,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicoController = void 0;
 const common_1 = require("@nestjs/common");
-const create_medico_dto_1 = require("../../../application/use-cases/abm/medico/dto/create-medico.dto");
-const update_medico_dto_1 = require("../../../application/use-cases/abm/medico/dto/update-medico.dto");
+const abm_medico_use_case_1 = require("../../../application/use-cases/abm/medico/abm-medico.use-case");
 const medico_entity_1 = require("../../../domain/entities/medico.entity");
-class MedicoController {
-    abmMedicoUseCase;
-    genericRepositoryService;
+const genericRepository_service_1 = require("../../../shared/utils/genericRepository.service");
+const abm_base_controller_1 = require("./abm-base.controller");
+let MedicoController = class MedicoController extends abm_base_controller_1.AbmBaseController {
     constructor(abmMedicoUseCase, genericRepositoryService) {
-        this.abmMedicoUseCase = abmMedicoUseCase;
-        this.genericRepositoryService = genericRepositoryService;
+        super(abmMedicoUseCase, genericRepositoryService, medico_entity_1.Medico);
     }
-    async alta(createMedicoDto) {
-        return this.abmMedicoUseCase.crear(createMedicoDto);
-    }
-    async modificar(id, updateMedicoDto) {
-        return this.abmMedicoUseCase.actualizar(id, updateMedicoDto);
-    }
-    async baja(id) {
-        return this.genericRepositoryService.eliminar(medico_entity_1.Medico, id);
-    }
-}
+};
 exports.MedicoController = MedicoController;
-__decorate([
-    (0, common_1.Post)('alta'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_medico_dto_1.CreateMedicoDto]),
-    __metadata("design:returntype", Promise)
-], MedicoController.prototype, "alta", null);
-__decorate([
-    (0, common_1.Put)('modificar/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_medico_dto_1.UpdateMedicoDto]),
-    __metadata("design:returntype", Promise)
-], MedicoController.prototype, "modificar", null);
-__decorate([
-    (0, common_1.Delete)('baja/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], MedicoController.prototype, "baja", null);
+exports.MedicoController = MedicoController = __decorate([
+    (0, common_1.Controller)('medico'),
+    __metadata("design:paramtypes", [abm_medico_use_case_1.AbmMedicoUseCase,
+        genericRepository_service_1.GenericRepositoryService])
+], MedicoController);
 //# sourceMappingURL=medico.controller.js.map

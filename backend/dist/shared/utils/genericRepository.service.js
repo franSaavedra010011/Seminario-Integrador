@@ -92,10 +92,10 @@ let GenericRepositoryService = class GenericRepositoryService {
         const repository = this.dataSource.getRepository(entidad);
         const objeto = await repository.findOneBy({ id });
         if (!objeto) {
-            throw new Error('Entidad no encontrada');
+            throw new common_1.NotFoundException('Entidad no encontrada');
         }
         objeto.fechaHoraBaja = new Date();
-        await repository.save(objeto);
+        return await repository.save(objeto);
     }
 };
 exports.GenericRepositoryService = GenericRepositoryService;

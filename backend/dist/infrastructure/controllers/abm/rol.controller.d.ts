@@ -3,11 +3,7 @@ import { CreateRolDto } from "src/application/use-cases/abm/rol/dto/create-rol.d
 import { UpdateRolDto } from "src/application/use-cases/abm/rol/dto/update-rol.dto";
 import { Rol } from "src/domain/entities/rol.entity";
 import { GenericRepositoryService } from "src/shared/utils/genericRepository.service";
-export declare class RolController {
-    private readonly abmRolUseCase;
-    private readonly genericRepositoryService;
+import { AbmBaseController } from "./abm-base.controller";
+export declare class RolController extends AbmBaseController<Rol, CreateRolDto, UpdateRolDto> {
     constructor(abmRolUseCase: AbmRolUseCase, genericRepositoryService: GenericRepositoryService);
-    alta(createRolDto: CreateRolDto): Promise<Rol>;
-    modificar(id: number, updateRolDto: UpdateRolDto): Promise<Rol>;
-    baja(id: number): Promise<void>;
 }

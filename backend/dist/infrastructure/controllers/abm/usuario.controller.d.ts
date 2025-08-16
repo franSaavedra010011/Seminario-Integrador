@@ -3,11 +3,7 @@ import { AbmUsuarioUseCase } from 'src/application/use-cases/abm/usuario/abm-usu
 import { CreateUsuarioDto } from 'src/application/use-cases/abm/usuario/dto/create-usuario.dto';
 import { UpdateUsuarioDto } from 'src/application/use-cases/abm/usuario/dto/update-usuario.dto';
 import { Usuario } from 'src/domain/entities/usuario.entity';
-export declare class UsuarioController {
-    private readonly abmUsuarioUseCase;
-    private readonly GenericRepositoryService;
-    constructor(abmUsuarioUseCase: AbmUsuarioUseCase, GenericRepositoryService: GenericRepositoryService);
-    alta(dto: CreateUsuarioDto): Promise<Usuario>;
-    modificacion(id: number, dto: UpdateUsuarioDto): Promise<Usuario>;
-    baja(id: number): Promise<void>;
+import { AbmBaseController } from './abm-base.controller';
+export declare class UsuarioController extends AbmBaseController<Usuario, CreateUsuarioDto, UpdateUsuarioDto> {
+    constructor(abmUsuarioUseCase: AbmUsuarioUseCase, genericRepositoryService: GenericRepositoryService);
 }
