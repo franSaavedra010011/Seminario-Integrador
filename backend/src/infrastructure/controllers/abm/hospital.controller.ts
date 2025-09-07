@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from './../../../shared/utils/genericRepository.service';
+import { GenericRepositoryService } from '../../../shared/services/genericRepository.service';
 import { AbmHospitalUseCase } from './../../../application/use-cases/abm/hospital/abm-hospital.use-case';
 import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
 import { CreateHospitalDto } from 'src/application/use-cases/abm/hospital/dto/create-hospital.dto';

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
 import { CreateEstadoTurnoDto } from './dto/create-estado-turno.dto';
 import { UpdateEstadoTurnoDto } from './dto/update-estado-turno.dto';

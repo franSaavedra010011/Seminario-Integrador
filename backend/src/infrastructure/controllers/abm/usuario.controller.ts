@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from './../../../shared/utils/genericRepository.service';
+import { GenericRepositoryService } from '../../../shared/services/genericRepository.service';
 import { Controller, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { AbmUsuarioUseCase } from 'src/application/use-cases/abm/usuario/abm-usuario.use-case';
 import { CreateUsuarioDto } from 'src/application/use-cases/abm/usuario/dto/create-usuario.dto';

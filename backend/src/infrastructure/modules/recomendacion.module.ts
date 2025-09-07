@@ -9,7 +9,7 @@ import { CongestionHistorico } from 'src/domain/entities/congestion-historico.en
 // Casos de uso
 import { ActualizarNivelDeCongestionUseCase } from 'src/application/use-cases/modulo-recomendacion/actualizar-nivel-de-congestion.use-case';
 // Servicios compartidos
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 
 @Module({
   imports: [

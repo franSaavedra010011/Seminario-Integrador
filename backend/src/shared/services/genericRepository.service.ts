@@ -6,7 +6,7 @@ import {
   EntityTarget,
 } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DTOCriterio } from '../../shared/dto/dtoCriterio.dto';
+import { DTOCriterio } from '../dto/dtoCriterio.dto';
 
 @Injectable()
 export class GenericRepositoryService {

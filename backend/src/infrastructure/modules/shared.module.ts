@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 
 @Module({
   providers: [GenericRepositoryService],

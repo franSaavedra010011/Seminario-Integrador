@@ -38,7 +38,7 @@ import { AbmEspecialidadUseCase } from 'src/application/use-cases/abm/especialid
 import { AbmEstadoTurnoUseCase } from 'src/application/use-cases/abm/estado-turno/abm-estado-turno.use-case';
 
 // SERVICIOS
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { PermisoController } from '../controllers/abm/permiso.controller';
 import { EspecialidadController } from '../controllers/abm/especialidad.controller';
 

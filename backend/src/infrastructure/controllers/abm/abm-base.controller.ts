@@ -1,5 +1,5 @@
 import { Body, Delete, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 
 export abstract class AbmBaseController<T, CreateDto, UpdateDto> {
   constructor(

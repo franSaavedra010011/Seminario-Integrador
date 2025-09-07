@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from 'src/domain/entities/usuario.entity';
@@ -49,6 +49,7 @@ export class AbmUsuarioUseCase {
         usuario: usuarioGuardado,
         rol: roles[0],
         fechaDesde: new Date(),
+        rolActivo: true,
       });
 
       await this.usuarioRolRepo.save(usuarioRol);

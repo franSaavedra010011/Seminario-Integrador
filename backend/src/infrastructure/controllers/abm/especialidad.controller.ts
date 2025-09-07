@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from './../../../shared/utils/genericRepository.service';
+import { GenericRepositoryService } from '../../../shared/services/genericRepository.service';
 import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
 import { Especialidad } from './../../../domain/entities/especialidad.entity';
 import { AbmEspecialidadUseCase } from 'src/application/use-cases/abm/especialidad/abm-especialidad.use-case';

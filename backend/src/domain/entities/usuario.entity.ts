@@ -13,7 +13,7 @@ export class Usuario extends Base {
   @Column({ unique: true, nullable: false })
   emailUsuario: string;
 
-  @Column({ nullable: false, select: false })
+  @Column({ nullable: false })
   passwordUsuario: string;
 
   @OneToOne(() => Paciente, (paciente) => paciente.usuario)

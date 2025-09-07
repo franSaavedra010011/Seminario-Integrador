@@ -8,7 +8,7 @@ import { CreateUsuarioDto } from '../usuario/dto/create-usuario.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { RolEnum } from 'src/domain/enums/rol.enum';
 import { Usuario } from 'src/domain/entities/usuario.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Localidad } from 'src/domain/entities/localidad.entity';
 import { Rol } from 'src/domain/entities/rol.entity';
 

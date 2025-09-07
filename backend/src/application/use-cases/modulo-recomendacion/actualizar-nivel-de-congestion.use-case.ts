@@ -1,5 +1,5 @@
 import { CongestionActual } from 'src/domain/entities/congestion-actual.entity';
-import { GenericRepositoryService } from './../../../shared/utils/genericRepository.service';
+import { GenericRepositoryService } from '../../../shared/services/genericRepository.service';
 import { UpdateCongestionDto } from './dto/update-congestion.dto';
 import { Hospital } from 'src/domain/entities/hospital.entity';
 import { NotFoundException } from '@nestjs/common';
