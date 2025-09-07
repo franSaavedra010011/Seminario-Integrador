@@ -26,11 +26,13 @@ import { RecomendacionModule } from './recomendacion.module';
       {
         path: 'abm',
         module: AbmModule, // Asegúrate de que AbmModule esté importado correctamente
-      }
+      },
+      {
+        path: 'recomendacion',
+        module: RecomendacionModule,
+      },
     ]),
     AuthModule,
-    AbmModule,
-    RecomendacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
