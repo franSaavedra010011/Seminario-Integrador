@@ -8,7 +8,7 @@ import { AuthModule } from '../../infrastructure/modules/auth.module';
 import path from 'path';
 import { AbmModule } from './abm.module';
 import { RouterModule } from '@nestjs/core';
-
+import { RecomendacionModule } from './recomendacion.module';
 
 @Module({
   imports: [
@@ -30,6 +30,7 @@ import { RouterModule } from '@nestjs/core';
     ]),
     AuthModule,
     AbmModule,
+    RecomendacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

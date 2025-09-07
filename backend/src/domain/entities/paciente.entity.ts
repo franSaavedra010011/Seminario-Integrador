@@ -21,6 +21,9 @@ export class Paciente extends Base {
   apellidoPaciente: string;
 
   @Column()
+  dniPaciente: string;
+
+  @Column()
   edadPaciente: number;
 
   @Column()
