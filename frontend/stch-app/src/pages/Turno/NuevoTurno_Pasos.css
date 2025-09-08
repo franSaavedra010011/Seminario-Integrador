@@ -1,0 +1,101 @@
+.nuevo-turno-container {
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.nuevo-turno-container h2 {
+  color: #384179;
+  margin-bottom: 15px;
+}
+
+.nuevo-turno-container select {
+  padding: 10px;
+  margin: 10px 0 20px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.nuevo-turno-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.nuevo-turno-container th,
+.nuevo-turno-container td {
+  padding: 12px 15px;
+  text-align: center;
+}
+
+.nuevo-turno-container th {
+  background-color: #384179;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.nuevo-turno-container tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.nuevo-turno-container tr:hover {
+  background-color: #eaeaea;
+}
+
+.nuevo-turno-container button {
+  margin-top: 20px;
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: #384179;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nuevo-turno-container button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.nuevo-turno-container button:hover:not(:disabled) {
+  background-color: #2f3662;
+}
+
+/* Estilo para celdas de horario seleccionadas y ocupadas */
+.horario-disponible {
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.horario-disponible:hover {
+  background-color: #def1ff;
+}
+
+.horario-seleccionado {
+  background-color: #b2f0b2 !important;
+}
+
+.horario-ocupado {
+  background-color: #f88 !important;
+  cursor: not-allowed;
+}
+
+/* Estilo para la sección de resumen */
+.resumen-turno p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.resumen-turno strong {
+  color: #384179;
+}

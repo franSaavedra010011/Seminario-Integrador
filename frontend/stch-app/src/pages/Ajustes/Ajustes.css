@@ -1,0 +1,48 @@
+.ajustes-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.ajustes-container h2 {
+  margin-bottom: 20px;
+  color: #384179;
+}
+
+.ajustes-form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.ajustes-form input[type="text"],
+.ajustes-form input[type="email"],
+.ajustes-form select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.ajustes-form input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.ajustes-form button {
+  margin-top: 25px;
+  background-color: #384179;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ajustes-form button:hover {
+  background-color: #2f3662;
+}
