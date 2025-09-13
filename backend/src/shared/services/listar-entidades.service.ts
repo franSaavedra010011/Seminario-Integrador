@@ -4,11 +4,24 @@ import { Medico } from "src/domain/entities/medico.entity";
 import { Paciente } from "src/domain/entities/paciente.entity";
 import { Rol } from "src/domain/entities/rol.entity";
 import { Usuario } from "src/domain/entities/usuario.entity";
+import { Especialidad } from "src/domain/entities/especialidad.entity";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class ListarEntidadesService {
+    
     constructor(
         private readonly genericRepository: GenericRepositoryService,
     ) {}
+
+    async listarEspecialidades() {
+        return await this.genericRepository.buscar(
+            Especialidad, 
+            'espe', 
+            [{ atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }],
+            [],
+        );
+    }
 
     async listarHospitales() {
         return await this.genericRepository.buscar(

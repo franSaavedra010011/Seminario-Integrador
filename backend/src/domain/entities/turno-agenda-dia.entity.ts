@@ -20,7 +20,7 @@ export class TurnoAgendaDia extends Base {
   @Column()
   horaHasta: string;
 
-  @ManyToOne(() => AgendaDia, (agendaDia) => agendaDia.turnosAgendaDia)
+  @ManyToOne(() => AgendaDia, (agendaDia) => agendaDia.turnosAgendaDia, { onDelete: 'CASCADE' })
   agendaDia: AgendaDia;
 
   @OneToOne(() => Turno, (turno) => turno.turnoAgendaDia)

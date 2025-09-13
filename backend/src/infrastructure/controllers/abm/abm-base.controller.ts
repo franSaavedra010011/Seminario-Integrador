@@ -6,6 +6,7 @@ export abstract class AbmBaseController<T, CreateDto, UpdateDto> {
     protected readonly useCase: {
       crear(dto: CreateDto): Promise<T>;
       actualizar(id: number, dto: UpdateDto): Promise<T>;
+      eliminar?(id: number): Promise<void>;
     },
     protected readonly genericRepositoryService: GenericRepositoryService,
     private readonly entity: new () => T,
@@ -26,6 +27,10 @@ export abstract class AbmBaseController<T, CreateDto, UpdateDto> {
 
   @Delete('baja/:id')
   async baja(@Param('id', ParseIntPipe) id: number) {
-    return this.genericRepositoryService.eliminar(this.entity, id);
+    if (this.useCase.eliminar) {
+      return this.useCase.eliminar(id);
+    } else {
+      return this.genericRepositoryService.eliminar(this.entity, id);
+    }
   }
 }

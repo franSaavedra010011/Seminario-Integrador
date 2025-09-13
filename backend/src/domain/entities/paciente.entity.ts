@@ -38,7 +38,7 @@ export class Paciente extends Base {
   @Column()
   grupoSanguineoPaciente: string;
 
-  @OneToMany(() => Turno, (turno) => turno.paciente, { nullable: true })
+  @OneToMany(() => Turno, (turno) => turno.paciente, { nullable: true, cascade: true, onDelete: 'CASCADE' })
   turnos: Turno[];
 
   @OneToOne(() => Usuario, (usuario) => usuario.paciente, { nullable: true })
@@ -48,9 +48,11 @@ export class Paciente extends Base {
   @OneToMany(
     () => PacienteNotificacion,
     (pacienteNotificacion) => pacienteNotificacion.paciente,
+    { cascade: true, onDelete: 'CASCADE' },
   )
   pacienteNotificaciones: PacienteNotificacion[];
 
   @ManyToOne(() => Localidad, { nullable: false })
   localidad: Localidad;
+  fechaNacimiento: any;
 }

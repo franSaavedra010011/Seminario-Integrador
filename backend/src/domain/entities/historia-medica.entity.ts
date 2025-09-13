@@ -15,7 +15,7 @@ export class HistoriaMedica extends Base {
   @JoinColumn({ name: 'idTurno' })
   turno: Turno;
 
-  @ManyToOne(() => Medico, (medico) => medico.historiasMedica)
+  @ManyToOne(() => Medico, (medico) => medico.historiasMedica, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'idMedico' })
   medico: Medico;
 }

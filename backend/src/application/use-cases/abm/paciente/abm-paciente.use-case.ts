@@ -1,41 +1,63 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Paciente } from 'src/domain/entities/paciente.entity';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
-import { CreateUsuarioDto } from '../usuario/dto/create-usuario.dto';
-import { AuthService } from 'src/auth/auth.service';
-import { RolEnum } from 'src/domain/enums/rol.enum';
 import { Usuario } from 'src/domain/entities/usuario.entity';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Localidad } from 'src/domain/entities/localidad.entity';
-import { Rol } from 'src/domain/entities/rol.entity';
 
 @Injectable()
 export class AbmPacienteUseCase {
   constructor(
-    @InjectRepository(Paciente)
     private readonly genericRepository: GenericRepositoryService,
   ) {}
 
-  async crear(dto: CreatePacienteDto): Promise<Paciente> {
-    // Buscar la localidad existente
+  async crear(dto: CreatePacienteDto, usuario: Usuario): Promise<Paciente> {
+
+    /*
+      Buscar instancia de localidad existente:
+        - Con id igual al proporcionado
+        - Con fechaHoraBaja igual a null (Localidad vigente)
+    */
     const localidades = await this.genericRepository.buscar(
       Localidad,
       'localidad',
-      [{ atributo: 'id', operacion: '=', valor: dto.idLocalidad }]
+      [
+        { atributo: 'id', operacion: '=', valor: dto.idLocalidad },
+        { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null },
+      ]
     );
 
+    // Comprobar que existe la localidad proporcionada
     if (!localidades.length) {
+      // CA N°1: no existe la localidad proporcionada
       throw new BadRequestException('La localidad proporcionada no existe');
     }
 
-    // Crear el paciente y asociar localidad
+    /*
+      Crear instancia de Paciente:
+        - Con nombre igual al ingresado
+        - Con apellido igual al ingresado
+        - Con dni igual al ingresado
+        - Con fechaNacimiento igual al ingresado
+        - Con celular igual al ingresado
+        - Con correo igual al ingresado
+        - Con grupoSanguineo igual al ingresado
+        - Con localidad igual a la localidad encontrada
+    */
     const paciente = new Paciente();
-    Object.assign(paciente, dto);
+    paciente.nombrePaciente = dto.nombrePaciente;
+    paciente.apellidoPaciente = dto.apellidoPaciente;
+    paciente.edadPaciente = dto.edadPaciente;
+    paciente.dniPaciente = dto.dniPaciente;
+    paciente.fechaNacimientoPaciente = new Date(dto.fechaNacimientoPaciente);
+    paciente.celularPaciente = dto.celularPaciente;
+    paciente.correoPaciente = dto.correoPaciente;
+    paciente.grupoSanguineoPaciente = dto.grupoSanguineoPaciente;
     paciente.localidad = localidades[0];
+    paciente.usuario = usuario;
 
+    // Guardar cambios
     return await this.genericRepository.guardarCambios(Paciente, paciente);
   }
 

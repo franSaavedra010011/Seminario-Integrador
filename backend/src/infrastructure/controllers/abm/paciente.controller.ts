@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { Paciente } from './../../../domain/entities/paciente.entity';
 import { AbmPacienteUseCase } from 'src/application/use-cases/abm/paciente/abm-paciente.use-case';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
@@ -7,16 +7,19 @@ import { UpdatePacienteDto } from 'src/application/use-cases/abm/paciente/dto/up
 import { AbmBaseController } from './abm-base.controller';
 
 @Controller('paciente')
-export class PacienteController extends AbmBaseController<
-    Paciente,
-    CreatePacienteDto,
-    UpdatePacienteDto
->{
+export class PacienteController {
     constructor(
-        abmPacienteUseCase: AbmPacienteUseCase,
-        genericRepositoryService: GenericRepositoryService,
-    ) {
-        super(abmPacienteUseCase, genericRepositoryService, Paciente);
+        private readonly useCase: AbmPacienteUseCase,
+        private readonly genericRepo: GenericRepositoryService
+    ) {}
+
+    @Put('modificar/:id')
+    async modificar(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdatePacienteDto) {
+        return this.useCase.actualizar(id, dto);
     }
-    
+
+    @Delete('baja/:id')
+    async baja(@Param('id', ParseIntPipe) id: number) {
+        return this.useCase.eliminar(id);
+    }
 }

@@ -32,25 +32,32 @@ export class Medico extends Base {
   @Column()
   tiempoConsulta: number;
 
-  @OneToMany(() => Turno, (turno) => turno.paciente)
+  // Medico -> Turno (1:N)
+  @OneToMany(() => Turno, (turno) => turno.paciente, { cascade: true, onDelete: 'CASCADE', nullable: true })
   turnos: Turno[];
 
-  @OneToOne(() => Usuario, (usuario) => usuario.medico)
-  @JoinColumn({ name: 'userEmail', referencedColumnName: 'emailUsuario' })
+  // Medico -> Usuario (1:1)
+  @OneToOne(() => Usuario, (usuario) => usuario.medico, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'idUsuario', referencedColumnName: 'id' })
   usuario: Usuario;
 
+  // Medico -> EspecialidadMedico (1:N)
   @OneToMany(
     () => EspecialidadMedico,
     (especialidadMedico) => especialidadMedico.medico,
+    { cascade: true, onDelete: 'CASCADE' },
   )
   especialidadesMedico: EspecialidadMedico[];
 
-  @OneToMany(() => HistoriaMedica, (historiaMedica) => historiaMedica.medico)
+  // Medico -> HistoriaMedica (1:N)
+  @OneToMany(() => HistoriaMedica, (historiaMedica) => historiaMedica.medico, { cascade: true, onDelete: 'CASCADE', nullable: true })
   historiasMedica: HistoriaMedica[];
 
+  // Medico -> HospitalEspecialidadMedico (1:N)
   @OneToMany(
     () => HospitalEspecialidadMedico,
     (hospitalEspecialidadMedico) => hospitalEspecialidadMedico.medico,
+    { cascade: true, onDelete: 'CASCADE' },
   )
   hospitalEspecialidadMedico: HospitalEspecialidadMedico[];
 }

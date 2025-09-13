@@ -21,10 +21,14 @@ export class AgendaDia extends Base {
 
   @ManyToOne(() => AgendaSemanal, agendaSemanal => agendaSemanal.agendasDia, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'idAgendaSemanal' }) // opcional
   agendaSemanal: AgendaSemanal;
 
-  @OneToMany(() => TurnoAgendaDia, turnoAgendaDia => turnoAgendaDia.agendaDia)
+  @OneToMany(() => TurnoAgendaDia, turnoAgendaDia => turnoAgendaDia.agendaDia, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   turnosAgendaDia: TurnoAgendaDia[];
 }

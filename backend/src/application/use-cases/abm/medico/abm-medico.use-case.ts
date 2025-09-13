@@ -8,6 +8,7 @@ import { Hospital } from 'src/domain/entities/hospital.entity';
 import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
 import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
 import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 
 @Injectable()
 export class AbmMedicoUseCase {
@@ -21,7 +22,7 @@ export class AbmMedicoUseCase {
     private readonly genericRepository: GenericRepositoryService,
   ) {}
 
-  async crear(dto: CreateMedicoDto): Promise<Medico> {
+  async crear(dto: CreateMedicoDto, usuario: Usuario): Promise<Medico> {
     // Crear instancia base
     const medico = new Medico();
     medico.nombreMedico = dto.nombreMedico;
@@ -30,6 +31,7 @@ export class AbmMedicoUseCase {
     medico.telMedico = dto.telefonoMedico;
     medico.matriculaMedico = dto.matriculaMedico;
     medico.tiempoConsulta = dto.tiempoConsultaMedico;
+    medico.usuario = usuario;
 
     const medicoGuardado = await this.genericRepository.guardarCambios(Medico, medico);
 

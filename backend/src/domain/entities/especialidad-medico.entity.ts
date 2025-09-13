@@ -20,7 +20,7 @@ export class EspecialidadMedico extends Base {
   @JoinColumn({ name: 'idEspecialidad' }) // opcional, si querés especificar
   especialidad: Especialidad;
 
-  @ManyToOne(() => Medico, (medico) => medico.especialidadesMedico)
+  @ManyToOne(() => Medico, (medico) => medico.especialidadesMedico, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'idMedico' }) // opcional
   medico: Medico;
 }

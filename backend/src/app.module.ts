@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from '../../infrastructure/controllers/app.controller';
-import { AppService } from '../../app.service';
+import { AppController } from './infrastructure/controllers/app.controller';
+import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // Módulos de infraestructura (vía imports relativos)
-import { AuthModule } from '../../infrastructure/modules/auth.module';
+import { AuthModule } from './infrastructure/modules/auth.module';
 import path from 'path';
-import { AbmModule } from './abm.module';
+import { AbmModule } from './infrastructure/modules/abm.module';
 import { RouterModule } from '@nestjs/core';
-import { RecomendacionModule } from './recomendacion.module';
+import { RecomendacionModule } from './infrastructure/modules/recomendacion.module';
+import { SharedModule } from './infrastructure/modules/shared.module';
 
 @Module({
   imports: [
@@ -31,8 +32,13 @@ import { RecomendacionModule } from './recomendacion.module';
         path: 'recomendacion',
         module: RecomendacionModule,
       },
+      {
+        path: 'shared',
+        module: SharedModule,
+      },
     ]),
     AuthModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

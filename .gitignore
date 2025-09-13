@@ -26,3 +26,10 @@ Thumbs.db
 
 # Archivos de VS Code (opcional si no querés versionar settings)
 .vscode/
+
+# Archivos de logs
+debug.log
+
+# Archivos de Enterprise Architect
+*.eapx
+*.ldb
