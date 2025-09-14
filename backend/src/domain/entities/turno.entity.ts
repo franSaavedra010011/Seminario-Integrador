@@ -53,7 +53,9 @@ export class Turno extends Base {
   @OneToOne(() => TurnoAgendaDia, (turnoAgendaDia) => turnoAgendaDia.turno)
   turnoAgendaDia: TurnoAgendaDia;
 
-  @ManyToOne(() => Hospital, (hospital) => hospital.turnos)
+  @ManyToOne(() => Hospital, (hospital) => hospital.turnos, {
+    onDelete: 'CASCADE',
+  })
   hospital: Hospital;
 
   @OneToMany(

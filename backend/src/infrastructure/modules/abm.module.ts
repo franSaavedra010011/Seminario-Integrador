@@ -44,6 +44,7 @@ import { EspecialidadController } from '../controllers/abm/especialidad.controll
 import { UsuarioController } from '../controllers/abm/usuario.controller';
 import { PacienteController } from '../controllers/abm/paciente.controller';
 import { MedicoController } from '../controllers/abm/medico.controller';
+import { HospitalController } from '../controllers/abm/hospital.controller';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { MedicoController } from '../controllers/abm/medico.controller';
     UsuarioController,
     PacienteController,
     MedicoController,
+    HospitalController
   ],
   providers: [
     GenericRepositoryService,

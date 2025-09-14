@@ -35,7 +35,10 @@ export class CongestionActual extends Base {
   @Column()
   turnosEnProceso: number;
 
-  @ManyToOne(() => Hospital, (hospital) => hospital.congestionesActual)
+  @ManyToOne(() => Hospital, (hospital) => hospital.congestionesActual, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'idHospital' }) 
   hospital: Hospital;
+    registro: Hospital[];
 }

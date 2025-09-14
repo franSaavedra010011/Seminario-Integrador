@@ -27,7 +27,9 @@ export class CongestionHistorico extends Base {
   @Column()
   turnosMaximoDia: number;
 
-  @ManyToOne(() => Hospital, (hospital) => hospital.congestionesHistorico)
+  @ManyToOne(() => Hospital, (hospital) => hospital.congestionesHistorico, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'idHospital' })
   hospital: Hospital;
 }

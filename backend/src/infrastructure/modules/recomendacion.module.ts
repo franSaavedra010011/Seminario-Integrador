@@ -10,6 +10,10 @@ import { CongestionHistorico } from 'src/domain/entities/congestion-historico.en
 import { ActualizarNivelDeCongestionUseCase } from 'src/application/use-cases/modulo-recomendacion/actualizar-nivel-de-congestion.use-case';
 // Servicios compartidos
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
+import { RecomendacionController } from '../controllers/recomendacion.controller';
+import { CompararHospitalesUseCase } from 'src/application/use-cases/modulo-recomendacion/comparar-hospitales.use-case';
+import { SharedModule } from 'src/infrastructure/modules/shared.module';
+import { RegistrarCongestionHistoricaUseCase } from 'src/application/use-cases/modulo-recomendacion/registrar-congestion-historica.use-case';
 
 @Module({
   imports: [
@@ -18,13 +22,20 @@ import { GenericRepositoryService } from 'src/shared/services/genericRepository.
       CongestionActual,
       CongestionHistorico,
     ]),
+    SharedModule,
+  ],
+  controllers: [
+    RecomendacionController,
   ],
   providers: [
-    GenericRepositoryService,
     ActualizarNivelDeCongestionUseCase,
+    CompararHospitalesUseCase,
+    RegistrarCongestionHistoricaUseCase
   ],
   exports: [
     ActualizarNivelDeCongestionUseCase,
+    CompararHospitalesUseCase,
+    RegistrarCongestionHistoricaUseCase
   ],
 })
 export class RecomendacionModule {}

@@ -1,9 +1,11 @@
+import { Type } from "class-transformer";
 import { IsEnum, IsIn, IsInt, Min } from "class-validator";
 import { NivelCongestionEnum } from "src/domain/enums/nivel-congestion.enum";
 
 export class UpdateCongestionDto {
     @IsInt()
     @Min(1)
+    @Type(() => Number)
     hospitalId: number;
 
     @IsEnum(NivelCongestionEnum)

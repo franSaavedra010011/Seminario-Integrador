@@ -29,16 +29,11 @@ import { SharedModule } from './infrastructure/modules/shared.module';
         module: AbmModule, // Asegúrate de que AbmModule esté importado correctamente
       },
       {
-        path: 'recomendacion',
-        module: RecomendacionModule,
-      },
-      {
         path: 'shared',
         module: SharedModule,
       },
     ]),
-    AuthModule,
-    SharedModule,
+    AuthModule, AbmModule, RecomendacionModule, SharedModule 
   ],
   controllers: [AppController],
   providers: [AppService],

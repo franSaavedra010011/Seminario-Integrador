@@ -20,7 +20,9 @@ export class HospitalEspecialidadMedico extends Base {
 
   @ManyToOne(
     () => HospitalEspecialidad,
-    (hospitalEspecialidad) => hospitalEspecialidad.hospitalEspecialidadMedico,
+    (hospitalEspecialidad) => hospitalEspecialidad.hospitalEspecialidadMedico, {
+      onDelete: 'CASCADE',
+    }
   )
   @JoinColumn({ name: 'idHospitalEspecialidad', referencedColumnName: 'id' })
   hospitalEspecialidad: HospitalEspecialidad;

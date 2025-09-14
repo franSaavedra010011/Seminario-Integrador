@@ -1,42 +1,59 @@
 import { CongestionActual } from 'src/domain/entities/congestion-actual.entity';
-import { GenericRepositoryService } from '../../../shared/services/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { UpdateCongestionDto } from './dto/update-congestion.dto';
 import { Hospital } from 'src/domain/entities/hospital.entity';
-import { NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+@Injectable()
 export class ActualizarNivelDeCongestionUseCase {
-    constructor(
-        private readonly updateCongestionDto: UpdateCongestionDto,
-        private readonly genericRepository: GenericRepositoryService,
-    ) {}
+  constructor(private readonly genericRepository: GenericRepositoryService) {
+    console.log('✅ GenericRepositoryService inyectado:', !!genericRepository);
+  }
 
-    async ejecutar(dto: UpdateCongestionDto): Promise<CongestionActual> {
-        // Buscar instancia de Hospital existente con el ID proporcionado
-        const hospitales = await this.genericRepository.buscar(
-            Hospital,
-            'hosp',
-            [{ atributo: 'id', operacion: '=', valor: dto.hospitalId }],
-        );
+  async ejecutar(dto: UpdateCongestionDto): Promise<CongestionActual> {
+    /*
+            Buscar instancia de hospital existente:
+                - Con id igual al proporcionado
+                - Con fechaHoraBaja igual a null (Hospital vigente)
+        */
+    const hospital = await this.genericRepository.buscar(Hospital, 'hosp', [
+      { atributo: 'id', operacion: '=', valor: dto.hospitalId },
+      { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null },
+    ]);
 
-        // Comprobar si trajo algun hospital
-        if (!hospitales.length) {
-            throw new NotFoundException(`Hospital con ID ${dto.hospitalId} no encontrado`);
-        }
-
-        // Leer el hospital
-        const hospital = hospitales[0];
-
-        // Crear registro de CongestionActual
-        const registro = new CongestionActual();
-        registro.fecha = new Date();
-        registro.horaActualizacion = new Date().getHours();
-        registro.nivelCongestion = dto.nivelCongestion;
-        registro.turnosCancelados = dto.turnosCancelados;
-        registro.turnosNoAsistidos = dto.turnosNoAsistidos;
-        registro.turnosAsistidos = dto.turnosAsistidos;
-        registro.turnosEnProceso = dto.turnosEnProceso;
-        registro.hospital = hospital;
-
-        // Guardar cambios de la congestion actual
-        return await this.genericRepository.guardarCambios(CongestionActual, registro);
+    // Comprobar que existe el hospital proporcionado
+    if (!hospital.length) {
+      // CA N°1: no existe el hospital proporcionado
+      throw new NotFoundException(
+        `Hospital con ID ${dto.hospitalId} no encontrado`
+      );
     }
+
+    /*
+            Crear instancia de CongestionActual:
+                - Con fecha igual a la fecha actual
+                - Con horaActualizacion igual a la hora actual
+                - Con nivelCongestion igual al ingresado
+                - Con turnosCancelados igual al ingresado
+                - Con turnosNoAsistidos igual al ingresado
+                - Con turnosAsistidos igual al ingresado
+                - Con turnosEnProceso igual al ingresado
+                - Relacionado al hospital encontrado
+        */
+    const registro = new CongestionActual();
+    registro.fecha = new Date();
+    registro.horaActualizacion = new Date().getHours();
+    registro.nivelCongestion = dto.nivelCongestion;
+    registro.turnosCancelados = dto.turnosCancelados;
+    registro.turnosNoAsistidos = dto.turnosNoAsistidos;
+    registro.turnosAsistidos = dto.turnosAsistidos;
+    registro.turnosEnProceso = dto.turnosEnProceso;
+    registro.hospital = hospital[0];
+
+    // Guardar cambios
+    return await this.genericRepository.guardarCambios(
+      CongestionActual,
+      registro
+    );
+  }
 }
