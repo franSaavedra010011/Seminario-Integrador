@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import './CrearHospital.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CrearHospital() {
   const navigate = useNavigate();
+  const [localidades, setLocalidades] = useState([]);
+  const [idLocalidad, setIdLocalidad] = useState(''); 
   const [form, setForm] = useState({
     nombre: '',
     direccion: '',
@@ -11,19 +13,50 @@ export default function CrearHospital() {
     telefono: ''
   });
 
+  useEffect(() => {
+    fetch('http://localhost:3000/shared/listas/localidades')
+    .then(response => response.json())
+    .then(data => setLocalidades(data))
+    .catch(error => console.error('Error al cargar localidades:', error));
+  }, []);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Formulario enviado:', form);
 
-    // Simular envío al backend (puedes reemplazarlo con una llamada real)
-    setTimeout(() => {
+    const dto = {
+      nombreHospital: form.nombre,
+      direccionHospital: form.direccion,
+      emailHospital: form.email,
+      telHospital: form.telefono,
+      idLocalidad: Number(idLocalidad)
+    };
+
+    try {
+
+      const response = await fetch('http://localhost:3000/abm/hospital/alta', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dto)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Error al crear hospital');
+      }
+
       alert('Hospital creado con éxito');
-      navigate('/hospitalTabla'); // Redirige a la lista de hospitales
-    }, 500);
+      navigate('/hospitalTabla');
+      
+    } catch (error) {
+      alert(`Error al crear hospital: ${error.message}`);
+    }
   };
 
   return (
@@ -76,6 +109,24 @@ export default function CrearHospital() {
               required
             />
           </div>
+          <div>
+            <label>Localidad</label>
+            <select
+              name="idLocalidad"
+              value={idLocalidad}
+              onChange={(e) => setIdLocalidad(e.target.value)}
+              required
+            >
+              <option value="">Seleccione una localidad</option>
+              {localidades.map(loc => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+
         </div>
 
         <button type="submit">Guardar Hospital</button>

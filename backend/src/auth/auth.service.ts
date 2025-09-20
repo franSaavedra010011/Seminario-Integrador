@@ -19,7 +19,7 @@ export class AuthService {
     private readonly abmUsuarioUseCase: AbmUsuarioUseCase,
     private readonly jwtService: JwtService,
     private readonly genericRepository: GenericRepositoryService,
-  ) {}
+  ) { }
 
   /*
     CU N°1: Registrar
@@ -61,7 +61,7 @@ export class AuthService {
         Rol,
         'rol',
         [
-          { atributo: 'nombre', operacion: '=', valor: nombreRol.trim().toUpperCase() },
+          { atributo: 'nombre', operacion: '=', valor: nombreRol.trim() },
           { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }
         ]
       );
@@ -82,7 +82,7 @@ export class AuthService {
         - Con email proporcionado
         - Con password proporcionado
         - Con idRoles (array de id de roles encontrados)
-    */ 
+    */
     const createUsuarioDto: CreateUsuarioDto = {
       usernameUsuario: registerDto.usernameUsuario,
       emailUsuario: registerDto.emailUsuario,
@@ -170,21 +170,22 @@ export class AuthService {
     if (roles.length === 1) {
       // Leer rol
       const rol = roles[0];
-      
+
       /*
         Crear instancia de payload:
           - Con id de usuario
           - Con email de usuario
           - Con nombre de rol
           - Con permiso/s (en minúsculas y sin espacios al inicio o final)            
-      */ 
+      */
       const payload = {
         sub: usuario.id,
         email: usuario.emailUsuario,
+        username: usuario.usernameUsuario,
         rol: rol.nombreRol,
         permisos: rol.permisos
       };
-      
+
       /*
         Crear instancia de token JWT:
           - Relacionada a la instancia de payload creada

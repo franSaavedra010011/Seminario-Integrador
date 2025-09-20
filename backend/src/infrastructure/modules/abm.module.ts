@@ -45,6 +45,7 @@ import { UsuarioController } from '../controllers/abm/usuario.controller';
 import { PacienteController } from '../controllers/abm/paciente.controller';
 import { MedicoController } from '../controllers/abm/medico.controller';
 import { HospitalController } from '../controllers/abm/hospital.controller';
+import { RolController } from '../controllers/abm/rol.controller';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { HospitalController } from '../controllers/abm/hospital.controller';
     EspecialidadController,
     UsuarioController,
     PacienteController,
+    RolController,
     MedicoController,
     HospitalController
   ],
@@ -105,4 +107,4 @@ import { HospitalController } from '../controllers/abm/hospital.controller';
     AbmEstadoTurnoUseCase
   ]
 })
-export class AbmModule {}
+export class AbmModule { }

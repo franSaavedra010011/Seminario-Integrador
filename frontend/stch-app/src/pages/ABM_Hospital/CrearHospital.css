@@ -45,6 +45,25 @@
   font-size: 1rem;
 }
 
+.form-grid select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #fefefe;
+  color: #212529;
+  appearance: none;
+}
+
+.form-grid select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20fill%3D'%23212529'%20viewBox%3D'0%200%2024%2024'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M7%2010l5%205%205-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2rem;
+}
+
+
 button[type="submit"] {
   margin-top: 2rem;
   width: 100%;

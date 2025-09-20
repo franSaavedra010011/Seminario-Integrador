@@ -1,13 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ListarEntidadesService } from 'src/shared/services/listar-entidades.service';
 
 @Controller('listas')
 export class ListarEntidadesController {
-  constructor(private readonly listarSvc: ListarEntidadesService) {}
+  constructor(private readonly listarSvc: ListarEntidadesService) { }
 
   @Get('hospitales')
-  hospitales() {
-    return this.listarSvc.listarHospitales();
+  hospitales(
+    @Query('modo') modo: 'simple' | 'localidad' | 'completo' = 'simple'
+  ) {
+    return this.listarSvc.listarHospitales(modo);
   }
 
   @Get('medicos')
@@ -29,4 +31,10 @@ export class ListarEntidadesController {
   especialidades() {
     return this.listarSvc.listarEspecialidades();
   }
+
+  @Get('localidades')
+  listarLocalidades() {
+    return this.listarSvc.listarLocalidades();
+  }
+
 }
