@@ -1,3 +1,5 @@
+/* CrearHospital.css */
+
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f5f6fa;
@@ -13,45 +15,61 @@ body {
 
 .hospital-form {
   background-color: #fff;
-  padding: 2.5rem 3rem;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  padding: 3rem 3rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
   width: 100%;
-  max-width: 960px;
+  max-width: 1200px;
 }
 
+/* Título principal */
 .hospital-form h2 {
   text-align: center;
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: #384179;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2d3d;
+  margin-bottom: 0.5rem;
+}
+
+.hospital-form p {
+  text-align: center;
+  font-size: 1rem;
+  color: #6c757d;
   margin-bottom: 2.5rem;
 }
 
-.form-section {
-  margin-bottom: 2rem;
-}
-
-.form-section h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #384179;
-  margin-bottom: 1.25rem;
-}
-
-.form-grid {
+/* Sección con dos columnas principales */
+.form-dual-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem 1.5rem;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Encabezados de sección con línea vertical azul */
+.form-section h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1f2d3d;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid #384179;
+  padding-left: 10px;
+}
+
+/* Inputs */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 input,
 select {
   font-size: 1rem;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
   border: 1px solid #ced4da;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #f9fafb;
   color: #212529;
   font-weight: 500;
   width: 100%;
@@ -62,47 +80,42 @@ input::placeholder {
   color: #adb5bd;
 }
 
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem 1.5rem;
+/* Especialidades tipo "tags" */
+.specialties-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
-.checkbox-grid label {
-  display: flex;
+.specialty-tag {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 15px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background-color: #f1f3f5;
   color: #212529;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
-.checkbox-grid input[type="checkbox"] {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #384179;
-  border-radius: 4px;
-  position: relative;
-  display: inline-block;
-}
-
-.checkbox-grid input[type="checkbox"]:checked {
+.specialty-tag.selected {
   background-color: #384179;
-}
-
-.checkbox-grid input[type="checkbox"]:checked::after {
-  content: '✔';
   color: white;
-  font-size: 12px;
-  position: absolute;
-  top: -2px;
-  left: 3px;
+  border-color: #384179;
 }
 
+.specialty-tag:hover {
+  background-color: #e2e6ea;
+}
+
+/* Botones */
 .btn-primary {
-  margin-top: 1.5rem;
   width: 100%;
   padding: 1rem;
   font-size: 1.05rem;
@@ -112,6 +125,7 @@ input::placeholder {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  margin-bottom: 0.75rem;
 }
 
 .btn-primary:hover {
@@ -119,7 +133,6 @@ input::placeholder {
 }
 
 .btn-secondary {
-  margin-top: 1rem;
   width: 100%;
   padding: 0.95rem;
   font-size: 1rem;

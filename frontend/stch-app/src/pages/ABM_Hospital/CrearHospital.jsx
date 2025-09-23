@@ -69,71 +69,96 @@ export default function CrearHospital() {
   return (
     <div className="hospital-container">
       <form className="hospital-form" onSubmit={handleSubmit}>
-        <h2>Crear Nuevo Hospital</h2>
+        <h2>Crear nuevo hospital</h2>
+        <p>Completa la información para registrar un nuevo centro médico.</p>
 
-        <div className="form-section">
-          <h3>Datos generales</h3>
-          <div className="form-grid">
-            <div>
-              <label>Nombre</label>
-              <input type="text" name="nombre" value={form.nombre} onChange={handleChange} placeholder="Ej: Hospital Central" required />
-            </div>
-            <div>
-              <label>Dirección</label>
-              <input type="text" name="direccion" value={form.direccion} onChange={handleChange} placeholder="Ej: Av. Siempre Viva 742" required />
+        <div className="form-dual-grid">
+          <div>
+            <h3>Datos generales</h3>
+            <div className="form-grid">
+              <input
+                type="text"
+                name="nombre"
+                value={form.nombre}
+                onChange={handleChange}
+                placeholder="Ej: Hospital Central"
+                required
+              />
+              <input
+                type="text"
+                name="direccion"
+                value={form.direccion}
+                onChange={handleChange}
+                placeholder="Ej: Av. Siempre Viva 742"
+                required
+              />
             </div>
           </div>
-        </div>
 
-        <div className="form-section">
-          <h3>Contacto</h3>
-          <div className="form-grid">
-            <div>
-              <label>Email</label>
-              <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="contacto@hospital.com" required />
-            </div>
-            <div>
-              <label>Teléfono</label>
-              <input type="tel" name="telefono" value={form.telefono} onChange={handleChange} placeholder="+54 9 261 1234567" required />
+          <div>
+            <h3>Contacto y Localidad</h3>
+            <div className="form-grid">
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="contacto@hospital.com"
+                required
+              />
+              <input
+                type="tel"
+                name="telefono"
+                value={form.telefono}
+                onChange={handleChange}
+                placeholder="+54 9 261 1234567"
+                required
+              />
+              <select
+                name="idLocalidad"
+                value={idLocalidad}
+                onChange={(e) => setIdLocalidad(e.target.value)}
+                required
+              >
+                <option value="">Seleccione una localidad</option>
+                {localidades.map((loc) => (
+                  <option key={loc.id} value={loc.id}>
+                    {loc.nombre}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-        </div>
-
-        <div className="form-section">
-          <h3>Localidad</h3>
-          <select name="idLocalidad" value={idLocalidad} onChange={(e) => setIdLocalidad(e.target.value)} required>
-            <option value="">Seleccione una localidad</option>
-            {localidades.map(loc => (
-              <option key={loc.id} value={loc.id}>{loc.nombre}</option>
-            ))}
-          </select>
         </div>
 
         <div className="form-section">
           <h3>Especialidades médicas</h3>
-          <div className="checkbox-grid">
-            {especialidades.map((esp) => (
-              <label key={esp.id}>
-                <input
-                  type="checkbox"
-                  value={esp.id}
-                  checked={especialidadesSeleccionadas.includes(esp.id)}
-                  onChange={(e) => {
-                    const id = parseInt(e.target.value);
-                    if (e.target.checked) {
-                      setEspecialidadesSeleccionadas([...especialidadesSeleccionadas, id]);
+          <div className="specialties-grid">
+            {especialidades.map((esp) => {
+              const selected = especialidadesSeleccionadas.includes(esp.id);
+              return (
+                <div
+                  key={esp.id}
+                  className={`specialty-tag ${selected ? 'selected' : ''}`}
+                  onClick={() => {
+                    const id = esp.id;
+                    if (selected) {
+                      setEspecialidadesSeleccionadas(especialidadesSeleccionadas.filter(e => e !== id));
                     } else {
-                      setEspecialidadesSeleccionadas(especialidadesSeleccionadas.filter(item => item !== id));
+                      setEspecialidadesSeleccionadas([...especialidadesSeleccionadas, id]);
                     }
                   }}
-                />
-                {esp.nombre}
-              </label>
-            ))}
+                >
+                  {esp.nombre}
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        <button type="submit" className="btn-primary">Guardar Hospital</button>
+        <button type="submit" className="btn-primary">
+          Guardar Hospital
+        </button>
         <button type="button" className="btn-secondary" onClick={() => navigate('/hospitalTabla')}>
           ← Volver a la tabla
         </button>
