@@ -1,63 +1,140 @@
-.crear-hospital-container {
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f6fa;
+}
+
+.hospital-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  background-color: #f8f9fa;
+  padding: 40px 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-.crear-hospital-form {
+.hospital-form {
   background-color: #fff;
-  padding: 2rem 2.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 3rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   width: 100%;
-  max-width: 600px;
+  max-width: 960px;
 }
 
-.crear-hospital-form h2 {
+.hospital-form h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  font-size: 1.9rem;
+  font-weight: 700;
   color: #384179;
+  margin-bottom: 2.5rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #384179;
+  margin-bottom: 1.25rem;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.2rem 2rem;
+  gap: 1.25rem 1.5rem;
 }
 
-.form-grid div {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-grid label {
-  margin-bottom: 0.4rem;
-  font-weight: 500;
-  color: #495057;
-}
-
-.form-grid input {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+input,
+select {
   font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #212529;
+  font-weight: 500;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-button[type="submit"] {
-  margin-top: 2rem;
+input::placeholder {
+  color: #adb5bd;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+}
+
+.checkbox-grid label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #212529;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.checkbox-grid input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #384179;
+  border-radius: 4px;
+  position: relative;
+  display: inline-block;
+}
+
+.checkbox-grid input[type="checkbox"]:checked {
+  background-color: #384179;
+}
+
+.checkbox-grid input[type="checkbox"]:checked::after {
+  content: '✔';
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  top: -2px;
+  left: 3px;
+}
+
+.btn-primary {
+  margin-top: 1.5rem;
   width: 100%;
-  padding: 0.75rem;
-  font-size: 1.1rem;
+  padding: 1rem;
+  font-size: 1.05rem;
   background-color: #384179;
   color: white;
+  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
-  background-color: #4c58a3;
+.btn-primary:hover {
+  background-color: #2e376a;
+}
+
+.btn-secondary {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.95rem;
+  font-size: 1rem;
+  background-color: #f1f3f5;
+  color: #374151;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover {
+  background-color: #e3e6e9;
 }

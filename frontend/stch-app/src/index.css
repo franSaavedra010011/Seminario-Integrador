@@ -66,3 +66,7 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+form input {
+  color: #000 !important; /* Asegura que el texto sea negro */
+}

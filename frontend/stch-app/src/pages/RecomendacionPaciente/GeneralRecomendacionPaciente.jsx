@@ -25,14 +25,15 @@ export default function RecomendacionPaciente() {
                     <strong>85%</strong>.
                     </p>
                 </button>
-                <button className="card">
+                <button className="card" onClick={() => handleNavigate('consultarDetalleHospital')}>
                     <h3>- Consultar detalle del hospital</h3>
                     <p>
-                    Hospital del Sur (1.2 km)
-                    <br />
-                    Clínica Santa Fe (2.0 km)
+                        Información completa de cada hospital:
+                        <br />✔ Dirección
+                        <br />✔ Contacto
+                        <br />✔ Nivel de congestión
                     </p>
-                </button>
+                    </button>
                 <button type="button" className="card"  onClick={() => handleNavigate('consultarCongestion')}>
                     <h3>- Consultar congestión de hospital</h3>
                     <p>

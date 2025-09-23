@@ -31,6 +31,7 @@ import ABMRoles from './pages/Rol/ABMRoles';
 import Alta_Modificar from './pages/Rol/Alta_Modificar';
 import Notificaciones from './pages/Notificaciones/Notificaciones';
 import RecomendacionPorFiltro from './pages/RecomendacionPaciente/RecomendacionPorFiltro';
+import ConsultarDetalleHospital from './pages/RecomendacionPaciente/ConsultarDetalleHospital';
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
           <Route path="/alta_Modificar" element={< Alta_Modificar/>} />
           <Route path="/notificaciones" element={< Notificaciones/>} />
           <Route path="/recomendacionPorFiltro" element={< RecomendacionPorFiltro/>} />
+          <Route path="/consultarDetalleHospital" element={<ConsultarDetalleHospital />} />
         </Route>
       </Routes>
     </Router>

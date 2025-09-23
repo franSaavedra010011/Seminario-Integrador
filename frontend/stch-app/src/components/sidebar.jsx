@@ -99,7 +99,7 @@ export default function Sidebar() {
         <div className="user-info">
           <strong>{usuario.username}</strong>
           <br />
-          <small>Rol: {usuario.role}</small>
+          <small>Rol: {usuario.rol.toUpperCase()}</small>
         </div>
       </div>
       <button className="logout" onClick={handleLogout}>
