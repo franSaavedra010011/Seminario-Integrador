@@ -29,7 +29,7 @@ export class ListarEntidadesService {
     }
 
     async listarHospitales(
-        opcion: 'simple' | 'localidad' | 'congestion' | 'completo' = 'simple'
+        opcion: 'simple' | 'localidad' | 'congestion' | 'especialidades' | 'completo' = 'simple'
     ): Promise<Hospital[]> {
         const relacionesBase: string[] = [];
         switch (opcion) {
@@ -52,6 +52,13 @@ export class ListarEntidadesService {
                     'congestionesHistorico',
                     'personalHospital',
                     'turnos',
+                )
+                break;
+
+            case 'especialidades':
+                relacionesBase.push(
+                    'hospitalEspecialidades',
+                    'hospitalEspecialidades.especialidad',
                 )
                 break;
 

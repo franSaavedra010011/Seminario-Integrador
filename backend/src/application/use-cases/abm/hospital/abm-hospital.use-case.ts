@@ -63,6 +63,8 @@ export class AbmHospitalUseCase {
     hospital.telefono = dto.telHospital?.trim() ?? '';
     hospital.localidad = localidad[0];
 
+    const hospitalGuardado = await this.genericRepository.guardarCambios(Hospital, hospital);
+
     if (dto.idEspecialidades && dto.idEspecialidades.length > 0) {
       for (const idEspecialidad of dto.idEspecialidades) {
         const especialidad = await this.genericRepository.buscar(
