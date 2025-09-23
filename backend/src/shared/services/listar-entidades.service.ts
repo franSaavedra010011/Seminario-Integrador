@@ -29,12 +29,16 @@ export class ListarEntidadesService {
     }
 
     async listarHospitales(
-        opcion: 'simple' | 'localidad' | 'completo' = 'simple'
+        opcion: 'simple' | 'localidad' | 'congestion' | 'completo' = 'simple'
     ): Promise<Hospital[]> {
         const relacionesBase: string[] = [];
         switch (opcion) {
             case 'localidad':
                 relacionesBase.push('localidad');
+                break;
+
+            case 'congestion':
+                relacionesBase.push('congestionesActual', 'congestionesHistorico');
                 break;
 
             case 'completo':

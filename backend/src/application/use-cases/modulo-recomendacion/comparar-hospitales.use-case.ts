@@ -1,11 +1,15 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CompararHospitalesDto } from './dto/comparar-hospitales.dto';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Hospital } from 'src/domain/entities/hospital.entity';
 import { NivelCongestionEnum } from 'src/domain/enums/nivel-congestion.enum';
 import { HospitalComparadoDto } from './dto/hospital-comparado.dto';
+
+@Injectable()
 export class CompararHospitalesUseCase {
-  constructor() {}
+  constructor(
+    private readonly genericRepository: GenericRepositoryService
+  ) { }
 
   async ejecutar(dto: CompararHospitalesDto) {
     if (dto.idHospitales.length !== 2) {
@@ -17,7 +21,7 @@ export class CompararHospitalesUseCase {
     const hospitalesComparados: HospitalComparadoDto[] = [];
 
     for (const id of dto.idHospitales) {
-      const hospitales = await GenericRepositoryService.prototype.buscar(
+      const hospitales = await this.genericRepository.buscar(
         Hospital,
         'hosp',
         [
@@ -28,8 +32,8 @@ export class CompararHospitalesUseCase {
           'localidad',
           'hospitalEspecialidades',
           'hospitalEspecialidades.especialidad',
-          'congestionActual',
-          'congestionHistorico',
+          'congestionesActual',
+          'congestionesHistorico',
         ]
       );
 
@@ -60,9 +64,9 @@ export class CompararHospitalesUseCase {
 
       const porcentajeCongestion = historico?.turnosMaximoDia
         ? Math.min(
-            100,
-            Math.round((turnosHoy * 100) / historico.turnosMaximoDia)
-          )
+          100,
+          Math.round((turnosHoy * 100) / historico.turnosMaximoDia)
+        )
         : 100;
 
       let nivelDeCongestion: NivelCongestionEnum;

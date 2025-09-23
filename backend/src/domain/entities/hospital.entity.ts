@@ -28,35 +28,30 @@ export class Hospital extends Base {
   telefono: string;
 
   @OneToMany(() => HospitalEspecialidad, (he) => he.hospital, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE',
   })
   hospitalEspecialidades: HospitalEspecialidad[];
 
   @OneToMany(() => CongestionHistorico, (ch) => ch.hospital, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE',
   })
   congestionesHistorico: CongestionHistorico[];
 
   @OneToMany(() => CongestionActual, (ca) => ca.hospital, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE',
   })
   congestionesActual: CongestionActual[];
 
   @OneToMany(() => PersonalHospital, (ph) => ph.hospital, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE',
   })
   personalHospital: PersonalHospital[];
 
   @OneToMany(() => Turno, (turno) => turno.hospital, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE',
   })

@@ -14,6 +14,8 @@ import { RecomendacionController } from '../controllers/recomendacion.controller
 import { CompararHospitalesUseCase } from 'src/application/use-cases/modulo-recomendacion/comparar-hospitales.use-case';
 import { SharedModule } from 'src/infrastructure/modules/shared.module';
 import { RegistrarCongestionHistoricaUseCase } from 'src/application/use-cases/modulo-recomendacion/registrar-congestion-historica.use-case';
+import { ConsultarCongestionDeHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-congestion-de-hospital.use-case';
+import { ConsultarDetalleDelHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-detalle-del-hospital.use-case';
 
 @Module({
   imports: [
@@ -30,12 +32,16 @@ import { RegistrarCongestionHistoricaUseCase } from 'src/application/use-cases/m
   providers: [
     ActualizarNivelDeCongestionUseCase,
     CompararHospitalesUseCase,
-    RegistrarCongestionHistoricaUseCase
+    ConsultarCongestionDeHospitalUseCase,
+    RegistrarCongestionHistoricaUseCase,
+    ConsultarDetalleDelHospitalUseCase
   ],
   exports: [
     ActualizarNivelDeCongestionUseCase,
     CompararHospitalesUseCase,
-    RegistrarCongestionHistoricaUseCase
+    ConsultarCongestionDeHospitalUseCase,
+    RegistrarCongestionHistoricaUseCase,
+    ConsultarDetalleDelHospitalUseCase
   ],
 })
-export class RecomendacionModule {}
+export class RecomendacionModule { }
