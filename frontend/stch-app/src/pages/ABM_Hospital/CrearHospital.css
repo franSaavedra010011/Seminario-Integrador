@@ -20,6 +20,7 @@ body {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
   width: 100%;
   max-width: 1200px;
+  align-items: stretch;
 }
 
 /* Título principal */

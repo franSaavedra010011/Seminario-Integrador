@@ -94,6 +94,41 @@ export class AuthService {
     return await this.abmUsuarioUseCase.crear(createUsuarioDto);
   }
 
+  async registerPaciente(dto: CreateUsuarioDto): Promise<Usuario> {
+    // Validaciones adicionales si querés, como confirmar que tiene el rol correcto
+    if (!dto.idRoles || !dto.idRoles.length) {
+      throw new BadRequestException('Debe especificar al menos un rol');
+    }
+
+    const roles = await this.genericRepository.buscar(Rol, 'rol', [
+      { atributo: 'id', operacion: '=', valor: dto.idRoles[0] },
+      { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null },
+    ]);
+
+    if (!roles.length || roles[0].nombre.toUpperCase() !== 'PACIENTE') {
+      throw new BadRequestException('El rol asignado no es PACIENTE');
+    }
+
+    return this.abmUsuarioUseCase.crear(dto);
+  }
+
+  async registerMedico(dto: CreateUsuarioDto): Promise<Usuario> {
+    if (!dto.idRoles || !dto.idRoles.length) {
+      throw new BadRequestException('Debe especificar al menos un rol');
+    }
+
+    const roles = await this.genericRepository.buscar(Rol, 'rol', [
+      { atributo: 'id', operacion: '=', valor: dto.idRoles[0] },
+      { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null },
+    ]);
+
+    if (!roles.length || roles[0].nombre.toUpperCase() !== 'MEDICO') {
+      throw new BadRequestException('El rol asignado no es MÉDICO');
+    }
+
+    return this.abmUsuarioUseCase.crear(dto);
+  }
+
   /*
     CU N°2: Iniciar sesión
     Actor: Usuario

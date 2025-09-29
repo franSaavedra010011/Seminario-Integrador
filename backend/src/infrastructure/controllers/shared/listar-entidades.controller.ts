@@ -37,4 +37,9 @@ export class ListarEntidadesController {
     return this.listarSvc.listarLocalidades();
   }
 
+  @Get('roles')
+  listarRoles() {
+    return this.listarSvc.listarRoles();
+  }
+
 }

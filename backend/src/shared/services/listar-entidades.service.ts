@@ -99,7 +99,7 @@ export class ListarEntidadesService {
             Usuario,
             'usua',
             [{ atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }],
-            [],
+            ['usuarioRoles.rol'],
         );
     }
 

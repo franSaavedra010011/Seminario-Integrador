@@ -4,6 +4,7 @@ import { RegisterDTO } from '../../auth/dto/register.dto';
 import { LoginDTO } from '../../auth/dto/login.dto';
 import { Request } from 'express';
 import { Auth } from '../../auth/decorators/auth.decorator';
+import { CreateUsuarioDto } from 'src/application/use-cases/abm/usuario/dto/create-usuario.dto';
 
 // Adaptar para soportar rol único o lista de roles
 interface RequestWithUser extends Request {
@@ -16,12 +17,23 @@ interface RequestWithUser extends Request {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
   register(@Body() registerDTO: RegisterDTO) {
     return this.authService.register(registerDTO);
   }
+
+  @Post('register-paciente')
+  registerPaciente(@Body() dto: CreateUsuarioDto) {
+    return this.authService.registerPaciente(dto);
+  }
+
+  @Post('register-medico')
+  registerMedico(@Body() dto: CreateUsuarioDto) {
+    return this.authService.registerMedico(dto);
+  }
+
 
   @Post('login')
   login(@Body() loginDto: LoginDTO) {

@@ -9,6 +9,9 @@ import { DetalleHospitalDto } from 'src/application/use-cases/modulo-recomendaci
 import { RegistrarCongestionHistoricaDto } from 'src/application/use-cases/modulo-recomendacion/dto/registrar-congestion-historica.dto';
 import { UpdateCongestionDto } from 'src/application/use-cases/modulo-recomendacion/dto/update-congestion.dto';
 import { RegistrarCongestionHistoricaUseCase } from 'src/application/use-cases/modulo-recomendacion/registrar-congestion-historica.use-case';
+import { SolicitarRecomendacionDeHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/solicitar-recomendacion-de-hospital.use-case';
+import { SolicitarRecomendacionDto } from 'src/application/use-cases/modulo-recomendacion/dto/solicitar-recomendacion.dto';
+
 
 @Controller('recomendacion')
 export class RecomendacionController {
@@ -17,7 +20,8 @@ export class RecomendacionController {
     private readonly compararHospitalesUseCase: CompararHospitalesUseCase,
     private readonly registrarCongestionHistoricaUseCase: RegistrarCongestionHistoricaUseCase,
     private readonly consultarCongestionDeHospitalUseCase: ConsultarCongestionDeHospitalUseCase,
-    private readonly consultarDetalleDelHospitalUseCase: ConsultarDetalleDelHospitalUseCase
+    private readonly consultarDetalleDelHospitalUseCase: ConsultarDetalleDelHospitalUseCase,
+    private readonly solicitarRecomendacionDeHospitalUseCase: SolicitarRecomendacionDeHospitalUseCase,
   ) { }
 
   @Post('actualizar-congestion')
@@ -28,6 +32,11 @@ export class RecomendacionController {
   @Post('comparar-hospitales')
   compararHospitales(@Body() dto: CompararHospitalesDto) {
     return this.compararHospitalesUseCase.ejecutar(dto);
+  }
+
+  @Post('solicitar-recomendacion')
+  solicitarRecomendacion(@Body() dto: SolicitarRecomendacionDto) {
+    return this.solicitarRecomendacionDeHospitalUseCase.ejecutar(dto);
   }
 
   @Post('registrar-congestion-historica')
