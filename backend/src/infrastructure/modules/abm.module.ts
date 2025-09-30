@@ -94,7 +94,7 @@ import { RolController } from '../controllers/abm/rol.controller';
     AbmMedicoUseCase,
     AbmHospitalUseCase,
     AbmEspecialidadUseCase,
-    AbmEstadoTurnoUseCase
+    AbmEstadoTurnoUseCase,
   ],
   exports: [
     AbmUsuarioUseCase,

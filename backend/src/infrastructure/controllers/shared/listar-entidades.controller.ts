@@ -7,9 +7,10 @@ export class ListarEntidadesController {
 
   @Get('hospitales')
   hospitales(
-    @Query('modo') modo: 'simple' | 'localidad' | 'completo' = 'simple'
+    @Query('modo') modo: 'simple' | 'localidad' | 'completo' = 'simple',
+    @Query('id') idHospital?: number
   ) {
-    return this.listarSvc.listarHospitales(modo);
+    return this.listarSvc.listarHospitales(modo, idHospital);
   }
 
   @Get('medicos')

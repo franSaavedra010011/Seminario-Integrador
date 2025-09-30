@@ -33,9 +33,9 @@ export default function HospitalTabla() {
 
   const handleEditar = (hospital) => {
     navigate('/modificarHospital', {
-        state: { hospital }
+      state: { id: hospital.id }
     });
-   };  
+  };
   const handleEliminar = (id) => {
     if (confirm('¿Estás seguro de eliminar este hospital?')) {
       setHospitales(prev => prev.filter(h => h.id !== id));
@@ -104,30 +104,30 @@ export default function HospitalTabla() {
           </tr>
         </thead>
 
-      <tbody>
-        {hospitales
-          .filter(h => 
-            (!filtroLocalidad || h.localidad?.nombre === filtroLocalidad) &&
-            (!busquedaNombre || h.nombre.toLowerCase().includes(busquedaNombre.toLowerCase()))
-          )
-          .map(h => (
-            <tr key={h.id}>
-              <td>{h.id}</td>
-              <td>{h.nombre}</td>
-              <td>{h.direccion}</td>
-              <td>{h.email}</td>
-              <td>{h.telefono}</td>
-              <td>{h.localidad?.nombre || '-'}</td>
-              <td>{new Date(h.fechaHoraCreacion).toLocaleString()}</td>
-              <td>{new Date(h.fechaHoraModificacion).toLocaleString()}</td>
-              <td>{h.fechaHoraBaja ? new Date(h.fechaHoraBaja).toLocaleString() : '-'}</td>
-              <td>
-                <button className="icon-button edit" onClick={() => handleEditar(h)}>✏️</button>
-                <button className="icon-button delete" onClick={() => handleEliminar(h.id)}>🗑️</button>
-              </td>
-            </tr>
-        ))}
-      </tbody>
+        <tbody>
+          {hospitales
+            .filter(h =>
+              (!filtroLocalidad || h.localidad?.nombre === filtroLocalidad) &&
+              (!busquedaNombre || h.nombre.toLowerCase().includes(busquedaNombre.toLowerCase()))
+            )
+            .map(h => (
+              <tr key={h.id}>
+                <td>{h.id}</td>
+                <td>{h.nombre}</td>
+                <td>{h.direccion}</td>
+                <td>{h.email}</td>
+                <td>{h.telefono}</td>
+                <td>{h.localidad?.nombre || '-'}</td>
+                <td>{new Date(h.fechaHoraCreacion).toLocaleString()}</td>
+                <td>{new Date(h.fechaHoraModificacion).toLocaleString()}</td>
+                <td>{h.fechaHoraBaja ? new Date(h.fechaHoraBaja).toLocaleString() : '-'}</td>
+                <td>
+                  <button className="icon-button edit" onClick={() => handleEditar(h)}>✏️</button>
+                  <button className="icon-button delete" onClick={() => handleEliminar(h.id)}>🗑️</button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
 
       </table>
     </div>

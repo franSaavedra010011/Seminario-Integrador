@@ -29,18 +29,18 @@ export class ListarEntidadesService {
     }
 
     async listarHospitales(
-        opcion: 'simple' | 'localidad' | 'congestion' | 'especialidades' | 'completo' = 'simple'
+        opcion: 'simple' | 'localidad' | 'congestion' | 'especialidades' | 'completo' = 'simple',
+        idHospital?: number
     ): Promise<Hospital[]> {
         const relacionesBase: string[] = [];
+
         switch (opcion) {
             case 'localidad':
                 relacionesBase.push('localidad');
                 break;
-
             case 'congestion':
                 relacionesBase.push('congestionesActual', 'congestionesHistorico');
                 break;
-
             case 'completo':
                 relacionesBase.push(
                     'localidad',
@@ -52,28 +52,29 @@ export class ListarEntidadesService {
                     'congestionesHistorico',
                     'personalHospital',
                     'turnos',
-                )
+                );
                 break;
-
             case 'especialidades':
                 relacionesBase.push(
                     'hospitalEspecialidades',
                     'hospitalEspecialidades.especialidad',
-                )
+                );
                 break;
-
             case 'simple':
             default:
                 break;
         }
 
+        const where = idHospital
+            ? { id: idHospital, fechaHoraBaja: IsNull() }
+            : { fechaHoraBaja: IsNull() };
+
         return await this.hospitalRepo.find({
-            where: { fechaHoraBaja: IsNull() },
+            where,
             relations: relacionesBase,
             order: { nombre: 'ASC' },
         });
     }
-
 
 
     async listarPacientes() {
