@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ActualizarNivelDeCongestionUseCase } from 'src/application/use-cases/modulo-recomendacion/actualizar-nivel-de-congestion.use-case';
 import { CompararHospitalesUseCase } from 'src/application/use-cases/modulo-recomendacion/comparar-hospitales.use-case';
 import { ConsultarCongestionDeHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-congestion-de-hospital.use-case';
@@ -11,6 +11,8 @@ import { UpdateCongestionDto } from 'src/application/use-cases/modulo-recomendac
 import { RegistrarCongestionHistoricaUseCase } from 'src/application/use-cases/modulo-recomendacion/registrar-congestion-historica.use-case';
 import { SolicitarRecomendacionDeHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/solicitar-recomendacion-de-hospital.use-case';
 import { SolicitarRecomendacionDto } from 'src/application/use-cases/modulo-recomendacion/dto/solicitar-recomendacion.dto';
+import { ConsultarHospitalesCriteriosDto } from 'src/application/use-cases/modulo-recomendacion/dto/consultar-hospitales-criterios.dto';
+import { ConsultarHospitalesSegunCriteriosUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-hospitales-segun-criterios.use-case';
 
 
 @Controller('recomendacion')
@@ -22,6 +24,7 @@ export class RecomendacionController {
     private readonly consultarCongestionDeHospitalUseCase: ConsultarCongestionDeHospitalUseCase,
     private readonly consultarDetalleDelHospitalUseCase: ConsultarDetalleDelHospitalUseCase,
     private readonly solicitarRecomendacionDeHospitalUseCase: SolicitarRecomendacionDeHospitalUseCase,
+    private readonly consultarHospitalesSegunCriteriosUseCase: ConsultarHospitalesSegunCriteriosUseCase,
   ) { }
 
   @Post('actualizar-congestion')
@@ -38,6 +41,12 @@ export class RecomendacionController {
   solicitarRecomendacion(@Body() dto: SolicitarRecomendacionDto) {
     return this.solicitarRecomendacionDeHospitalUseCase.ejecutar(dto);
   }
+
+  @Post('consultar-segun-criterios')
+  async consultarHospitalesSegunCriterios(@Body() dto: ConsultarHospitalesCriteriosDto) {
+    return this.consultarHospitalesSegunCriteriosUseCase.ejecutar(dto);
+  }
+
 
   @Post('registrar-congestion-historica')
   registrarCongestionHistorica(@Body() dto: RegistrarCongestionHistoricaDto) {
