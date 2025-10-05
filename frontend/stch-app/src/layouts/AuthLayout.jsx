@@ -6,13 +6,13 @@ import Footer from '../components/footer';
 export default function AuthLayout() {
   return (
     <div className="auth-container">
-      <Header />
+      <Header conSidebar={false} />
       <div className="layout">
         <div className="main-content">
           <Outlet />
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

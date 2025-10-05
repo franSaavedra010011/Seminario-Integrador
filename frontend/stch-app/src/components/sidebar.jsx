@@ -19,65 +19,78 @@ export default function Sidebar() {
 
   return (
     <div className="sidebar" id="sidebar">
-      <button
-        className="toggle-btn"
-        onClick={() => {
-          document.getElementById('sidebar').classList.toggle('expanded');
-        }}
-      >
-        <i className="fas fa-bars"></i>
-      </button>
 
-      <nav>
-        <Link to="/home">
-          <i className="fas fa-home"></i>
-          <span>Inicio</span>
-        </Link>
-        <Link to="/historia">
-          <i className="fas fa-info"></i>
-          <span>Historia Médica</span>
-        </Link>
-        <Link to="/turnos">
-          <i className="fas fa-calendar"></i>
-          <span>Turnos</span>
-        </Link>
-        {/*<a href="#">
+      <div className="sidebar-header">
+        <button
+          className="toggle-btn"
+          onClick={() => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('expanded');
+
+            // 🔧 Esto es lo que agrega la clase al body
+            if (sidebar.classList.contains('expanded')) {
+              document.body.classList.add('sidebar-expanded');
+            } else {
+              document.body.classList.remove('sidebar-expanded');
+            }
+          }}
+        >
+          <i className="fas fa-bars"></i>
+        </button>
+
+      </div>
+
+      <div className="sidebar-scroll">
+        <nav>
+          <Link to="/home">
+            <i className="fas fa-home"></i>
+            <span>Inicio</span>
+          </Link>
+          <Link to="/historia">
+            <i className="fas fa-info"></i>
+            <span>Historia Médica</span>
+          </Link>
+          <Link to="/turnos">
+            <i className="fas fa-calendar"></i>
+            <span>Turnos</span>
+          </Link>
+          {/*<a href="#">
           <i className="fas fa-box"></i>
           <span>Orders</span>
         </a>*/}
-        <Link to="/notificaciones">
-          <i className="fas fa-envelope"></i>
-          <span>Notificaciones</span>
-        </Link>
-        <Link to="/ajustes">
-          <i className="fas fa-cog"></i>
-          <span>Settings</span>
-        </Link>
-        <Link to="/reportes">
-          <i className="fas fa-chart-line"></i>
-          <span>Reportes</span>
-        </Link>
-        <Link to="/asistencia">
-          <i className="fas fa-check"></i>
-          <span>Asistencia Paciente</span>
-        </Link>
-        <Link to="/altaUsuario">
-          <i className="fas fa-user-plus"></i>
-          <span>Nuevo Usuario</span>
-        </Link>
-        <Link to="/hospitalTabla">
-          <i className="fas fa-hospital"></i>
-          <span>Hospitales</span>
-        </Link>
-        <Link to="/recomendacionPaciente">
-          <i className="fas fa-info"></i>
-          <span>Recomendacion Paciente</span>
-        </Link>
-        <Link to="/abmRoles">
-          <i className="fas fa-users"></i>
-          <span>Roles</span>
-        </Link>
-        {/*<a href="#">
+          <Link to="/notificaciones">
+            <i className="fas fa-envelope"></i>
+            <span>Notificaciones</span>
+          </Link>
+          <Link to="/ajustes">
+            <i className="fas fa-cog"></i>
+            <span>Settings</span>
+          </Link>
+          <Link to="/reportes">
+            <i className="fas fa-chart-line"></i>
+            <span>Reportes</span>
+          </Link>
+          <Link to="/asistencia">
+            <i className="fas fa-check"></i>
+            <span>Asistencia Paciente</span>
+          </Link>
+          <Link to="/altaUsuario">
+            <i className="fas fa-user-plus"></i>
+            <span>Nuevo Usuario</span>
+          </Link>
+          <Link to="/hospitalTabla">
+            <i className="fas fa-hospital"></i>
+            <span>Hospitales</span>
+          </Link>
+          <Link to="/recomendacionPaciente">
+            <i className="fas fa-info"></i>
+            <span>Recomendacion Paciente</span>
+          </Link>
+          <Link to="/abmRoles">
+            <i className="fas fa-users"></i>
+            <span>Roles</span>
+          </Link>
+          {/*<a href="#">
           <i className="fas fa-user"></i>
           <span>Pacientes</span>
         </a>
@@ -90,22 +103,30 @@ export default function Sidebar() {
           <span>Recepcionista/Administrador</span>
         </a>
       */}
-      </nav>
-      <div className="user">
-        <img
-          src="https://randomuser.me/api/portraits/men/32.jpg"
-          alt="Usuario"
-        />
-        <div className="user-info">
-          <strong>{usuario.username}</strong>
-          <br />
-          <small>Rol: {usuario.rol.toUpperCase()}</small>
-        </div>
+        </nav>
       </div>
-      <button className="logout" onClick={handleLogout}>
-        <i className="fas fa-sign-out-alt"></i>
-        <span>Cerrar sesión</span>
-      </button>
+
+
+      <div className="sidebar-footer">
+        <div className="user">
+          <img
+            src="https://randomuser.me/api/portraits/men/32.jpg"
+            alt="Usuario"
+          />
+          <div className="user-info">
+            <strong>{usuario.username}</strong>
+            <br />
+            <small>Rol: {usuario.rol.toUpperCase()}</small>
+          </div>
+        </div>
+
+        <button className="logout" onClick={handleLogout}>
+          <i className="fas fa-sign-out-alt"></i>
+          <span>Cerrar sesión</span>
+        </button>
+      </div>
+
+
     </div>
   );
 }
