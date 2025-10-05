@@ -192,6 +192,7 @@ export class AbmHospitalUseCase {
         nueva.fechaDesde = new Date();
         hospital.hospitalEspecialidades = hospital.hospitalEspecialidades ?? [];
         hospital.hospitalEspecialidades.push(nueva);
+        console.log(`➡ Agregando nueva especialidad ID ${id} al hospital ID ${hospital.id} el contenido de hospital.hospitalEspecialidades es:`, hospital.hospitalEspecialidades);
 
         await this.genericRepository.guardarCambios(HospitalEspecialidad, nueva);
       }
@@ -218,7 +219,6 @@ export class AbmHospitalUseCase {
 
         // Actualizar relación en memoria dentro del array del hospital
         const index = hospital.hospitalEspecialidades?.findIndex(he => he.id === r.id);
-
         if (index !== undefined && index >= 0 && hospital.hospitalEspecialidades) {
           hospital.hospitalEspecialidades[index] = r;
           console.log(`   ✅ Actualizada en memoria en posición ${index}`);
@@ -233,6 +233,7 @@ export class AbmHospitalUseCase {
 
     console.log(`✅ Finalizó eliminación de especialidades`);
   }
+
 
 
 

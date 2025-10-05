@@ -1,5 +1,11 @@
-import { IsInt, IsOptional } from 'class-validator';
+import { IsEnum, IsInt, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+
+export enum CriterioBusquedaHospital {
+    Especialidades,
+    Medicos,
+    UltimoVisitado
+}
 
 export class ConsultarHospitalesCriteriosDto {
     @IsInt()
@@ -20,4 +26,7 @@ export class ConsultarHospitalesCriteriosDto {
     @IsInt()
     @Type(() => Number)
     idLocalidad?: number;
+
+    @IsEnum(CriterioBusquedaHospital)
+    criterio: CriterioBusquedaHospital
 }

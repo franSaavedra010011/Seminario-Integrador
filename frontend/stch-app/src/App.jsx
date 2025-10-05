@@ -32,6 +32,7 @@ import Alta_Modificar from './pages/Rol/Alta_Modificar';
 import Notificaciones from './pages/Notificaciones/Notificaciones';
 import RecomendacionPorFiltro from './pages/RecomendacionPaciente/RecomendacionPorFiltro';
 import ConsultarDetalleHospital from './pages/RecomendacionPaciente/ConsultarDetalleHospital';
+import ConsultarHospitalesCriterios from './pages/RecomendacionPaciente/ConsultarHospitalesCriterios';
 
 function App() {
   return (
@@ -72,13 +73,14 @@ function App() {
           <Route path="/crearHospital" element={<CrearHospital />} />
           <Route path="/modificarHospital" element={<ModificarHospital />} />
           <Route path="/recomendacionPaciente" element={<RecomendacionPaciente />} />
-          <Route path="/consultarCongestion" element={< ConsultarCongestion/>} />
-          <Route path="/compararHospitales" element={< CompararHospitales/>} />
-          <Route path="/abmRoles" element={< ABMRoles/>} />
-          <Route path="/alta_Modificar" element={< Alta_Modificar/>} />
-          <Route path="/notificaciones" element={< Notificaciones/>} />
-          <Route path="/recomendacionPorFiltro" element={< RecomendacionPorFiltro/>} />
+          <Route path="/consultarCongestion" element={< ConsultarCongestion />} />
+          <Route path="/compararHospitales" element={< CompararHospitales />} />
+          <Route path="/abmRoles" element={< ABMRoles />} />
+          <Route path="/alta_Modificar" element={< Alta_Modificar />} />
+          <Route path="/notificaciones" element={< Notificaciones />} />
+          <Route path="/recomendacionPorFiltro" element={< RecomendacionPorFiltro />} />
           <Route path="/consultarDetalleHospital" element={<ConsultarDetalleHospital />} />
+          <Route path="/consultarHospitalesCriterios" element={<ConsultarHospitalesCriterios />} />
         </Route>
       </Routes>
     </Router>

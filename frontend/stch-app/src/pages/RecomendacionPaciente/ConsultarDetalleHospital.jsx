@@ -77,55 +77,55 @@ export default function ConsultarHospital() {
       </div>
 
       {(detalle || congestion) && (
-            <div className="card-hospital-dual">
+        <div className="card-hospital-dual">
 
-                {/* Card Izquierda - Info hospital */}
-                {detalle && (
-                    <div className="card-info-hospital">
-                        <h2 className="card-title">{detalle.nombreHospital}</h2>
+          {/* Card Izquierda - Info hospital */}
+          {detalle && (
+            <div className="card-info-hospital">
+              <h2 className="card-title">{detalle.nombreHospital}</h2>
 
-                        <div className="info-row">
-                        <i className="fas fa-map-marker-alt"></i>
-                        <p>
-                            <strong className="info-label">Dirección:</strong> {detalle.direccionHospital}
-                        </p>
-                        </div>
+              <div className="info-row">
+                <i className="fas fa-map-marker-alt"></i>
+                <p>
+                  <strong className="info-label">Dirección:</strong> {detalle.direccionHospital}
+                </p>
+              </div>
 
-                        <div className="info-row">
-                        <i className="fas fa-envelope"></i>
-                        <p>
-                            <strong className="info-label">Email:</strong> {detalle.emailHospital}
-                        </p>
-                        </div>
+              <div className="info-row">
+                <i className="fas fa-envelope"></i>
+                <p>
+                  <strong className="info-label">Email:</strong> {detalle.emailHospital}
+                </p>
+              </div>
 
-                        <div className="info-row">
-                        <i className="fas fa-phone"></i>
-                        <p>
-                            <strong className="info-label">Teléfono:</strong> {detalle.telHospital}
-                        </p>
-                        </div>
+              <div className="info-row">
+                <i className="fas fa-phone"></i>
+                <p>
+                  <strong className="info-label">Teléfono:</strong> {detalle.telHospital}
+                </p>
+              </div>
 
-                        <div className="info-row">
-                        <i className="fas fa-location-dot"></i>
-                        <p>
-                            <strong className="info-label">Localidad:</strong> {detalle.nombreLocalidad ?? '-'}
-                        </p>
-                        </div>
-                    </div>
-                )}
-
-
-                {/* Card Derecha - Nivel de congestión */}
-                {congestion && (
-                <div className="card-congestion-nivel">
-                    <span className="label-congestion">Nivel de Congestión</span>
-                    <div className={`nivel-circulo ${congestion.nivelDeCongestion?.toLowerCase()}`}>
-                    {congestion.nivelDeCongestion}
-                    </div>
-                </div>
-                )}
+              <div className="info-row">
+                <i className="fas fa-location-dot"></i>
+                <p>
+                  <strong className="info-label">Localidad:</strong> {detalle.nombreLocalidad ?? '-'}
+                </p>
+              </div>
             </div>
-        )}
+          )}
+
+
+          {/* Card Derecha - Nivel de congestión */}
+          {congestion && (
+            <div className="card-congestion-nivel">
+              <span className="label-congestion">Nivel de Congestión</span>
+              <div className={`nivel-circulo ${congestion.nivelDeCongestion?.toLowerCase()}`}>
+                {congestion.nivelDeCongestion}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
         Volver al inicio
