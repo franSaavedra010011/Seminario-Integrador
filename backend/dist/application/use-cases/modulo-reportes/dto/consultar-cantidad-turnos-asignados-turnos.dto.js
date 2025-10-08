@@ -9,32 +9,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AgendasNotificarCancelacionDTO = void 0;
+exports.ConsultarCantidadTurnosAsignadosTurnosDTO = void 0;
 const class_validator_1 = require("class-validator");
-class AgendasNotificarCancelacionDTO {
-    nroSemana;
-    fechaDesde;
-    fechaHasta;
-    dias;
+class ConsultarCantidadTurnosAsignadosTurnosDTO {
+    horaTurno;
+    nombreEspecialidad;
+    nombrePaciente;
+    apellidoPaciente;
 }
-exports.AgendasNotificarCancelacionDTO = AgendasNotificarCancelacionDTO;
+exports.ConsultarCantidadTurnosAsignadosTurnosDTO = ConsultarCantidadTurnosAsignadosTurnosDTO;
 __decorate([
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Number)
-], AgendasNotificarCancelacionDTO.prototype, "nroSemana", void 0);
+    __metadata("design:type", String)
+], ConsultarCantidadTurnosAsignadosTurnosDTO.prototype, "horaTurno", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Date)
-], AgendasNotificarCancelacionDTO.prototype, "fechaDesde", void 0);
+    __metadata("design:type", String)
+], ConsultarCantidadTurnosAsignadosTurnosDTO.prototype, "nombreEspecialidad", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Date)
-], AgendasNotificarCancelacionDTO.prototype, "fechaHasta", void 0);
+    __metadata("design:type", String)
+], ConsultarCantidadTurnosAsignadosTurnosDTO.prototype, "nombrePaciente", void 0);
 __decorate([
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Array)
-], AgendasNotificarCancelacionDTO.prototype, "dias", void 0);
-//# sourceMappingURL=agendas-notificar-cancelacion.dto.js.map
+    __metadata("design:type", String)
+], ConsultarCantidadTurnosAsignadosTurnosDTO.prototype, "apellidoPaciente", void 0);
+//# sourceMappingURL=consultar-cantidad-turnos-asignados-turnos.dto.js.map

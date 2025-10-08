@@ -55,6 +55,10 @@ import { NotificarProximidadDeTurnoUseCase } from 'src/application/use-cases/mod
 import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
 import { AbmTurnoEstadoUseCase } from 'src/application/use-cases/abm/turnoEstado/abm-turno-estado.use-case';
 import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/solicitar-turno.use-case';
+import { ModuloDeReporteController } from '../controllers/modulo-reportes/modulo-reportes.controller';
+import { ConsultarCantidadDeTurnosAsignadosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case';
+import { ConsultarHistorialDeTurnosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case';
+import { ConsultarPorcentajeDeAsistenciaDePacientesUseCase } from 'src/application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case';
 
 @Module({
   imports: [
@@ -89,6 +93,7 @@ import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/s
     PermisoController,
     EspecialidadController,
     ModuloDeTurnoController,
+    ModuloDeReporteController,
   ],
   providers: [
     GenericRepositoryService,
@@ -113,6 +118,9 @@ import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/s
     NotificarProximidadDeTurnoUseCase,
     RegistrarAsistenciaDePacienteUseCase,
     SolicitarTurnoUseCase,
+    ConsultarCantidadDeTurnosAsignadosUseCase,
+    ConsultarHistorialDeTurnosUseCase,
+    ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
   ],
   exports: [
     AbmUsuarioUseCase,
@@ -136,6 +144,9 @@ import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/s
     NotificarProximidadDeTurnoUseCase,
     RegistrarAsistenciaDePacienteUseCase,
     SolicitarTurnoUseCase,
+    ConsultarCantidadDeTurnosAsignadosUseCase,
+    ConsultarHistorialDeTurnosUseCase,
+    ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
   ],
 })
 export class AbmModule {}

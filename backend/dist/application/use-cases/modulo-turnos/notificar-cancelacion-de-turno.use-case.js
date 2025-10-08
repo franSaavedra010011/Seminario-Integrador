@@ -201,6 +201,8 @@ let NotificarCancelacionDeTurnoUseCase = class NotificarCancelacionDeTurnoUseCas
                                     const agendaDTO = {
                                         nroSemana: agendaSemanal.nroSemana,
                                         dias: ListaDiaDTO,
+                                        fechaDesde: agendaSemanal.fechaDesdeAgendaSemanal,
+                                        fechaHasta: agendaSemanal.fechaHastaAgendaSemanal,
                                     };
                                     ListaAgendaDTO.push(agendaDTO);
                                 }

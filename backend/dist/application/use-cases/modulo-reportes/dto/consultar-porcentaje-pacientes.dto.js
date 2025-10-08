@@ -9,32 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AgendasNotificarCancelacionDTO = void 0;
+exports.ConsultarPorcentajePacientesDTO = void 0;
 const class_validator_1 = require("class-validator");
-class AgendasNotificarCancelacionDTO {
-    nroSemana;
-    fechaDesde;
-    fechaHasta;
-    dias;
+class ConsultarPorcentajePacientesDTO {
+    nombreHospital;
+    idHospital;
 }
-exports.AgendasNotificarCancelacionDTO = AgendasNotificarCancelacionDTO;
+exports.ConsultarPorcentajePacientesDTO = ConsultarPorcentajePacientesDTO;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], ConsultarPorcentajePacientesDTO.prototype, "nombreHospital", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
-], AgendasNotificarCancelacionDTO.prototype, "nroSemana", void 0);
-__decorate([
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Date)
-], AgendasNotificarCancelacionDTO.prototype, "fechaDesde", void 0);
-__decorate([
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Date)
-], AgendasNotificarCancelacionDTO.prototype, "fechaHasta", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Array)
-], AgendasNotificarCancelacionDTO.prototype, "dias", void 0);
-//# sourceMappingURL=agendas-notificar-cancelacion.dto.js.map
+], ConsultarPorcentajePacientesDTO.prototype, "idHospital", void 0);
+//# sourceMappingURL=consultar-porcentaje-pacientes.dto.js.map

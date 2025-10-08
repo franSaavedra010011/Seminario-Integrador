@@ -58,6 +58,10 @@ const notificar_proximidad_de_turno_use_case_1 = require("../../application/use-
 const registrar_asistencia_de_paciente_use_case_1 = require("../../application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case");
 const abm_turno_estado_use_case_1 = require("../../application/use-cases/abm/turnoEstado/abm-turno-estado.use-case");
 const solicitar_turno_use_case_1 = require("../../application/use-cases/modulo-turnos/solicitar-turno.use-case");
+const modulo_reportes_controller_1 = require("../controllers/modulo-reportes/modulo-reportes.controller");
+const consultar_cantidad_de_turnos_asignados_use_case_1 = require("../../application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case");
+const consultar_historial_de_turnos_use_case_1 = require("../../application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case");
+const consultar_porcentaje_de_asistencia_de_pacientes_use_case_1 = require("../../application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case");
 let AbmModule = class AbmModule {
 };
 exports.AbmModule = AbmModule;
@@ -95,6 +99,7 @@ exports.AbmModule = AbmModule = __decorate([
             permiso_controller_1.PermisoController,
             especialidad_controller_1.EspecialidadController,
             modulo_turnos_controller_1.ModuloDeTurnoController,
+            modulo_reportes_controller_1.ModuloDeReporteController,
         ],
         providers: [
             genericRepository_service_1.GenericRepositoryService,
@@ -119,6 +124,9 @@ exports.AbmModule = AbmModule = __decorate([
             notificar_proximidad_de_turno_use_case_1.NotificarProximidadDeTurnoUseCase,
             registrar_asistencia_de_paciente_use_case_1.RegistrarAsistenciaDePacienteUseCase,
             solicitar_turno_use_case_1.SolicitarTurnoUseCase,
+            consultar_cantidad_de_turnos_asignados_use_case_1.ConsultarCantidadDeTurnosAsignadosUseCase,
+            consultar_historial_de_turnos_use_case_1.ConsultarHistorialDeTurnosUseCase,
+            consultar_porcentaje_de_asistencia_de_pacientes_use_case_1.ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
         ],
         exports: [
             abm_usuario_use_case_1.AbmUsuarioUseCase,
@@ -142,6 +150,9 @@ exports.AbmModule = AbmModule = __decorate([
             notificar_proximidad_de_turno_use_case_1.NotificarProximidadDeTurnoUseCase,
             registrar_asistencia_de_paciente_use_case_1.RegistrarAsistenciaDePacienteUseCase,
             solicitar_turno_use_case_1.SolicitarTurnoUseCase,
+            consultar_cantidad_de_turnos_asignados_use_case_1.ConsultarCantidadDeTurnosAsignadosUseCase,
+            consultar_historial_de_turnos_use_case_1.ConsultarHistorialDeTurnosUseCase,
+            consultar_porcentaje_de_asistencia_de_pacientes_use_case_1.ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
         ],
     })
 ], AbmModule);
