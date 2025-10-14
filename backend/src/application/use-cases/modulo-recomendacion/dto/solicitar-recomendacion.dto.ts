@@ -1,10 +1,10 @@
+// import { TipoRecomendacion } from './solicitar-recomendacion.dto';
 import { Type } from "class-transformer";
 import { IsEnum, IsInt } from "class-validator";
 
-export enum TipoRecomendacion {
-    CERCANIA = 'cercania',
-    CONGESTION = 'congestion',
-    VISITADO = 'visitado'
+export enum criterioRecomendacion {
+    CERCANIA,
+    CONGESTION
 }
 
 export class SolicitarRecomendacionDto {
@@ -12,6 +12,6 @@ export class SolicitarRecomendacionDto {
     @Type(() => Number)
     idUsuario: number;
 
-    @IsEnum(TipoRecomendacion)
-    opcion: TipoRecomendacion;
+    @IsEnum(criterioRecomendacion)
+    criterioRecomendacion: criterioRecomendacion;
 }

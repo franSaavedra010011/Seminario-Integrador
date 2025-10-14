@@ -34,7 +34,7 @@ export default function RecomendacionPorFiltro() {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          opcion,
+          criterioRecomendacion: opcion === 'cercania' ? 0 : 1,
           idUsuario
         })
       });
@@ -68,12 +68,6 @@ export default function RecomendacionPorFiltro() {
           onClick={() => handleSeleccion('congestion')}
         >
           Por congestión
-        </button>
-        <button
-          className={opcionSeleccionada === 'visitado' ? 'activo' : ''}
-          onClick={() => handleSeleccion('visitado')}
-        >
-          Último visitado
         </button>
       </div>
 

@@ -18,7 +18,7 @@ import { SharedModule } from './infrastructure/modules/shared.module';
       host: 'localhost',
       port: 5432,
       username: 'postgres', // el que configuraste
-      password: '1234', // reemplaza con la real
+      password: 'admin', // reemplaza con la real
       database: 'turnos_db',
       autoLoadEntities: true,
       synchronize: true, // ¡solo en desarrollo!
@@ -33,9 +33,9 @@ import { SharedModule } from './infrastructure/modules/shared.module';
         module: SharedModule,
       },
     ]),
-    AuthModule, AbmModule, RecomendacionModule, SharedModule 
+    AuthModule, AbmModule, RecomendacionModule, SharedModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

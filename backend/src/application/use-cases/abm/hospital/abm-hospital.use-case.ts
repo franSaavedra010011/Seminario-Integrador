@@ -239,6 +239,148 @@ export class AbmHospitalUseCase {
 
   // Baja lógica
   async eliminar(id: number): Promise<void> {
-    await this.genericRepository.eliminar(Hospital, id);
+    const hospitales = await this.genericRepository.buscar(
+      Hospital,
+      'hosp',
+      [{ atributo: 'id', operacion: '=', valor: id }]
+    );
+
+    if (!hospitales.length || hospitales[0].fechaHoraBaja) {
+      throw new NotFoundException(`Hospital con ID ${id} no encontrado`);
+    }
+
+    const hospital = hospitales[0];
+    const fechaBaja = new Date();
+
+    // Baja lógica del hospital
+    hospital.fechaHoraBaja = fechaBaja;
+    await this.genericRepository.guardarCambios(Hospital, hospital);
+
+    // Baja lógica de relaciones
+    await this.darDeBajaHospitalEspecialidades(id, fechaBaja);
+    await this.darDeBajaCongestionesActuales(id, fechaBaja);
+    await this.darDeBajaPersonalHospital(id, fechaBaja);
+    await this.darDeBajaTurnos(id, fechaBaja);
+
+    console.log(`✅ Hospital ID ${id} dado de baja lógica junto a sus relaciones asociadas`);
+  }
+
+  private async darDeBajaHospitalEspecialidades(idHospital: number, fecha: Date): Promise<void> {
+    try {
+      const relaciones = await this.genericRepository.buscar(
+        'HospitalEspecialidad',
+        'he',
+        [
+          { atributo: 'hospital.id', operacion: '=', valor: idHospital },
+          { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }
+        ]
+      );
+
+      for (const he of relaciones) {
+        he.fechaHasta = fecha;
+        he.fechaHoraBaja = fecha;
+        await this.genericRepository.guardarCambios('HospitalEspecialidad', he);
+      }
+    } catch (error) {
+      console.error(`Error al dar de baja HospitalEspecialidades para hospital ID ${idHospital}:`, error);
+      throw error;
+    }
+  }
+
+  private async darDeBajaCongestionesActuales(idHospital: number, fecha: Date): Promise<void> {
+    try {
+      const congestiones = await this.genericRepository.buscar(
+        'CongestionActual',
+        'ca',
+        [
+          { atributo: 'hospital.id', operacion: '=', valor: idHospital },
+          { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }
+        ]
+      );
+
+      for (const ca of congestiones) {
+        ca.fechaHoraBaja = fecha;
+        await this.genericRepository.guardarCambios('CongestionActual', ca);
+      }
+    } catch (error) {
+      console.error(`Error al dar de baja CongestionesActuales para hospital ID ${idHospital}:`, error);
+      throw error;
+    }
+  }
+
+  private async darDeBajaPersonalHospital(idHospital: number, fecha: Date): Promise<void> {
+    try {
+      const personal = await this.genericRepository.buscar(
+        'PersonalHospital',
+        'ph',
+        [
+          { atributo: 'hospital.id', operacion: '=', valor: idHospital },
+          { atributo: 'fechaHasta', operacion: 'isNull', valor: null }
+        ]
+      );
+
+      for (const ph of personal) {
+        ph.fechaHoraBaja = fecha;
+        ph.fechaHasta = fecha;
+        await this.genericRepository.guardarCambios('PersonalHospital', ph);
+      }
+    } catch (error) {
+      console.error(`Error al dar de baja PersonalHospital para hospital ID ${idHospital}:`, error);
+      throw error;
+    }
+  }
+
+  private async darDeBajaTurnos(idHospital: number, fecha: Date): Promise<void> {
+    try {
+      const hospital = await this.genericRepository.buscar(
+        Hospital,
+        'hosp',
+        [
+          { atributo: 'id', operacion: '=', valor: idHospital },
+          { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }
+        ],
+        [
+          'hospitalEspecialidades',
+          'hospitalEspecialidades.hospitalEspecialidadMedico',
+          'hospitalEspecialidades.hospitalEspecialidadMedico.agendaSemanales',
+          'hospitalEspecialidades.hospitalEspecialidadMedico.agendaSemanales.agendasDia',
+          'hospitalEspecialidades.hospitalEspecialidadMedico.agendaSemanales.agendasDia.turnosAgendaDia',
+        ]
+      );
+
+      if (!hospital.length) {
+        throw new NotFoundException(`Hospital con ID ${idHospital} no encontrado`);
+      }
+
+      const hospitalEspecialidades = hospital[0].hospitalEspecialidades ?? [];
+      const hospitalEspecialidadMedicos = hospitalEspecialidades.flatMap(he => he.hospitalEspecialidadMedico ?? []);
+      const agendaSemanales = hospitalEspecialidadMedicos.flatMap(hem => hem.agendaSemanales ?? []);
+      const agendasDia = agendaSemanales.flatMap(as => as.agendasDia ?? []);
+      const turnos = agendasDia.flatMap(ad => ad.turnosAgendaDia ?? []);
+
+      for (const he of hospitalEspecialidades) {
+        he.fechaHoraBaja = fecha;
+        await this.genericRepository.guardarCambios(HospitalEspecialidad, he);
+        for (const hem of hospitalEspecialidadMedicos) {
+          hem.fechaHoraBaja = fecha;
+          await this.genericRepository.guardarCambios('HospitalEspecialidadMedico', hem);
+          for (const as of agendaSemanales) {
+            as.fechaHoraBaja = fecha;
+            await this.genericRepository.guardarCambios('AgendaSemanal', as);
+            for (const ad of agendasDia) {
+              ad.fechaHoraBaja = fecha;
+              await this.genericRepository.guardarCambios('AgendaDia', ad);
+              for (const turno of turnos) {
+                turno.fechaHoraBaja = fecha;
+                await this.genericRepository.guardarCambios('TurnoAgendaDia', turno);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`Error al dar de baja Turnos para hospital ID ${idHospital}:`, error);
+      throw error;
+    }
   }
 }
