@@ -3,12 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
 
 @Injectable()
 export class AbmAgendaSemanalUseCase {
-  constructor(private readonly genericRepository: GenericRepositoryService) {}
+  constructor(private readonly genericRepository: GenericRepositoryService) { }
 
   // Crear Especialidad
   /*async crear(dto: CreateEspecialidadDto): Promise<Especialidad> {

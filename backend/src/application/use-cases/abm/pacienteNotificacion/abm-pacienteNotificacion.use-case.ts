@@ -3,13 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { PacienteNotificacion } from 'src/domain/entities/paciente-notificacion.entity';
 import { CreatePacienteNotificacionDto } from './dto/create-pacienteNotificacion.dto';
 
 @Injectable()
 export class AbmPacienteNotificacionUseCase {
-  constructor(private readonly genericRepository: GenericRepositoryService) {}
+  constructor(private readonly genericRepository: GenericRepositoryService) { }
 
   // Crear PacienteNotificacion
   async crear(

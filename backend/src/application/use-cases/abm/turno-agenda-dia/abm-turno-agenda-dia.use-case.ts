@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 
 @Injectable()
 export class AbmTurnoAgendaDiaUseCase {
-  constructor(private readonly genericRepository: GenericRepositoryService) {}
+  constructor(private readonly genericRepository: GenericRepositoryService) { }
 
   // Crear Especialidad
   /*async crear(dto: CreateEspecialidadDto): Promise<Especialidad> {

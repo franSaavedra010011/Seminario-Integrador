@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Paciente } from 'src/domain/entities/paciente.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
 import { ConsultarTurnosActivosDTO } from './dto/consultar-turnos-activos.dto';
 import { EstadoTurnoEnum } from 'src/domain/enums/estado-turno.enum';
@@ -12,7 +12,7 @@ export class ConsultarTurnosActivosUseCase {
     private readonly genericRepository: GenericRepositoryService,
     @InjectRepository(Paciente)
     private pacienteRepository: Repository<Paciente>,
-  ) {}
+  ) { }
   async consultarTurnosActivos(mailPaciente: string) {
     const paciente = await this.pacienteRepository
       .createQueryBuilder('paciente') //hacerlo con usuario

@@ -1,5 +1,5 @@
 import { Turno } from 'src/domain/entities/turno.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Hospital } from 'src/domain/entities/hospital.entity';
 import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
@@ -22,7 +22,7 @@ export class CancelarTurnoUseCase {
     private turnoRepository: Repository<Turno>,
     @InjectRepository(TurnoAgendaDia)
     private turnoAgendaDiaRepository: Repository<TurnoAgendaDia>,
-  ) {}
+  ) { }
   async bajaTurno(idTurnoSeleccionado: number) {
     const estadoBajas = await this.genericRepository.buscar(
       EstadoTurno,

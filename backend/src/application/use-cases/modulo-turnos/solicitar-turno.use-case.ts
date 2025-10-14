@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
 import { AbmTurnoEstadoUseCase } from '../abm/turnoEstado/abm-turno-estado.use-case';
 import { Localidad } from 'src/domain/entities/localidad.entity';
@@ -48,7 +48,7 @@ export class SolicitarTurnoUseCase {
     private agendaSemanalRepository: Repository<AgendaSemanal>,
     private readonly abmTurnoEstadoUseCase: AbmTurnoEstadoUseCase,
     private readonly abmTurnoUseCase: AbmTurnoUseCase,
-  ) {}
+  ) { }
   async solicitarTurnoEspecialidades() {
     const especialidades = await this.especialidadRepository
       .createQueryBuilder('especialidad') //hacerlo con usuario

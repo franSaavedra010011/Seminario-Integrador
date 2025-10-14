@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
 import { Usuario } from 'src/domain/entities/usuario.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
 import { HospitalesNotificarCancelacionDTO } from './dto/hospitales-notificar-cancelacion.dto';
 import { EspecialidadesNotificarCancelacionDTO } from './dto/especialidades-notificar-cancelacion.dto';
@@ -45,7 +45,7 @@ export class NotificarCancelacionDeTurnoUseCase {
     private readonly abmTurnoUseCase: AbmTurnoUseCase,
     private readonly abmPacienteNotificacionUseCase: AbmPacienteNotificacionUseCase,
     private readonly abmTurnoAgendaDiaUseCase: AbmTurnoAgendaDiaUseCase,
-  ) {}
+  ) { }
   async notificacionMuestraDeHospitales(mailUsuario: string) {
     const usuario = await this.usuarioRepository
       .createQueryBuilder('usuario')
@@ -274,11 +274,11 @@ export class NotificarCancelacionDeTurnoUseCase {
                 for (const turnoDePaciente of turnosDePaciente) {
                   if (turnoDePaciente.id === turnoRelacionado.id) {
                     const dtoCrearNotificacion: CreatePacienteNotificacionDto =
-                      {
-                        observaciones: `Su turno para el dia ${turnoRelacionado.fecha} ha sido cancelado.`,
-                        paciente: paciente,
-                        turno: turnoRelacionado,
-                      };
+                    {
+                      observaciones: `Su turno para el dia ${turnoRelacionado.fecha} ha sido cancelado.`,
+                      paciente: paciente,
+                      turno: turnoRelacionado,
+                    };
                     this.abmPacienteNotificacionUseCase.crear(
                       dtoCrearNotificacion,
                     );
@@ -318,11 +318,11 @@ export class NotificarCancelacionDeTurnoUseCase {
                 for (const turnoDePaciente of turnosDePaciente) {
                   if (turnoDePaciente.id === turnoRelacionado.id) {
                     const dtoCrearNotificacion: CreatePacienteNotificacionDto =
-                      {
-                        observaciones: `Su turno para el dia ${turnoRelacionado.fecha} ha sido cancelado.`,
-                        paciente: paciente,
-                        turno: turnoRelacionado,
-                      };
+                    {
+                      observaciones: `Su turno para el dia ${turnoRelacionado.fecha} ha sido cancelado.`,
+                      paciente: paciente,
+                      turno: turnoRelacionado,
+                    };
                     this.abmPacienteNotificacionUseCase.crear(
                       dtoCrearNotificacion,
                     );

@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { TurnoEstado } from 'src/domain/entities/turno-estado.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { CreateTurnoEstadoDto } from './dto/create-turnoEstado.dto';
 
 @Injectable()
 export class AbmTurnoEstadoUseCase {
-  constructor(private readonly genericRepository: GenericRepositoryService) {}
+  constructor(private readonly genericRepository: GenericRepositoryService) { }
 
   // Crear Especialidad
   async crear(dto: CreateTurnoEstadoDto): Promise<TurnoEstado> {
