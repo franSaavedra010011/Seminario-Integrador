@@ -23,7 +23,7 @@ export class TurnoAgendaDia extends Base {
   @ManyToOne(() => AgendaDia, (agendaDia) => agendaDia.turnosAgendaDia, { onDelete: 'CASCADE' })
   agendaDia: AgendaDia;
 
-  @OneToOne(() => Turno, (turno) => turno.turnoAgendaDia)
+  @OneToOne(() => Turno, (turno) => turno.turnoAgendaDia, { nullable: true })
   @JoinColumn()
-  turno: Turno;
+  turno: Turno | null;
 }
