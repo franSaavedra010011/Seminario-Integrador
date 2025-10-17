@@ -1,3 +1,4 @@
+import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
@@ -20,7 +21,7 @@ export class AbmMedicoUseCase {
     @InjectRepository(HospitalEspecialidad)
     private readonly hospitalEspecialidadRepo: Repository<HospitalEspecialidad>,
     private readonly genericRepository: GenericRepositoryService,
-  ) {}
+  ) { }
 
   async crear(dto: CreateMedicoDto, usuario: Usuario): Promise<Medico> {
     // Crear instancia base
@@ -74,7 +75,11 @@ export class AbmMedicoUseCase {
           });
           await this.especialidadMedicoRepo.save(em);
 
-          // No guardamos `especialidad` porque no se requiere en tu diseño.
+          const personalHospital = new PersonalHospital();
+          personalHospital.hospital = hospital;
+          personalHospital.usuario = usuario;
+          personalHospital.fechaDesde = new Date();
+          await this.genericRepository.guardarCambios(PersonalHospital, personalHospital);
         }
       }
     }
