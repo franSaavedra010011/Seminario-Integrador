@@ -40,4 +40,8 @@ export class CreateUsuarioDto {
   @ValidateNested()
   @Type(() => CreateMedicoDto)
   datosMedico?: CreateMedicoDto;
+
+  @IsOptional()
+  @Type(() => Number)
+  idHospital?: number;
 }

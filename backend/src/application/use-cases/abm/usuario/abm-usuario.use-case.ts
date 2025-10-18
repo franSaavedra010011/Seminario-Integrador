@@ -1,3 +1,4 @@
+import { PersonalHospital } from './../../../../domain/entities/personal-hospital.entity';
 import { CreateMedicoDto } from 'src/application/use-cases/abm/medico/dto/create-medico.dto';
 import { AbmMedicoUseCase } from 'src/application/use-cases/abm/medico/abm-medico.use-case';
 import { AbmPacienteUseCase } from 'src/application/use-cases/abm/paciente/abm-paciente.use-case';
@@ -17,6 +18,7 @@ import { Turno } from 'src/domain/entities/turno.entity';
 import { TurnoEstado } from 'src/domain/entities/turno-estado.entity';
 import { PacienteNotificacion } from 'src/domain/entities/paciente-notificacion.entity';
 import { Medico } from 'src/domain/entities/medico.entity';
+import { Hospital } from 'src/domain/entities/hospital.entity';
 
 @Injectable()
 export class AbmUsuarioUseCase {
@@ -26,7 +28,7 @@ export class AbmUsuarioUseCase {
     private readonly usuarioRolRepo: Repository<UsuarioRol>,
     private readonly AbmPacienteUseCase: AbmPacienteUseCase,
     private readonly AbmMedicoUseCase: AbmMedicoUseCase
-  ) {}
+  ) { }
 
   async crear(dto: CreateUsuarioDto): Promise<Usuario> {
     // Iniciar CU
@@ -125,9 +127,24 @@ export class AbmUsuarioUseCase {
       await this.genericRepository.guardarCambios(Usuario, usuarioGuardado);
     }
 
+    const esPersonalHospital = rolesVinculados.some(
+      (r) => r.nombre.toUpperCase() === 'ADMINHOSPITAL' || r.nombre.toUpperCase() === 'RECEPCIONISTA'
+    );
+
+    if (esPersonalHospital) {
+      const personalHospital = new PersonalHospital();
+      personalHospital.fechaDesde = new Date();
+      personalHospital.usuario = usuarioGuardado;
+      const hospitalRelacionado = await this.genericRepository.buscar(Hospital, 'hospital', [
+        { atributo: 'id', operacion: '=', valor: dto.idHospital },
+      ]);
+      personalHospital.hospital = hospitalRelacionado[0];
+      await this.genericRepository.guardarCambios(PersonalHospital, personalHospital);
+    }
+
     const usuarioConRelaciones = await this.genericRepository.buscar(Usuario, 'u', [
       { atributo: 'id', operacion: '=', valor: usuarioGuardado.id },
-    ], ['paciente', 'medico', 'usuarioRoles', 'usuarioRoles.rol'] );
+    ], ['paciente', 'medico', 'usuarioRoles', 'usuarioRoles.rol']);
 
     return usuarioConRelaciones[0];
   }

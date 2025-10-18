@@ -174,25 +174,215 @@ textarea:focus {
   background-color: #d2d6eb;
 }
 
+/* === VACUNAS === */
+fieldset.vacunas-section {
+  background-color: #fafbff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px 25px;
+  margin-top: 25px;
+}
+
+fieldset.vacunas-section legend {
+  font-weight: 600;
+  color: #384179;
+  font-size: 15px;
+  padding: 0 10px;
+}
+
+.vacunas-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.vacunas-inputs>div {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.vacunas-inputs label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.vacunas-inputs input[type="text"],
+.vacunas-inputs input[type="date"] {
+  padding: 10px 12px;
+  border: 1.3px solid #ccd2e0;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.vacunas-inputs input:focus {
+  border-color: #384179;
+  outline: none;
+  box-shadow: 0 0 4px rgba(56, 65, 121, 0.3);
+}
+
+.btn-agregar-vacuna {
+  width: 100%;
+  background-color: #e8eaff;
+  color: #384179;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-agregar-vacuna:hover {
+  background-color: #d4d8fc;
+}
+
 .vacunas-lista {
   list-style: none;
   padding: 0;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .vacunas-lista li {
+  background-color: #f7f8fc;
+  border: 1px solid #e2e5f3;
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
-  background-color: #f7f8fc;
-  padding: 8px 12px;
+  align-items: center;
+  /* Alinea al tope por consistencia */
+  gap: 10px;
+  color: #333;
+  font-size: 15px;
+  box-shadow: 0 2px 6px rgba(56, 65, 121, 0.08);
+  transition: all 0.2s ease;
+}
+
+.vacunas-lista li:hover {
+  transform: scale(1.01);
+  background-color: #ffffff;
+}
+
+.vacunas-lista li span {
+  display: flex;
+  align-items: center;
+  /* centra verticalmente el texto */
+  gap: 5px;
+}
+
+.vacunas-lista li button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f8fc;
+  border: 1px solid #e1e3f0;
+  color: #c62828;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 7px;
   border-radius: 6px;
-  margin-bottom: 6px;
+  height: 28px;
+  /* Fuerza misma altura visual */
+  transition: all 0.25s ease;
+}
+
+.vacunas-lista li button:hover {
+  background-color: #ffecec;
+  color: #9a0007;
+  transform: scale(1.1);
 }
 
 .vacunas-lista li button {
   background: none;
   border: none;
-  color: #a00;
+  color: #c62828;
   font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
+  margin: 0px;
+  transition: color 0.3s ease;
+  width: auto;
+}
+
+.vacunas-lista li button:hover {
+  color: #9a0007;
+}
+
+
+.select-especialidades {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.react-select__control {
+  border-radius: 8px !important;
+  border-color: #ccc !important;
+  min-height: 44px !important;
+  box-shadow: none !important;
+}
+
+.react-select__control:hover {
+  border-color: #888 !important;
+}
+
+.react-select__multi-value {
+  background-color: #e8eaff !important;
+  color: #4a56e2 !important;
+  border-radius: 8px !important;
+}
+
+.react-select__multi-value__label {
+  color: #4a56e2 !important;
+  font-weight: 500;
+}
+
+.react-select__multi-value__remove:hover {
+  background-color: #d1d4fa !important;
+  color: #2f36a9 !important;
+}
+
+.react-select__menu {
+  z-index: 10 !important;
+}
+
+.react-select__option--is-focused {
+  background-color: #f1f2ff !important;
+}
+
+.react-select__option--is-selected {
+  background-color: #c9ceff !important;
+  color: #1b1b1b !important;
+}
+
+/* ==== FIX: Selector de fecha oculto ==== */
+input[type="date"] {
+  position: relative;
+  z-index: 20;
+  /* Asegura que el calendario aparezca arriba de todo */
+}
+
+fieldset,
+.alta-card,
+.vacunas-section {
+  overflow: visible !important;
+  /* Permite que el calendario se vea fuera del contenedor */
+}
+
+::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: brightness(0.8);
+  transition: all 0.3s ease;
+}
+
+::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+
 }
