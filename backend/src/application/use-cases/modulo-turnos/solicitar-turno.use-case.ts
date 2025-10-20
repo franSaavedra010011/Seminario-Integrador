@@ -49,55 +49,8 @@ export class SolicitarTurnoUseCase {
     private readonly abmTurnoEstadoUseCase: AbmTurnoEstadoUseCase,
     private readonly abmTurnoUseCase: AbmTurnoUseCase,
   ) { }
-  async solicitarTurnoEspecialidades() {
-    const especialidades = await this.especialidadRepository
-      .createQueryBuilder('especialidad') //hacerlo con usuario
-      .where('especialidad.fechaHoraBaja IS NULL')
-      .getMany();
-    if (!especialidades) {
-      throw new BadRequestException(`No hay especialidades disponibles`);
-    }
-    const listaEspecialidadesDTO: EspecialidadSolicitarTurnoDto[] = [];
-    for (const especialidad of especialidades) {
-      const especialidadDTO: EspecialidadSolicitarTurnoDto = {
-        idEspecialidad: especialidad.id,
-        nombreEspecialidad: especialidad.nombre,
-      };
-      listaEspecialidadesDTO.push(especialidadDTO);
-    }
-    return listaEspecialidadesDTO;
-  }
-  async solicitarTurnoLocalidades(idEspecialidad: number) {
-    const hospitales = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .leftJoinAndSelect('hospital.hospitalEspecialidades', 'he')
-      .leftJoinAndSelect('he.especialidad', 'esp')
-      .leftJoinAndSelect('hospital.localidad', 'loc')
-      .where('hospital.fechaHoraBaja IS NULL')
-      .getMany();
-    if (!hospitales) {
-      throw new BadRequestException(`No hay hospitales disponibles`);
-    }
-    const listaLocalidadesDTO: LocalidadSolicitarTurnoDto[] = [];
-    for (const hospital of hospitales) {
-      const hospitalEspecialidades = hospital.hospitalEspecialidades;
-      for (const hospitalEspecialidad of hospitalEspecialidades) {
-        const especialdiad = hospitalEspecialidad.especialidad;
-        if (
-          especialdiad.id === idEspecialidad &&
-          hospitalEspecialidad.fechaHoraBaja === null
-        ) {
-          const localidad = hospital.localidad;
-          const localidadDTO: LocalidadSolicitarTurnoDto = {
-            idLocalidad: localidad.id,
-            nombreLocalidad: localidad.nombre,
-          };
-          listaLocalidadesDTO.push(localidadDTO);
-        }
-      }
-    }
-    return listaLocalidadesDTO;
-  }
+
+
   async solicitarTurnoHospitales(idEspecialidad: number, idLocalidad: number) {
     const hospitales = await this.hospitalRepository
       .createQueryBuilder('hospital')
@@ -144,6 +97,7 @@ export class SolicitarTurnoUseCase {
     }
     return listaHospitalesDTO;
   }
+
   async solicitarTurnoMedicos(idEspecialidad: number, idHospital: number) {
     const hospital = await this.hospitalRepository
       .createQueryBuilder('hospital')
@@ -187,9 +141,14 @@ export class SolicitarTurnoUseCase {
     }
     return listaMedicosDTO;
   }
+
   async solicitarTurnoAgendas(idMedico: number, idHospital: number) {
+
+    // Leer la fecha actual y el número de semana actual
     const fechaActual = new Date();
     const nroSemanaActual = this.getWeekNumber(fechaActual);
+
+    // Leer instancia de Hospital
     const hospital = await this.hospitalRepository
       .createQueryBuilder('hospital')
       .leftJoinAndSelect('hospital.hospitalEspecialidades', 'he')
@@ -202,48 +161,74 @@ export class SolicitarTurnoUseCase {
         id: idHospital,
       })
       .getOne();
+
     if (!hospital) {
       throw new BadRequestException(`No hay hospital disponible`);
     }
+
+    // Leer instancia de HospitalEspecialidad relacionada
     const hospitalEspecialidades = hospital.hospitalEspecialidades;
+
+    // Crear instancia de ListaDeAgendasDTO
     const ListaDeAgendasDTO: AgendasSolicitarTurnoDTO[] = [];
+
     for (const hospitalEspecialidad of hospitalEspecialidades) {
+
       if (
         hospitalEspecialidad.fechaHoraBaja === null &&
         hospitalEspecialidad.fechaHasta === null
       ) {
-        const hospitalEspecialidadMedicos =
-          hospitalEspecialidad.hospitalEspecialidadMedico;
+        const hospitalEspecialidadMedicos = hospitalEspecialidad.hospitalEspecialidadMedico;
         console.log(hospitalEspecialidadMedicos);
+
         for (const hospitalEspecialidadMedico of hospitalEspecialidadMedicos) {
+
           if (
             hospitalEspecialidadMedico.fechaHoraBaja === null &&
             hospitalEspecialidadMedico.fechaHasta === null
           ) {
             const medicoEncontrado = hospitalEspecialidadMedico.medico;
+            console.log(medicoEncontrado);
+
             if (medicoEncontrado.id === idMedico) {
-              const agendasSemanales =
-                hospitalEspecialidadMedico.agendaSemanales;
+
+              const agendasSemanales = hospitalEspecialidadMedico.agendaSemanales;
+              console.log(agendasSemanales);
+
               for (const agendaSemanal of agendasSemanales) {
+
                 if (
-                  (agendaSemanal.nroSemana === nroSemanaActual ||
+                  (
+                    agendaSemanal.nroSemana === nroSemanaActual ||
                     agendaSemanal.nroSemana === nroSemanaActual + 1 ||
                     agendaSemanal.nroSemana === nroSemanaActual + 2 ||
-                    agendaSemanal.nroSemana === nroSemanaActual + 3) &&
-                  agendaSemanal.fechaHoraBaja === null
+                    agendaSemanal.nroSemana === nroSemanaActual + 3
+                  ) && agendaSemanal.fechaHoraBaja === null
                 ) {
+
+                  // Leer dias de la agenda semanal
                   const agendaDias = agendaSemanal.agendasDia;
+
+                  // Crear lista de DiasSolicitarTurnoDTO
                   const ListaAgendaDia: DiasSolicitarTurnoDTO[] = [];
+
+
                   for (const agendaDia of agendaDias) {
+
                     let fechaBajaAgendaDiaDTO;
+
                     if (agendaDia.fechaHoraBaja !== null) {
                       fechaBajaAgendaDiaDTO = agendaDia.fechaHoraBaja!;
                     } else {
                       fechaBajaAgendaDiaDTO = null;
                     }
+
                     const turnosAgendaDia = agendaDia.turnosAgendaDia;
+
                     const ListaTurnosDTO: TurnosSolicitarTurnoDTO[] = [];
+
                     for (const turnoAgendaDia of turnosAgendaDia) {
+
                       const turnoDTO: TurnosSolicitarTurnoDTO = {
                         disponible: turnoAgendaDia.disponible,
                         horaDesde: turnoAgendaDia.horaDesde,
@@ -252,15 +237,21 @@ export class SolicitarTurnoUseCase {
                         idTurno: turnoAgendaDia.id,
                       };
                       ListaTurnosDTO.push(turnoDTO);
+
                     }
+
                     const agendaDiaDTO: DiasSolicitarTurnoDTO = {
+
                       idDia: agendaDia.id,
                       nombreDia: agendaDia.nombreAgendaDia,
                       fechaHoraBajaAgendaDia: fechaBajaAgendaDiaDTO,
                       turnos: ListaTurnosDTO,
+
                     };
+
                     ListaAgendaDia.push(agendaDiaDTO);
                   }
+
                   const agendaSemanalDTO: AgendasSolicitarTurnoDTO = {
                     idSemana: agendaSemanal.id,
                     nroSemana: agendaSemanal.nroSemana,
@@ -268,6 +259,7 @@ export class SolicitarTurnoUseCase {
                     fechaHasta: agendaSemanal.fechaHastaAgendaSemanal,
                     dias: ListaAgendaDia,
                   };
+
                   ListaDeAgendasDTO.push(agendaSemanalDTO);
                 }
               }
@@ -278,6 +270,7 @@ export class SolicitarTurnoUseCase {
     }
     return ListaDeAgendasDTO;
   }
+
   async solicitarTurnoResumen(
     idMedico: number,
     idHospital: number,
@@ -364,6 +357,7 @@ export class SolicitarTurnoUseCase {
     console.log(resumenDTO!);
     return resumenDTO!;
   }
+
   async solicitarTurnoFinalizar(
     idMedico: number,
     idHospital: number,
@@ -470,6 +464,7 @@ export class SolicitarTurnoUseCase {
       }
     }
   }
+
   //Algoritmo para calcular numero de Semana
   private getWeekNumber(date: Date): number {
     // Copia la fecha para no mutar la original
@@ -489,6 +484,7 @@ export class SolicitarTurnoUseCase {
 
     return weekNo;
   }
+
   //calcular la fecha del turno
   private obtenerFechaDesdeDia(fechaDesde: Date, nombreDia: string): Date {
     // Normalizo nombres de días
