@@ -1,0 +1,46 @@
+.crear-agenda-container {
+    padding: 2rem;
+    background-color: #f9fafc;
+    border-radius: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.especialidad-card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.especialidad-card h3 {
+    color: #384179;
+    margin-bottom: 0.8rem;
+}
+
+.estado-vigente {
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.estado-pendiente {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.crear-btn {
+    background-color: #384179;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.crear-btn:hover {
+    background-color: #2c3262;
+}

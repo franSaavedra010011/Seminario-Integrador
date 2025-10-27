@@ -33,6 +33,7 @@ import Notificaciones from './pages/Notificaciones/Notificaciones';
 import RecomendacionPorFiltro from './pages/RecomendacionPaciente/RecomendacionPorFiltro';
 import ConsultarDetalleHospital from './pages/RecomendacionPaciente/ConsultarDetalleHospital';
 import ConsultarHospitalesCriterios from './pages/RecomendacionPaciente/ConsultarHospitalesCriterios';
+import CrearAgendaSemanal from './pages/ABM_Hospital/CrearAgendaSemanal';
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
           <Route path="/recomendacionPorFiltro" element={< RecomendacionPorFiltro />} />
           <Route path="/consultarDetalleHospital" element={<ConsultarDetalleHospital />} />
           <Route path="/consultarHospitalesCriterios" element={<ConsultarHospitalesCriterios />} />
+          <Route path='/crearAgendaSemanal' element={<CrearAgendaSemanal />} />
         </Route>
       </Routes>
     </Router>

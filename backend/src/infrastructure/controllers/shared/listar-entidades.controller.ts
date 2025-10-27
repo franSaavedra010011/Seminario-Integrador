@@ -13,6 +13,11 @@ export class ListarEntidadesController {
     return this.listarSvc.listarHospitales(modo, idHospital);
   }
 
+  @Get('especialidades-hospital')
+  listarEspecialidadesHospital(@Query('idHospital') idHospital: number) {
+    return this.listarSvc.listarEspecialidadesHospital(idHospital)
+  }
+
   @Get('medicos')
   medicos() {
     return this.listarSvc.listarMedicos();

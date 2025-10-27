@@ -2,11 +2,13 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CancelarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/cancelar-turno.use-case';
 import { ConsultarDetalleDelTurnoUseCase } from 'src/application/use-cases/modulo-turnos/consultar-detalle-del-turno.use-case';
 import { ConsultarTurnosActivosUseCase } from 'src/application/use-cases/modulo-turnos/consultar-turnos-activos.use-case';
+import { CrearAgendaSemanalUseCase } from 'src/application/use-cases/modulo-turnos/crear-agenda-semanal.use-case';
 import { DiaAgendaCancelacionDTO } from 'src/application/use-cases/modulo-turnos/dto/dia-agenda-cancelacion.dto';
 import { NotificarCancelacionDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-cancelacion-de-turno.use-case';
 import { NotificarProximidadDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-proximidad-de-turno.use-case';
 import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
 import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/solicitar-turno.use-case';
+import { VerificarAgendaVigenteUseCase } from 'src/application/use-cases/modulo-turnos/verificar-agenda-vigente.use-case';
 
 @Controller('turno')
 export class TurnoController {
@@ -18,6 +20,8 @@ export class TurnoController {
         private readonly useCaseNotificarProximidadDeTurno: NotificarProximidadDeTurnoUseCase,
         private readonly useCaseRegistrarAsistenciaDePaciente: RegistrarAsistenciaDePacienteUseCase,
         private readonly useCaseSolicitarTurno: SolicitarTurnoUseCase,
+        private readonly useCaseCrearAgendaSemanal: CrearAgendaSemanalUseCase,
+        private readonly useCaseVerificarAgendaVigente: VerificarAgendaVigenteUseCase,
     ) { }
     //UseCase: Cancelar Turno
     @Delete('cancelarTurno/:id')
@@ -170,5 +174,15 @@ export class TurnoController {
             Number(idEspecialidad),
             emailUsuario,
         );
+    }
+
+    @Post('crearAgendaSemanal/:idHospital')
+    async crearAgendaSemanal(@Param('idHospital') idHospital: number) {
+        return this.useCaseCrearAgendaSemanal.ejecutar(idHospital);
+    }
+
+    @Get('verificarAgendaVigente/:idRelacion')
+    async verificarAgendaVigente(@Param('idRelacion') idRelacion: number) {
+        return await this.useCaseVerificarAgendaVigente.ejecutar(idRelacion);
     }
 }

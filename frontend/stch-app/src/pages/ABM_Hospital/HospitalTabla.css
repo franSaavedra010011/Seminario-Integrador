@@ -118,3 +118,10 @@ tr:hover {
 .icon-button.delete:hover {
   color: #dc3545;
 }
+
+.icon-button.clock:hover {
+  color: #f59e0b;
+  /* Amarillo reloj */
+  transform: scale(1.2);
+  transition: all 0.2s ease-in-out;
+}

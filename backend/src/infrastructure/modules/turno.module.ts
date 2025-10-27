@@ -15,11 +15,22 @@ import { TurnoAgendaDia } from "src/domain/entities/turno-agenda-dia.entity";
 import { Usuario } from "src/domain/entities/usuario.entity";
 import { AbmModule } from "./abm.module";
 import { AbmTurnoEstadoUseCase } from 'src/application/use-cases/abm/turnoEstado/abm-turno-estado.use-case';
+import { CrearAgendaSemanalUseCase } from 'src/application/use-cases/modulo-turnos/crear-agenda-semanal.use-case';
+import { VerificarAgendaVigenteUseCase } from 'src/application/use-cases/modulo-turnos/verificar-agenda-vigente.use-case';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Especialidad, Hospital, TurnoAgendaDia, Medico, Usuario, EstadoTurno, Paciente, AgendaSemanal]), SharedModule, AbmModule],
+    imports: [TypeOrmModule.forFeature([
+        Especialidad,
+        Hospital,
+        TurnoAgendaDia,
+        Medico,
+        Usuario,
+        EstadoTurno,
+        Paciente,
+        AgendaSemanal
+    ]), SharedModule, AbmModule],
     controllers: [TurnoController],
-    providers: [SolicitarTurnoUseCase],
-    exports: [SolicitarTurnoUseCase],
+    providers: [SolicitarTurnoUseCase, CrearAgendaSemanalUseCase, VerificarAgendaVigenteUseCase],
+    exports: [SolicitarTurnoUseCase, CrearAgendaSemanalUseCase, VerificarAgendaVigenteUseCase],
 })
 export class TurnoModule { }

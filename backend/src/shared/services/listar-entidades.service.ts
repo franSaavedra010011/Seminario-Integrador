@@ -28,6 +28,44 @@ export class ListarEntidadesService {
         );
     }
 
+    async listarEspecialidadesHospital(idHospital: number) {
+        const hospital = await this.hospitalRepo.findOne({
+            where: { id: idHospital, fechaHoraBaja: IsNull() },
+            relations: [
+                'hospitalEspecialidades',
+                'hospitalEspecialidades.especialidad',
+                'hospitalEspecialidades.hospitalEspecialidadMedico',
+                'hospitalEspecialidades.hospitalEspecialidadMedico.medico',
+                'hospitalEspecialidades.hospitalEspecialidadMedico.agendaSemanales',
+            ],
+        });
+
+        if (!hospital) {
+            throw new Error(`No se encontró el gospital con id ${idHospital}`)
+        }
+
+        const nroSemanaActual = this.obtenerNumeroSemana(new Date());
+
+        return hospital.hospitalEspecialidades.map((he) => ({
+            idRelacion: he.id,
+            nombreEspecialidad: he.especialidad.nombre,
+            medicos: he.hospitalEspecialidadMedico.map((hem) => ({
+                idRelacion: hem.id,
+                nombreMedico: hem.medico.nombreMedico,
+                apellidoMedico: hem.medico.apellidoMedico,
+                tieneAgendaVigente: hem.agendaSemanales?.some(
+                    (agenda) => agenda.nroSemana === nroSemanaActual
+                ),
+            })),
+        }));
+    }
+
+    private obtenerNumeroSemana(fecha: Date): number {
+        const primera = new Date(fecha.getFullYear(), 0, 1);
+        const diff = (fecha.getTime() - primera.getTime()) / (1000 * 60 * 60 * 24);
+        return Math.ceil((diff + primera.getDay() + 1) / 7);
+    }
+
     async listarHospitales(
         opcion: 'simple' | 'localidad' | 'congestion' | 'especialidades' | 'completo' = 'simple',
         idHospital?: number
