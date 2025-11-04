@@ -62,6 +62,7 @@ const modulo_reportes_controller_1 = require("../controllers/modulo-reportes/mod
 const consultar_cantidad_de_turnos_asignados_use_case_1 = require("../../application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case");
 const consultar_historial_de_turnos_use_case_1 = require("../../application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case");
 const consultar_porcentaje_de_asistencia_de_pacientes_use_case_1 = require("../../application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case");
+const generar_reporte_administrativo_use_case_1 = require("../../application/use-cases/modulo-reportes/generar-reporte-administrativo.use-case");
 let AbmModule = class AbmModule {
 };
 exports.AbmModule = AbmModule;
@@ -127,6 +128,7 @@ exports.AbmModule = AbmModule = __decorate([
             consultar_cantidad_de_turnos_asignados_use_case_1.ConsultarCantidadDeTurnosAsignadosUseCase,
             consultar_historial_de_turnos_use_case_1.ConsultarHistorialDeTurnosUseCase,
             consultar_porcentaje_de_asistencia_de_pacientes_use_case_1.ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
+            generar_reporte_administrativo_use_case_1.GenerarReporteAdministrativoUseCase,
         ],
         exports: [
             abm_usuario_use_case_1.AbmUsuarioUseCase,
@@ -153,6 +155,7 @@ exports.AbmModule = AbmModule = __decorate([
             consultar_cantidad_de_turnos_asignados_use_case_1.ConsultarCantidadDeTurnosAsignadosUseCase,
             consultar_historial_de_turnos_use_case_1.ConsultarHistorialDeTurnosUseCase,
             consultar_porcentaje_de_asistencia_de_pacientes_use_case_1.ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
+            generar_reporte_administrativo_use_case_1.GenerarReporteAdministrativoUseCase,
         ],
     })
 ], AbmModule);

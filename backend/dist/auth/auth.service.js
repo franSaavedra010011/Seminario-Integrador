@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
@@ -17,18 +20,26 @@ const genericRepository_service_1 = require("../shared/utils/genericRepository.s
 const abm_usuario_use_case_1 = require("../application/use-cases/abm/usuario/abm-usuario.use-case");
 const rol_entity_1 = require("../domain/entities/rol.entity");
 const usuario_entity_1 = require("../domain/entities/usuario.entity");
+const typeorm_1 = require("typeorm");
+const typeorm_2 = require("@nestjs/typeorm");
 let AuthService = class AuthService {
     abmUsuarioUseCase;
     jwtService;
     genericRepository;
-    constructor(abmUsuarioUseCase, jwtService, genericRepository) {
+    usuarioRepo;
+    constructor(abmUsuarioUseCase, jwtService, genericRepository, usuarioRepo) {
         this.abmUsuarioUseCase = abmUsuarioUseCase;
         this.jwtService = jwtService;
         this.genericRepository = genericRepository;
+        this.usuarioRepo = usuarioRepo;
     }
     async register(registerDto) {
         const existente = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [
-            { atributo: 'emailUsuario', operacion: '=', valor: registerDto.emailUsuario },
+            {
+                atributo: 'emailUsuario',
+                operacion: '=',
+                valor: registerDto.emailUsuario,
+            },
         ]);
         if (existente.length > 0) {
             throw new common_1.BadRequestException('Usuario ya existente');
@@ -37,7 +48,7 @@ let AuthService = class AuthService {
         for (const nombreRol of registerDto.roles) {
             const rolesEncontrados = await this.genericRepository.buscar(rol_entity_1.Rol, 'rol', [
                 { atributo: 'nombre', operacion: '=', valor: nombreRol.trim() },
-                { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }
+                { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null },
             ]);
             if (!rolesEncontrados.length) {
                 throw new common_1.BadRequestException(`El rol "${nombreRol}" no existe`);
@@ -48,17 +59,27 @@ let AuthService = class AuthService {
             usernameUsuario: registerDto.usernameUsuario,
             emailUsuario: registerDto.emailUsuario,
             passwordUsuario: registerDto.passwordUsuario,
-            idRoles
+            idRoles,
         };
         return await this.abmUsuarioUseCase.crear(createUsuarioDto);
     }
     async login({ email, password }) {
-        const usuarios = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'emailUsuario', operacion: '=', valor: email }], ['usuarioRoles', 'usuarioRoles.rol', 'usuarioRoles.rol.rolPermisos', 'usuarioRoles.rol.rolPermisos.permiso']);
+        const usuarios = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'emailUsuario', operacion: '=', valor: email }], [
+            'usuarioRoles',
+            'usuarioRoles.rol',
+            'usuarioRoles.rol.rolPermisos',
+            'usuarioRoles.rol.rolPermisos.permiso',
+        ]);
         if (!usuarios.length) {
             throw new common_1.UnauthorizedException('El email ingresado no coincide con ningún usuario registrado');
         }
         const usuario = usuarios[0];
-        const usuarioConPassword = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'id', operacion: '=', valor: usuario.id }]);
+        const idUsuario = usuario.id;
+        const usuarioConPassword = await this.usuarioRepo
+            .createQueryBuilder('usuario')
+            .addSelect('usuario.passwordUsuario')
+            .where('usuario.id = :idUsuario', { idUsuario })
+            .getMany();
         if (!usuarioConPassword.length) {
             throw new common_1.UnauthorizedException('No se pudo recuperar la contraseña');
         }
@@ -66,12 +87,12 @@ let AuthService = class AuthService {
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('La contraseña ingresada es incorrecta');
         }
-        const roles = (usuario.usuarioRoles || []).map(ur => ({
+        const roles = (usuario.usuarioRoles || []).map((ur) => ({
             idRol: ur.rol.id,
             nombreRol: ur.rol.nombre,
             permisos: (ur.rol.rolPermisos || [])
-                .filter(rp => !rp.fechaHasta)
-                .map(rp => rp.permiso.codigo.trim().toLowerCase())
+                .filter((rp) => !rp.fechaHasta)
+                .map((rp) => rp.permiso.codigo.trim().toLowerCase()),
         }));
         if (roles.length === 1) {
             const rol = roles[0];
@@ -79,28 +100,35 @@ let AuthService = class AuthService {
                 sub: usuario.id,
                 email: usuario.emailUsuario,
                 rol: rol.nombreRol,
-                permisos: rol.permisos
+                permisos: rol.permisos,
             };
-            const token = await this.jwtService.signAsync(payload, { expiresIn: '15m' });
+            const token = await this.jwtService.signAsync(payload, {
+                expiresIn: '15m',
+            });
             return {
                 token,
                 rolSeleccionado: rol.nombreRol,
-                permisos: rol.permisos
+                permisos: rol.permisos,
             };
         }
         return {
             usuarioId: usuario.id,
             email: usuario.emailUsuario,
-            roles: roles.map(r => ({ idRol: r.idRol, nombreRol: r.nombreRol }))
+            roles: roles.map((r) => ({ idRol: r.idRol, nombreRol: r.nombreRol })),
         };
     }
     async seleccionarRol(usuarioId, idRol) {
-        const usuarios = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'id', operacion: '=', valor: usuarioId }], ['usuarioRoles', 'usuarioRoles.rol', 'usuarioRoles.rol.rolPermisos', 'usuarioRoles.rol.rolPermisos.permiso']);
+        const usuarios = await this.genericRepository.buscar(usuario_entity_1.Usuario, 'usuario', [{ atributo: 'id', operacion: '=', valor: usuarioId }], [
+            'usuarioRoles',
+            'usuarioRoles.rol',
+            'usuarioRoles.rol.rolPermisos',
+            'usuarioRoles.rol.rolPermisos.permiso',
+        ]);
         if (!usuarios.length) {
             throw new common_1.UnauthorizedException('Usuario no encontrado');
         }
         const usuario = usuarios[0];
-        const usuarioRolSeleccionado = usuario.usuarioRoles.find(ur => ur.rol.id === idRol);
+        const usuarioRolSeleccionado = usuario.usuarioRoles.find((ur) => ur.rol.id === idRol);
         if (!usuarioRolSeleccionado) {
             throw new common_1.UnauthorizedException('El rol seleccionado no pertenece al usuario');
         }
@@ -109,22 +137,24 @@ let AuthService = class AuthService {
             await this.genericRepository.guardarCambios(ur.constructor, ur);
         }
         const permisos = usuarioRolSeleccionado.rol.rolPermisos
-            .filter(rp => !rp.fechaHasta)
-            .map(rp => rp.permiso.codigo.trim().toLowerCase());
+            .filter((rp) => !rp.fechaHasta)
+            .map((rp) => rp.permiso.codigo.trim().toLowerCase());
         const payload = {
             sub: usuario.id,
             email: usuario.emailUsuario,
             rol: usuarioRolSeleccionado.rol.nombre,
-            permisos
+            permisos,
         };
-        const token = await this.jwtService.signAsync(payload, { expiresIn: '15m' });
+        const token = await this.jwtService.signAsync(payload, {
+            expiresIn: '15m',
+        });
         return {
             token,
             rolSeleccionado: usuarioRolSeleccionado.rol.nombre,
-            permisos
+            permisos,
         };
     }
-    async profile({ email, rol, roles }) {
+    async profile({ email, rol, roles, }) {
         const role = rol || (roles?.length ? roles[0] : undefined);
         if (role !== 'ADMIN') {
             throw new common_1.UnauthorizedException('No tiene las credenciales para acceder a esta ruta');
@@ -139,8 +169,10 @@ let AuthService = class AuthService {
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
+    __param(3, (0, typeorm_2.InjectRepository)(usuario_entity_1.Usuario)),
     __metadata("design:paramtypes", [abm_usuario_use_case_1.AbmUsuarioUseCase,
         jwt_1.JwtService,
-        genericRepository_service_1.GenericRepositoryService])
+        genericRepository_service_1.GenericRepositoryService,
+        typeorm_1.Repository])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

@@ -4,11 +4,13 @@ import { GenericRepositoryService } from 'src/shared/utils/genericRepository.ser
 import { AbmUsuarioUseCase } from 'src/application/use-cases/abm/usuario/abm-usuario.use-case';
 import { Usuario } from 'src/domain/entities/usuario.entity';
 import { RegisterDTO } from './dto/register.dto';
+import { Repository } from 'typeorm';
 export declare class AuthService {
     private readonly abmUsuarioUseCase;
     private readonly jwtService;
     private readonly genericRepository;
-    constructor(abmUsuarioUseCase: AbmUsuarioUseCase, jwtService: JwtService, genericRepository: GenericRepositoryService);
+    private readonly usuarioRepo;
+    constructor(abmUsuarioUseCase: AbmUsuarioUseCase, jwtService: JwtService, genericRepository: GenericRepositoryService, usuarioRepo: Repository<Usuario>);
     register(registerDto: RegisterDTO): Promise<Usuario>;
     login({ email, password }: LoginDTO): Promise<{
         token: string;
@@ -33,7 +35,7 @@ export declare class AuthService {
         rolSeleccionado: string;
         permisos: string[];
     }>;
-    profile({ email, rol, roles }: {
+    profile({ email, rol, roles, }: {
         email: string;
         rol?: string;
         roles?: string[];

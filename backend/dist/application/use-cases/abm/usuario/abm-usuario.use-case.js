@@ -52,6 +52,7 @@ let AbmUsuarioUseCase = class AbmUsuarioUseCase {
                 usuario: usuarioGuardado,
                 rol: roles[0],
                 fechaDesde: new Date(),
+                rolActivo: true,
             });
             await this.usuarioRolRepo.save(usuarioRol);
         }

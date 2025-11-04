@@ -12,7 +12,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class AbmUsuarioUseCase {
   constructor(
-    
     private readonly genericRepository: GenericRepositoryService,
     @InjectRepository(UsuarioRol)
     private readonly usuarioRolRepo: Repository<UsuarioRol>,
@@ -34,7 +33,10 @@ export class AbmUsuarioUseCase {
     usuario.emailUsuario = dto.emailUsuario;
     usuario.passwordUsuario = passwordHasheado;
 
-    const usuarioGuardado = await this.genericRepository.guardarCambios(Usuario, usuario);
+    const usuarioGuardado = await this.genericRepository.guardarCambios(
+      Usuario,
+      usuario,
+    );
 
     for (const idRol of dto.idRoles) {
       const roles = await this.genericRepository.buscar(Rol, 'rol', [
@@ -49,6 +51,7 @@ export class AbmUsuarioUseCase {
         usuario: usuarioGuardado,
         rol: roles[0],
         fechaDesde: new Date(),
+        rolActivo: true,
       });
 
       await this.usuarioRolRepo.save(usuarioRol);
@@ -92,10 +95,14 @@ export class AbmUsuarioUseCase {
         }
 
         // Buscar si ya tiene ese rol asignado
-        const existente = await this.genericRepository.buscar(UsuarioRol, 'usuarioRol', [
-          { atributo: 'usuario', operacion: 'relacion', valor: usuario.id },
-          { atributo: 'rol', operacion: 'relacion', valor: idRol },
-        ]);
+        const existente = await this.genericRepository.buscar(
+          UsuarioRol,
+          'usuarioRol',
+          [
+            { atributo: 'usuario', operacion: 'relacion', valor: usuario.id },
+            { atributo: 'rol', operacion: 'relacion', valor: idRol },
+          ],
+        );
 
         if (!existente.length) {
           const usuarioRol = new UsuarioRol();
@@ -107,7 +114,6 @@ export class AbmUsuarioUseCase {
         }
       }
     }
-
 
     // Eliminar roles
     if (dto.idRolesAEliminar?.length) {
@@ -128,10 +134,9 @@ export class AbmUsuarioUseCase {
         }
       }
     }
-    
+
     return usuarioActualizado;
   }
-
 
   async eliminar(id: number): Promise<void> {
     await this.genericRepository.eliminar(Usuario, id);

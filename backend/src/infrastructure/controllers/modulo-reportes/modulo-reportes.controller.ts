@@ -1,7 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { ConsultarCantidadDeTurnosAsignadosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case';
 import { ConsultarHistorialDeTurnosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case';
 import { ConsultarPorcentajeDeAsistenciaDePacientesUseCase } from 'src/application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case';
+import { GenerarReporteAdministrativoUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-administrativo.use-case';
+import { GenerarReporteMedicoUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-de-medico.use-case';
+import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-de-paciente.use-case';
 
 @Controller('moduloReportes')
 export class ModuloDeReporteController {
@@ -10,6 +21,9 @@ export class ModuloDeReporteController {
     private readonly useCaseConsultarCantidadTurnosAsignados: ConsultarCantidadDeTurnosAsignadosUseCase,
     private readonly useCaseConsultarHistorialTurnos: ConsultarHistorialDeTurnosUseCase,
     private readonly useCaseConsultarPorcentajeDeAsistenciaDePacientes: ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
+    private readonly useCaseGenerarReporteAdministrativo: GenerarReporteAdministrativoUseCase,
+    private readonly useCaseGenerarReporteMedico: GenerarReporteMedicoUseCase,
+    private readonly useCaseGenerarReportePaciente: GenerarReportePacienteUseCase,
   ) {}
   //UseCase: Cancelar Turno
   //   @Delete('cancelarTurno/:id')
@@ -56,6 +70,74 @@ export class ModuloDeReporteController {
   ) {
     return this.useCaseConsultarPorcentajeDeAsistenciaDePacientes.consultarPorcentajeAsistenciaPacientes(
       Number(idHospital),
+    );
+  }
+  @Get('generarReporteAdministrativoHospital/:idHospital')
+  generarReporteAdministrativoHospital(
+    @Param('idHospital') idHospital: string,
+  ) {
+    return this.useCaseGenerarReporteAdministrativo.generarReporteAdministrativoHospital(
+      Number(idHospital),
+    );
+  }
+  @Get('generarReporteAdministrativo/:idHospital/:fechaDesde/:fechaHasta')
+  generarReporteAdministrativo(
+    @Param('idHospital') idHospital: string,
+    @Param('fechaDesde') fechaDesdeString: string,
+    @Param('fechaHasta') fechaHastaString: string,
+  ) {
+    const fechaDesde = new Date(fechaDesdeString);
+    const fechaHasta = new Date(fechaHastaString);
+
+    // Opcional pero recomendado: Verificación básica
+    if (isNaN(fechaDesde.getTime()) || isNaN(fechaHasta.getTime())) {
+      throw new BadRequestException(
+        'Formato de fecha inválido. Utilice un formato reconocido (ej. YYYY-MM-DD).',
+      );
+    }
+    return this.useCaseGenerarReporteAdministrativo.generarReporteAdministrativo(
+      Number(idHospital),
+      fechaDesde,
+      fechaHasta,
+    );
+  }
+  @Get('generarReporteMedico/:idMedico/:fechaDesde/:fechaHasta')
+  generarReporteMedico(
+    @Param('idMedico') idMedico: string,
+    @Param('fechaDesde') fechaDesdeString: string,
+    @Param('fechaHasta') fechaHastaString: string,
+  ) {
+    const fechaDesde = new Date(fechaDesdeString);
+    const fechaHasta = new Date(fechaHastaString);
+    if (isNaN(fechaDesde.getTime()) || isNaN(fechaHasta.getTime())) {
+      throw new BadRequestException(
+        'Formato de fecha inválido. Utilice un formato reconocido (ej. YYYY-MM-DD).',
+      );
+    }
+    return this.useCaseGenerarReporteMedico.generarReporteMedico(
+      Number(idMedico),
+      fechaDesde,
+      fechaHasta,
+    );
+  }
+
+  @Get('generarReportePaciente/:idPaciente/:fechaDesde/:fechaHasta')
+  generarReportePaciente(
+    @Param('idPaciente') idPaciente: string,
+    @Param('fechaDesde') fechaDesdeString: string,
+    @Param('fechaHasta') fechaHastaString: string,
+  ) {
+    const fechaDesde = new Date(fechaDesdeString);
+    const fechaHasta = new Date(fechaHastaString);
+    if (isNaN(fechaDesde.getTime()) || isNaN(fechaHasta.getTime())) {
+      throw new BadRequestException(
+        'Formato de fecha inválido. Utilice un formato reconocido (ej. YYYY-MM-DD).',
+      );
+    }
+    return this.useCaseGenerarReportePaciente.generarReportePaciente(
+      Number(idPaciente),
+      fechaDesde,
+      fechaHasta,
     );
   }
 }

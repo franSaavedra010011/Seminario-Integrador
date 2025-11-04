@@ -17,14 +17,17 @@ const common_1 = require("@nestjs/common");
 const consultar_cantidad_de_turnos_asignados_use_case_1 = require("../../../application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case");
 const consultar_historial_de_turnos_use_case_1 = require("../../../application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case");
 const consultar_porcentaje_de_asistencia_de_pacientes_use_case_1 = require("../../../application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case");
+const generar_reporte_administrativo_use_case_1 = require("../../../application/use-cases/modulo-reportes/generar-reporte-administrativo.use-case");
 let ModuloDeReporteController = class ModuloDeReporteController {
     useCaseConsultarCantidadTurnosAsignados;
     useCaseConsultarHistorialTurnos;
     useCaseConsultarPorcentajeDeAsistenciaDePacientes;
-    constructor(useCaseConsultarCantidadTurnosAsignados, useCaseConsultarHistorialTurnos, useCaseConsultarPorcentajeDeAsistenciaDePacientes) {
+    useCaseGenerarReporteAdministrativoUseCase;
+    constructor(useCaseConsultarCantidadTurnosAsignados, useCaseConsultarHistorialTurnos, useCaseConsultarPorcentajeDeAsistenciaDePacientes, useCaseGenerarReporteAdministrativoUseCase) {
         this.useCaseConsultarCantidadTurnosAsignados = useCaseConsultarCantidadTurnosAsignados;
         this.useCaseConsultarHistorialTurnos = useCaseConsultarHistorialTurnos;
         this.useCaseConsultarPorcentajeDeAsistenciaDePacientes = useCaseConsultarPorcentajeDeAsistenciaDePacientes;
+        this.useCaseGenerarReporteAdministrativoUseCase = useCaseGenerarReporteAdministrativoUseCase;
     }
     consultarTurnosAsignadosHospitales(emailUsuario) {
         return this.useCaseConsultarCantidadTurnosAsignados.consultarTurnosAsignadosHospitales(emailUsuario);
@@ -40,6 +43,17 @@ let ModuloDeReporteController = class ModuloDeReporteController {
     }
     consultarPorcentajeAsistenciaPacientes(idHospital) {
         return this.useCaseConsultarPorcentajeDeAsistenciaDePacientes.consultarPorcentajeAsistenciaPacientes(Number(idHospital));
+    }
+    generarReporteAdministrativoHospital(idHospital) {
+        return this.useCaseGenerarReporteAdministrativoUseCase.generarReporteAdministrativoHospital(Number(idHospital));
+    }
+    generarReporteAdministrativo(idHospital, fechaDesdeString, fechaHastaString) {
+        const fechaDesde = new Date(fechaDesdeString);
+        const fechaHasta = new Date(fechaHastaString);
+        if (isNaN(fechaDesde.getTime()) || isNaN(fechaHasta.getTime())) {
+            throw new common_1.BadRequestException('Formato de fecha inválido. Utilice un formato reconocido (ej. YYYY-MM-DD).');
+        }
+        return this.useCaseGenerarReporteAdministrativoUseCase.generarReporteAdministrativo(Number(idHospital), fechaDesde, fechaHasta);
     }
 };
 exports.ModuloDeReporteController = ModuloDeReporteController;
@@ -79,10 +93,27 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], ModuloDeReporteController.prototype, "consultarPorcentajeAsistenciaPacientes", null);
+__decorate([
+    (0, common_1.Get)('generarReporteAdministrativoHospital/:idHospital'),
+    __param(0, (0, common_1.Param)('idHospital')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ModuloDeReporteController.prototype, "generarReporteAdministrativoHospital", null);
+__decorate([
+    (0, common_1.Get)('generarReporteAdministrativo/:idHospital/:fechaDesde/:fechaHasta'),
+    __param(0, (0, common_1.Param)('idHospital')),
+    __param(1, (0, common_1.Param)('fechaDesde')),
+    __param(2, (0, common_1.Param)('fechaHasta')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", void 0)
+], ModuloDeReporteController.prototype, "generarReporteAdministrativo", null);
 exports.ModuloDeReporteController = ModuloDeReporteController = __decorate([
     (0, common_1.Controller)('moduloReportes'),
     __metadata("design:paramtypes", [consultar_cantidad_de_turnos_asignados_use_case_1.ConsultarCantidadDeTurnosAsignadosUseCase,
         consultar_historial_de_turnos_use_case_1.ConsultarHistorialDeTurnosUseCase,
-        consultar_porcentaje_de_asistencia_de_pacientes_use_case_1.ConsultarPorcentajeDeAsistenciaDePacientesUseCase])
+        consultar_porcentaje_de_asistencia_de_pacientes_use_case_1.ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
+        generar_reporte_administrativo_use_case_1.GenerarReporteAdministrativoUseCase])
 ], ModuloDeReporteController);
 //# sourceMappingURL=modulo-reportes.controller.js.map

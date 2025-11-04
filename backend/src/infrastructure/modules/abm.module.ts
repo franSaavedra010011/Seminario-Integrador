@@ -59,6 +59,9 @@ import { ModuloDeReporteController } from '../controllers/modulo-reportes/modulo
 import { ConsultarCantidadDeTurnosAsignadosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case';
 import { ConsultarHistorialDeTurnosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case';
 import { ConsultarPorcentajeDeAsistenciaDePacientesUseCase } from 'src/application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case';
+import { GenerarReporteAdministrativoUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-administrativo.use-case';
+import { GenerarReporteMedicoUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-de-medico.use-case';
+import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-de-paciente.use-case';
 
 @Module({
   imports: [
@@ -121,6 +124,9 @@ import { ConsultarPorcentajeDeAsistenciaDePacientesUseCase } from 'src/applicati
     ConsultarCantidadDeTurnosAsignadosUseCase,
     ConsultarHistorialDeTurnosUseCase,
     ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
+    GenerarReporteAdministrativoUseCase,
+    GenerarReporteMedicoUseCase,
+    GenerarReportePacienteUseCase,
   ],
   exports: [
     AbmUsuarioUseCase,
@@ -147,6 +153,9 @@ import { ConsultarPorcentajeDeAsistenciaDePacientesUseCase } from 'src/applicati
     ConsultarCantidadDeTurnosAsignadosUseCase,
     ConsultarHistorialDeTurnosUseCase,
     ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
+    GenerarReporteAdministrativoUseCase,
+    GenerarReporteMedicoUseCase,
+    GenerarReportePacienteUseCase,
   ],
 })
 export class AbmModule {}
