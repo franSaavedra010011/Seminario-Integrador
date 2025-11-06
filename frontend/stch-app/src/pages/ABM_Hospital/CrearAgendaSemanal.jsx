@@ -32,12 +32,14 @@ export default function CrearAgendaSemanal() {
         }
     };
 
-    // 🔍 Nueva función: verificar si ya existe una agenda vigente
     const verificarAgendaVigente = async (idRelacion) => {
         try {
-            const res = await fetch(`http://localhost:3000/turno/verificarAgendaVigente/${idRelacion}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            });
+            const res = await fetch(
+                `http://localhost:3000/turno/verificarAgendaVigente/${idRelacion}`,
+                {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                }
+            );
             const data = await res.json();
             return data.vigente;
         } catch (err) {
@@ -50,23 +52,26 @@ export default function CrearAgendaSemanal() {
         try {
             const vigente = await verificarAgendaVigente(idRelacion);
             if (vigente) {
-                alert("⚠️ Ya existe una agenda semanal vigente para este médico.");
+                alert("Ya existe una agenda semanal vigente para este médico.");
                 return;
             }
 
-            const res = await fetch(`http://localhost:3000/turno/crearAgendaSemanal/${hospitalId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
+            const res = await fetch(
+                `http://localhost:3000/turno/crearAgendaSemanal/${hospitalId}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
 
             if (!res.ok) throw new Error(await res.text());
-            alert("✅ Agenda creada correctamente.");
+            alert("Agenda creada correctamente.");
             cargarEspecialidades(hospitalId);
         } catch (err) {
-            alert("❌ " + err.message);
+            alert("Error: " + err.message);
         }
     };
 
@@ -74,18 +79,18 @@ export default function CrearAgendaSemanal() {
 
     return (
         <div className="crear-agenda-container">
-            <h2>Creación de Agenda Semanal</h2>
-            <p>Seleccione la especialidad para generar la agenda de esta semana.</p>
+            <h2>Gestión de Agendas Semanales</h2>
+            <p>Visualice las especialidades y el estado de agenda de cada médico.</p>
 
             {especialidades.map((esp) => (
                 <div key={esp.idRelacion} className="especialidad-card">
                     <h3>{esp.nombreEspecialidad}</h3>
-                    <table>
+
+                    <table className="tabla-agendas">
                         <thead>
                             <tr>
                                 <th>Médico</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
+                                <th>Estado de Agenda</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,23 +99,20 @@ export default function CrearAgendaSemanal() {
                                     <td>{m.nombreMedico}</td>
                                     <td>
                                         {m.tieneAgendaVigente ? (
-                                            <span className="estado-vigente">✅ Agenda vigente</span>
+                                            <div className="estado-agenda-container">
+                                                <span className="estado vigente">Agenda vigente</span>
+                                            </div>
                                         ) : (
-                                            <span className="estado-pendiente">❌ Sin agenda</span>
+                                            <div className="estado-agenda-container">
+                                                <span className="estado sin-agenda">Sin agenda</span>
+                                                <button
+                                                    className="btn-agenda"
+                                                    onClick={() => crearAgenda(m.idRelacion)}
+                                                >
+                                                    Crear agenda
+                                                </button>
+                                            </div>
                                         )}
-                                    </td>
-                                    <td>
-                                        <button
-                                            className="crear-btn"
-                                            onClick={() => crearAgenda(hospitalId)}
-                                            disabled={m.tieneAgendaVigente}
-                                            style={{
-                                                backgroundColor: m.tieneAgendaVigente ? "#ccc" : "#007bff",
-                                                cursor: m.tieneAgendaVigente ? "not-allowed" : "pointer",
-                                            }}
-                                        >
-                                            {m.tieneAgendaVigente ? "Agenda activa" : "🕒 Crear agenda"}
-                                        </button>
                                     </td>
                                 </tr>
                             ))}
