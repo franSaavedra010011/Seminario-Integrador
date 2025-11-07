@@ -176,9 +176,12 @@ export class TurnoController {
         );
     }
 
-    @Post('crearAgendaSemanal/:idHospital')
-    async crearAgendaSemanal(@Param('idHospital') idHospital: number) {
-        return this.useCaseCrearAgendaSemanal.ejecutar(idHospital);
+    @Post('crearAgendaSemanal/:idHospital/:idHem')
+    async crearAgendaSemanal(
+        @Param('idHospital') idHospital: number,
+        @Param('idHem') idHem: number,
+    ) {
+        return this.useCaseCrearAgendaSemanal.ejecutar(idHospital, idHem);
     }
 
     @Get('verificarAgendaVigente/:idRelacion')

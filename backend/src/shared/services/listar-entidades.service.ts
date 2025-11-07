@@ -41,7 +41,7 @@ export class ListarEntidadesService {
         });
 
         if (!hospital) {
-            throw new Error(`No se encontró el gospital con id ${idHospital}`)
+            throw new Error(`No se encontró el hospital con id ${idHospital}`)
         }
 
         const nroSemanaActual = this.obtenerNumeroSemana(new Date());
@@ -53,9 +53,14 @@ export class ListarEntidadesService {
                 idRelacion: hem.id,
                 nombreMedico: hem.medico.nombreMedico,
                 apellidoMedico: hem.medico.apellidoMedico,
-                tieneAgendaVigente: hem.agendaSemanales?.some(
-                    (agenda) => agenda.nroSemana === nroSemanaActual
-                ),
+                tieneAgendaVigente: hem.agendaSemanales?.some((agenda) => {
+                    const hoy = new Date();
+                    return (
+                        (!agenda.fechaHoraBaja || agenda.fechaHoraBaja > hoy) &&
+                        agenda.fechaDesdeAgendaSemanal <= hoy &&
+                        agenda.fechaHastaAgendaSemanal >= hoy
+                    );
+                }),
             })),
         }));
     }

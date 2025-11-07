@@ -57,7 +57,7 @@ export default function CrearAgendaSemanal() {
             }
 
             const res = await fetch(
-                `http://localhost:3000/turno/crearAgendaSemanal/${hospitalId}`,
+                `http://localhost:3000/turno/crearAgendaSemanal/${hospitalId}/${idRelacion}`,
                 {
                     method: "POST",
                     headers: {
@@ -69,11 +69,31 @@ export default function CrearAgendaSemanal() {
 
             if (!res.ok) throw new Error(await res.text());
             alert("Agenda creada correctamente.");
-            cargarEspecialidades(hospitalId);
+
+            // Esperar un breve tiempo antes de recargar datos
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
+            // 1. Recalcular el estado de agenda de todos los médicos
+            const nuevasEspecialidades = await Promise.all(
+                especialidades.map(async (esp) => ({
+                    ...esp,
+                    medicos: await Promise.all(
+                        esp.medicos.map(async (med) => ({
+                            ...med,
+                            tieneAgendaVigente: await verificarAgendaVigente(med.idRelacion),
+                        }))
+                    ),
+                }))
+            );
+
+            // 2. Actualizar el estado de React
+            setEspecialidades(nuevasEspecialidades);
         } catch (err) {
+            console.error(err);
             alert("Error: " + err.message);
         }
     };
+
 
     if (loading) return <p>Cargando especialidades...</p>;
 

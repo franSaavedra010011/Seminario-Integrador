@@ -1,15 +1,16 @@
-import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
-import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
-import { DiaSemanaEnum } from 'src/domain/enums/dia-semana.enum';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
-import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
 import { Hospital } from 'src/domain/entities/hospital.entity';
+import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
+import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
+import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
+import { DiaSemanaEnum } from 'src/domain/enums/dia-semana.enum';
 
 @Injectable()
 export class CrearAgendaSemanalUseCase {
+    private readonly logger = new Logger(CrearAgendaSemanalUseCase.name);
+
     constructor(
         @InjectRepository(AgendaSemanal)
         private readonly agendaSemanalRepository: Repository<AgendaSemanal>,
@@ -17,64 +18,85 @@ export class CrearAgendaSemanalUseCase {
         private readonly hospitalRepository: Repository<Hospital>,
     ) { }
 
-    async ejecutar(idHospital: number) {
-        const hospital = await this.hospitalRepository.findOne({
-            where: { id: idHospital, fechaHoraBaja: IsNull() },
-            relations: [
-                'hospitalEspecialidades',
-                'hospitalEspecialidades.hospitalEspecialidadMedico',
-                'hospitalEspecialidades.hospitalEspecialidadMedico.agendaSemanales',
-            ],
-        });
+    async ejecutar(idHospital: number, idHem: number) {
+        const startTime = Date.now();
+        this.logger.log(`🚀 Iniciando creación de agenda semanal para hospital ID: ${idHospital}, HEM ID: ${idHem}`);
 
-        if (!hospital) {
-            throw new BadRequestException(`No se encontró el hospital con id ${idHospital}`);
-        }
+        try {
+            // === 1. Verificar hospital existente ===
+            const hospital = await this.hospitalRepository.findOne({
+                where: { id: idHospital, fechaHoraBaja: IsNull() },
+            });
 
-        let heVigente;
-        let hemVigente;
-        for (const he of hospital.hospitalEspecialidades) {
-            if (!he.fechaHasta || he.fechaHasta > new Date()) {
-                heVigente = he;
+            if (!hospital) {
+                throw new BadRequestException(`No se encontró el hospital con ID ${idHospital}`);
             }
-            for (const hem of he.hospitalEspecialidadMedico) {
-                if (!hem.fechaHasta || hem.fechaHasta > new Date()) {
-                    hemVigente = hem;
-                }
-                const nroSemanaActual = this.obtenerNumeroSemana(new Date());
-                const agendaExistente = hem.agendaSemanales?.some(
-                    (agenda) => agenda.nroSemana === nroSemanaActual
-                );
+
+            // === 2. Buscar la relación HEM (hospital-especialidad-médico) ===
+            const hem = await this.hospitalRepository.manager.findOne(HospitalEspecialidadMedico, {
+                where: { id: idHem, fechaHasta: IsNull() },
+                relations: [
+                    'hospitalEspecialidad',
+                    'hospitalEspecialidad.hospital',
+                    'medico',
+                    'agendaSemanales',
+                ],
+            });
+
+            if (!hem) {
+                throw new BadRequestException(`No se encontró la relación HEM con ID ${idHem}`);
             }
+
+            if (hem.hospitalEspecialidad.hospital.id !== idHospital) {
+                throw new BadRequestException(`El HEM ${idHem} no pertenece al hospital ${idHospital}`);
+            }
+
+            // === 3. Calcular semana actual ===
+            const hoy = new Date();
+            const nroSemana = this.obtenerNumeroSemana(hoy);
+            const fechaDesde = this.getFechaInicioSemana(hoy);
+            const fechaHasta = this.getFechaFinSemana(hoy);
+
+            // === 4. Validar si ya existe agenda para esta semana ===
+            const yaExiste = hem.agendaSemanales?.some(a => a.nroSemana === nroSemana);
+
+            if (yaExiste) {
+                this.logger.warn(`⚠️ Ya existe una agenda para la semana ${nroSemana} (HEM ID: ${idHem})`);
+                return { mensaje: `Ya existe una agenda para la semana ${nroSemana} para este médico.` };
+            }
+
+            // === 5. Crear nueva agenda semanal ===
+            const nuevaAgenda = this.agendaSemanalRepository.create({
+                fechaDesdeAgendaSemanal: fechaDesde,
+                fechaHastaAgendaSemanal: fechaHasta,
+                nroSemana,
+                hospitalEspecialidadMedico: hem,
+                agendasDia: Object.values(DiaSemanaEnum).map(nombre => {
+                    const dia = new AgendaDia();
+                    dia.nombreAgendaDia = nombre as DiaSemanaEnum;
+                    return dia;
+                }),
+            });
+
+            await this.agendaSemanalRepository.save(nuevaAgenda);
+
+            this.logger.log(`✅ Agenda semanal creada exitosamente para el HEM ID: ${idHem} (Semana ${nroSemana}, Agenda ID: ${nuevaAgenda.id})`);
+
+            return {
+                mensaje: `✅ Agenda creada exitosamente para la semana ${nroSemana}.`,
+                nroSemana,
+                fechaDesde,
+                fechaHasta,
+                idHem,
+            };
+        } catch (error) {
+            this.logger.error(`💥 Error ejecutando caso de uso CrearAgendaSemanal: ${error.message}`);
+            this.logger.debug(error.stack);
+            throw error;
+        } finally {
+            const duration = Date.now() - startTime;
+            this.logger.log(`⏱️ Caso de uso finalizado en ${duration}ms`);
         }
-
-        // Crear agenda solo para la semana actual
-        const hoy = new Date();
-        const nroSemanaActual = this.obtenerNumeroSemana(hoy);
-
-        const agendaSemanal = new AgendaSemanal();
-        agendaSemanal.fechaDesdeAgendaSemanal = this.getFechaInicioSemana(hoy);
-        agendaSemanal.fechaHastaAgendaSemanal = this.getFechaFinSemana(hoy);
-        agendaSemanal.nroSemana = nroSemanaActual;
-        agendaSemanal.hospitalEspecialidadMedico = hemVigente;
-
-        // 🧩 Crear los días de la semana
-        const dias: AgendaDia[] = Object.values(DiaSemanaEnum).map((nombreDia) => {
-            const dia = new AgendaDia();
-            dia.nombreAgendaDia = nombreDia as DiaSemanaEnum;
-            return dia;
-        });
-
-        agendaSemanal.agendasDia = dias;
-
-        await this.agendaSemanalRepository.save(agendaSemanal);
-
-        return {
-            mensaje: '✅ Agenda creada correctamente para la semana actual.',
-            nroSemana: nroSemanaActual,
-            fechaDesde: agendaSemanal.fechaDesdeAgendaSemanal,
-            fechaHasta: agendaSemanal.fechaHastaAgendaSemanal,
-        };
     }
 
     private obtenerNumeroSemana(fecha: Date): number {
