@@ -50,7 +50,7 @@ export default function HospitalTabla() {
 
   return (
     <div className="hospitales-admin-container">
-      <div className="header">
+      <div className="btn-crear-contenedor">
         <h2>Gestión de Hospitales</h2>
         <button className="crear-btn" onClick={handleCrear}>
           Crear nuevo hospital

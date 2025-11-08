@@ -12,4 +12,8 @@ export class MedicoSolicitarTurnoDto {
   @IsNotEmpty()
   @IsString()
   apellidoMedico: String;
+
+  @IsNotEmpty()
+  @IsString()
+  matriculaMedico: String;
 }

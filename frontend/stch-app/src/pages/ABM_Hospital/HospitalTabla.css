@@ -1,29 +1,52 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
 .hospitales-admin-container {
   padding: 40px 20px;
   background-color: #f4f6fa;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
+  margin-top: 20px;
+  /* espacio por el navbar */
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
-.hospitales-admin-container h2 {
+/* ===== ENCABEZADO (título + botón) ===== */
+.btn-crear-contenedor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 12;
+}
+
+.btn-crear-contenedor h2 {
   color: #384179;
+  font-size: 1.9rem;
+  font-weight: 700;
   margin: 0;
 }
 
+/* ===== BOTÓN CREAR ===== */
 .crear-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   background-color: #1e8f3f;
   color: white;
   border: none;
-  padding: 12px 18px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.1s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .crear-btn:hover {
@@ -35,7 +58,7 @@
   transform: translateY(0);
 }
 
-
+/* ===== FILTROS ===== */
 .filtros-contenedor {
   display: flex;
   justify-content: space-between;
@@ -51,7 +74,6 @@
 
 .filtro-item label {
   margin-bottom: 6px;
-  /* ✅ más espacio entre label e input/select */
   font-weight: 500;
   color: #343a40;
 }
@@ -75,8 +97,7 @@
   padding-right: 2rem;
 }
 
-
-
+/* ===== TABLA ===== */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -103,6 +124,7 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
+/* ===== ICONOS ===== */
 .icon-button {
   background: none;
   border: none;
@@ -121,7 +143,6 @@ tr:hover {
 
 .icon-button.clock:hover {
   color: #f59e0b;
-  /* Amarillo reloj */
   transform: scale(1.2);
   transition: all 0.2s ease-in-out;
 }

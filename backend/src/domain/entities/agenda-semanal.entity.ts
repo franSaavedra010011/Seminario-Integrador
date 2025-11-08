@@ -18,6 +18,6 @@ export class AgendaSemanal extends Base {
   @JoinColumn({ name: 'idHospitalEspecialidadMedico' })
   hospitalEspecialidadMedico: HospitalEspecialidadMedico;
 
-  @OneToMany(() => AgendaDia, (agendaDia) => agendaDia.agendaSemanal, { cascade: true, onDelete: 'CASCADE' })
+  @OneToMany(() => AgendaDia, (agendaDia) => agendaDia.agendaSemanal, { cascade: ['insert', 'update'], onDelete: 'CASCADE', eager: true })
   agendasDia: AgendaDia[];
 }

@@ -133,6 +133,7 @@ export class SolicitarTurnoUseCase {
               idMedico: medicoEncontrado.id,
               nombreMedico: medicoEncontrado.nombreMedico,
               apellidoMedico: medicoEncontrado.apellidoMedico,
+              matriculaMedico: medicoEncontrado.matriculaMedico
             };
             listaMedicosDTO.push(medicoDTO);
           }

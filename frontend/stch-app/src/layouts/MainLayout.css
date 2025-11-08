@@ -5,7 +5,6 @@ body {
   background-color: #f0f0e8;
   height: 100%;
   width: 100%;
-  padding-top: 80px;
 }
 
 #root {
@@ -29,13 +28,13 @@ body {
 /* ===== MAIN CONTENT ===== */
 .main-content {
   flex: 1;
-  padding: 90px 30px 30px; /* 90px arriba por el header fijo */
-  margin-left: 72px;        /* dejar espacio para el sidebar colapsado */
+  padding: 90px 30px 30px;
+  margin-left: 72px;
   overflow-y: auto;
   min-height: 100%;
   box-sizing: border-box;
   position: relative;
-  z-index: 0; /* Asegura que no se superponga al sidebar */
+  z-index: 0;
   transition: margin-left 0.3s ease;
 }
 

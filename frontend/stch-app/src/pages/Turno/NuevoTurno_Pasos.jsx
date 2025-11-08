@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Building2,
+  User2,
+  Stethoscope,
+  CalendarDays,
+  Clock,
+  MapPin,
+} from "lucide-react";
 import './NuevoTurno_Pasos.css';
 
 export default function NuevoTurno() {
@@ -19,7 +27,6 @@ export default function NuevoTurno() {
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [filtroOrden, setFiltroOrden] = useState('');
 
-  // Cargar listas de localidades y especialidades
   useEffect(() => {
     Promise.all([
       fetch('http://localhost:3000/shared/listas/localidades').then(res => res.json()),
@@ -30,78 +37,62 @@ export default function NuevoTurno() {
     });
   }, []);
 
-  // Filtrar y ordenar hospitales según selección
   const hospitalesFiltrados = [...hospitales].sort((a, b) => {
-    if (filtroOrden === 'nombre') {
-      return a.nombreHospital.localeCompare(b.nombreHospital);
-    } else if (filtroOrden === 'congestion') {
-      return (a.nivelCongestion || '').localeCompare(b.nivelCongestion || '');
-    } else {
-      return 0;
-    }
+    if (filtroOrden === 'nombre') return a.nombreHospital.localeCompare(b.nombreHospital);
+    if (filtroOrden === 'congestion') return (a.nivelCongestion || '').localeCompare(b.nivelCongestion || '');
+    return 0;
   });
 
-  // Cargas listas de hospitales que cumplan con los criterios seleccionados
   useEffect(() => {
     if (!localidadSeleccionada || !especialidadSeleccionada) return;
 
     const cargarHospitales = async () => {
       try {
-        const response = await fetch(
+        const res = await fetch(
           `http://localhost:3000/turno/solicitarTurnoHospitales/${especialidadSeleccionada}/${localidadSeleccionada}`
         );
-
-        if (!response.ok) throw new Error('Error al cargar hospitales');
-
-        const data = await response.json();
+        if (!res.ok) throw new Error('Error al cargar hospitales');
+        const data = await res.json();
         setHospitales(data);
-
-      } catch (error) {
-        alert('Error al cargar hospitales: ' + error.message);
+      } catch (err) {
+        alert('Error al cargar hospitales: ' + err.message);
       }
     };
-
     cargarHospitales();
   }, [localidadSeleccionada, especialidadSeleccionada]);
 
-  // Cargar lista de médicos según hospital y especialidad seleccionados
   useEffect(() => {
-
     if (!especialidadSeleccionada || !hospitalSeleccionado) return;
-    console.log('Cargando médicos con:', { especialidadSeleccionada, hospitalSeleccionado });
 
     const cargarMedicos = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/turno/solicitarTurnoMedicos/${especialidadSeleccionada}/${hospitalSeleccionado}`);
-        if (!response.ok) throw new Error('Error al cargar médicos');
-
-        const data = await response.json();
+        const res = await fetch(
+          `http://localhost:3000/turno/solicitarTurnoMedicos/${especialidadSeleccionada}/${hospitalSeleccionado}`
+        );
+        if (!res.ok) throw new Error('Error al cargar médicos');
+        const data = await res.json();
         setMedicos(data);
-
-      } catch (error) {
-        alert('Error al cargar médicos: ' + error.message);
+      } catch (err) {
+        alert('Error al cargar médicos: ' + err.message);
       }
-
     };
-
     cargarMedicos();
   }, [especialidadSeleccionada, hospitalSeleccionado]);
 
-  // Cargar agendas de médicos
   useEffect(() => {
     if (!medicoSeleccionado || !hospitalSeleccionado) return;
 
     const cargarAgendas = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/turno/solicitarTurnoAgendas/${medicoSeleccionado}/${hospitalSeleccionado}`);
-        if (!response.ok) throw new Error('Error al cargar agendas');
-
-        const data = await response.json();
+        const res = await fetch(
+          `http://localhost:3000/turno/solicitarTurnoAgendas/${medicoSeleccionado}/${hospitalSeleccionado}`
+        );
+        if (!res.ok) throw new Error('Error al cargar agendas');
+        const data = await res.json();
         setAgendas(data);
-      } catch (error) {
-        alert('Error al cargar agendas: ' + error.message);
+      } catch (err) {
+        alert('Error al cargar agendas: ' + err.message);
       }
-
     };
     cargarAgendas();
   }, [medicoSeleccionado, hospitalSeleccionado]);
@@ -112,212 +103,379 @@ export default function NuevoTurno() {
     else if (paso === 3 && turnoSeleccionado) setPaso(4);
   };
 
-  const retrocederPaso = () => {
-    if (paso > 1) setPaso(paso - 1);
-  };
+  const retrocederPaso = () => paso > 1 && setPaso(paso - 1);
+
+  // Función helper para encontrar el turno completo por ID
+  const obtenerTurnoCompleto = (idTurno) => {
+    if (!idTurno || !agendas) return null;
+
+    for (const semana of agendas) {
+      for (let indexDia = 0; indexDia < semana.dias.length; indexDia++) {
+        const dia = semana.dias[indexDia];
+        const turno = dia.turnos.find(t => t.idTurno === idTurno);
+        if (turno) {
+          // Calcular la fecha del turno basándose en la semana
+          let fechaTurno = dia.fecha;
+
+          // Si no hay fecha del día, calcularla desde fechaDesde + indexDia
+          if (!fechaTurno) {
+            try {
+              const fechaInicio = new Date(semana.fechaDesde);
+              const fechaCalculada = new Date(fechaInicio);
+              fechaCalculada.setDate(fechaInicio.getDate() + indexDia);
+              fechaTurno = fechaCalculada.toISOString().split('T')[0]; // formato YYYY-MM-DD
+            } catch (error) {
+              console.warn('Error al calcular fecha del turno:', error);
+            }
+          }
+
+          return {
+            ...turno,
+            fecha: fechaTurno,
+            nombreDia: dia.nombreDia,
+            semana: semana.nroSemana
+          };
+        }
+      }
+    }
+    return null;
+  }; const turnoCompleto = obtenerTurnoCompleto(turnoSeleccionado);
+
+  // Debug temporal para entender la estructura de datos
+  useEffect(() => {
+    if (turnoCompleto) {
+      console.log('Turno completo encontrado:', turnoCompleto);
+      console.log('Fecha del turno:', turnoCompleto.fecha);
+      console.log('Agendas disponibles:', agendas);
+    }
+  }, [turnoCompleto, agendas]);
 
   return (
     <div className="nuevo-turno-container">
       <div style={{ padding: '1rem' }}>
-
-        {/** Paso 1: Selección de Hospital */}
+        {/* === Paso 1: Selección de hospital === */}
         {paso === 1 && (
           <>
             <h2>Seleccioná un hospital</h2>
 
-            <label>Localidad:</label>
-            <select
-              value={localidadSeleccionada}
-              onChange={(e) => setLocalidadSeleccionada(e.target.value)}
-            >
-              <option value="">Todas</option>
-              {localidades.map(loc => (
-                <option key={loc.id} value={loc.id}>{loc.nombre}</option>
-              ))}
-            </select>
+            <div className="filtros-container">
+              <select
+                value={localidadSeleccionada}
+                onChange={(e) => setLocalidadSeleccionada(e.target.value)}
+              >
+                <option value="">Todas las localidades</option>
+                {localidades.map(loc => (
+                  <option key={loc.id} value={loc.id}>{loc.nombre}</option>
+                ))}
+              </select>
 
-            <label>Especialidad:</label>
-            <select
-              value={especialidadSeleccionada}
-              onChange={(e) => setEspecialidadSeleccionada(e.target.value)}
-            >
-              <option value="">Todas</option>
-              {especialidades.map((esp) => (
-                <option key={esp.id} value={esp.id}>{esp.nombre}</option>
-              ))}
-            </select>
+              <select
+                value={especialidadSeleccionada}
+                onChange={(e) => setEspecialidadSeleccionada(e.target.value)}
+              >
+                <option value="">Todas las especialidades</option>
+                {especialidades.map(esp => (
+                  <option key={esp.id} value={esp.id}>{esp.nombre}</option>
+                ))}
+              </select>
 
-            {hospitales.length > 0 && (
-              <>
-                <label>Ordenar por:</label>
-                <select value={filtroOrden} onChange={(e) => setFiltroOrden(e.target.value)}>
-                  <option value="">Sin orden</option>
-                  <option value="nombre">Nombre</option>
-                  <option value="congestion">Congestión</option>
-                </select>
+              <select value={filtroOrden} onChange={(e) => setFiltroOrden(e.target.value)}>
+                <option value="">Sin orden</option>
+                <option value="nombre">Nombre</option>
+                <option value="congestion">Congestión</option>
+              </select>
+            </div>
 
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Nombre</th>
-                      <th>Dirección</th>
-                      <th>Congestión</th>
-                      <th>Seleccionar</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {hospitalesFiltrados.map(h => (
-                      <tr key={h.id}>
-                        <td>{h.idHospital}</td>
-                        <td>{h.nombreHospital}</td>
-                        <td>{h.direccionHospital}</td>
-                        <td>{h.nivelCongestion || 'Sin datos'}</td>
-                        <td>
-                          <input
-                            type="radio"
-                            name="hospital"
-                            value={h.idHospital}
-                            checked={hospitalSeleccionado === h.idHospital}
-                            onChange={() => setHospitalSeleccionado(h.idHospital)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>
+            {hospitales.length > 0 ? (
+              <div className="hospitales-grid">
+                {hospitalesFiltrados.map((h) => (
+                  <div
+                    key={h.idHospital}
+                    className={`hospital-card ${hospitalSeleccionado === h.idHospital ? 'seleccionado' : ''}`}
+                    onClick={() => setHospitalSeleccionado(h.idHospital)}
+                  >
+                    <div className="hospital-card-header">
+                      <h3>{h.nombreHospital}</h3>
+                      <span className={`badge congestion-${h.nivelCongestion?.toLowerCase() || 'sin'}`}>
+                        {h.nivelCongestion || 'Sin datos'}
+                      </span>
+                    </div>
+                    <p>{h.direccionHospital}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="sin-hospitales">Seleccioná filtros para ver hospitales disponibles.</p>
             )}
 
-            <button onClick={avanzarPaso} disabled={!hospitalSeleccionado}>Siguiente</button>
+            <div className="botones-turno">
+              <button onClick={avanzarPaso} disabled={!hospitalSeleccionado}>Siguiente</button>
+            </div>
           </>
         )}
 
-        {/** Paso 2: Selección de Médico */}
+        {/* === Paso 2: Selección de médico === */}
         {paso === 2 && (
           <>
             <h2>Seleccioná un médico</h2>
 
             {medicos.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Seleccionar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {medicos.map((m) => (
-                    <tr key={m.idMedico}>
-                      <td>{m.idMedico}</td>
-                      <td>{`${m.nombreMedico} ${m.apellidoMedico}`}</td>
-                      <td>
-                        <input
-                          type="radio"
-                          name="medico"
-                          value={m.idMedico}
-                          checked={medicoSeleccionado === m.idMedico}
-                          onChange={() => setMedicoSeleccionado(m.idMedico, m.nombreMedico + ' ' + m.apellidoMedico)}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="hospitales-grid">
+                {medicos.map(m => (
+                  <div
+                    key={m.idMedico}
+                    className={`hospital-card ${medicoSeleccionado === m.idMedico ? 'seleccionado' : ''}`}
+                    onClick={() => setMedicoSeleccionado(m.idMedico)}
+                  >
+                    <div className="hospital-card-header">
+                      <h3>{m.nombreMedico} {m.apellidoMedico}</h3>
+                      <span className="badge congestion-sin">Médico</span>
+                    </div>
+                    <p>Matrícula: {m.matriculaMedico || 'N/A'}</p>
+                  </div>
+                ))}
+              </div>
             ) : (
-              <p style={{ color: '#666' }}>No hay médicos disponibles en este hospital.</p>
+              <p className="sin-hospitales">No hay médicos disponibles en este hospital.</p>
             )}
 
-            <button onClick={retrocederPaso}>Atrás</button>
-            <button onClick={avanzarPaso} disabled={!medicoSeleccionado}>Siguiente</button>
+            <div className="botones-turno">
+              <button onClick={retrocederPaso}>Atrás</button>
+              <button onClick={avanzarPaso} disabled={!medicoSeleccionado}>Siguiente</button>
+            </div>
           </>
         )}
 
-        {/** Paso 3: Selección de Horario */}
+        {/* === Paso 3: Selección de turno === */}
         {paso === 3 && (
           <>
-            <h2>Elegí un horario</h2>
+            <h2>Elegí un horario disponible</h2>
 
-            {agendas.length > 0 ? (
-              agendas.map((semana) => (
-                <div key={semana.idSemana} style={{ marginBottom: '1.5rem' }}>
-                  <h3>Semana #{semana.nroSemana}</h3>
+            {agendas && agendas.length > 0 ? (
+              agendas.map((semana, index) => {
+                // Obtener todas las horas únicas de la semana
+                const horas = Array.from(
+                  new Set(
+                    semana.dias.flatMap(dia =>
+                      dia.turnos.map(turno => turno.horaDesde)
+                    )
+                  )
+                ).sort();
 
-                  {semana.dias.map((dia) => (
-                    <div key={dia.idDia} style={{ marginBottom: '1rem' }}>
-                      <h4>{dia.nombreDia}</h4>
-                      <table border="1" width="100%">
-                        <thead>
-                          <tr>
-                            <th>Hora Desde</th>
-                            <th>Hora Hasta</th>
-                            <th>Disponibilidad</th>
-                            <th>Seleccionar</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {dia.turnos.map((turno) => (
-                            <tr
-                              key={turno.idTurno}
-                              style={{
-                                backgroundColor: turno.disponible
+                return (
+                  <div key={index} className="semana-container">
+                    <h3>
+                      Semana #{semana.nroSemana}{' '}
+                      <small>
+                        ({new Date(semana.fechaDesde).toLocaleDateString()} -{' '}
+                        {new Date(semana.fechaHasta).toLocaleDateString()})
+                      </small>
+                    </h3>
+
+                    <div className="calendario-semanal">
+                      {/* Encabezado */}
+                      <div className="header-calendario">
+                        <div>Hora</div>
+                        {semana.dias.map((dia, indexDia) => {
+                          // Función para extraer el día del mes de diferentes formatos de fecha
+                          const obtenerNumeroDia = (fecha, indexDia, semana) => {
+                            // Primero intentar con la fecha del día
+                            if (fecha) {
+                              try {
+                                const fechaObj = typeof fecha === 'string' ? new Date(fecha) : fecha;
+                                if (!isNaN(fechaObj.getTime())) {
+                                  return fechaObj.getDate();
+                                }
+                              } catch {
+                                console.warn('Error al parsear fecha del día:', fecha);
+                              }
+                            }
+
+                            // Estrategia alternativa: calcular basándose en fechaDesde + indexDia
+                            try {
+                              const fechaInicio = new Date(semana.fechaDesde);
+                              const fechaCalculada = new Date(fechaInicio);
+                              fechaCalculada.setDate(fechaInicio.getDate() + indexDia);
+                              return fechaCalculada.getDate();
+                            } catch {
+                              console.warn('Error al calcular fecha basándose en semana');
+                              return '';
+                            }
+                          };
+
+                          return (
+                            <div key={dia.idDia} className="header-dia">
+                              <div className="nombre-dia">{dia.nombreDia}</div>
+                              <div className="numero-dia">
+                                {obtenerNumeroDia(dia.fecha, indexDia, semana)}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Filas por cada hora */}
+                      {horas.map((hora, idx) => (
+                        <div key={idx} className="body-calendario">
+                          <div className="columna-dia hora-label">{hora}</div>
+                          {semana.dias.map((dia) => {
+                            const turno = dia.turnos.find(t => t.horaDesde === hora);
+                            if (!turno)
+                              return (
+                                <div
+                                  key={dia.idDia + hora}
+                                  className="columna-dia"
+                                ></div>
+                              );
+
+                            return (
+                              <div
+                                key={turno.idTurno}
+                                className={`columna-dia bloque-turno ${turno.disponible
                                   ? turnoSeleccionado === turno.idTurno
-                                    ? '#b2f0b2'
-                                    : '#fff'
-                                  : '#f88',
-                              }}
-                            >
-                              <td>{turno.horaDesde}</td>
-                              <td>{turno.horaHasta}</td>
-                              <td>{turno.disponible ? 'Disponible' : 'Ocupado'}</td>
-                              <td>
-                                {turno.disponible && (
-                                  <input
-                                    type="radio"
-                                    name="turno"
-                                    value={turno.idTurno}
-                                    checked={turnoSeleccionado === turno.idTurno}
-                                    onChange={() => setTurnoSeleccionado(turno.idTurno)}
-                                  />
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                                    ? 'turno-seleccionado'
+                                    : ''
+                                  : 'turno-ocupado'
+                                  }`}
+                                onClick={() =>
+                                  turno.disponible && setTurnoSeleccionado(turno.idTurno)
+                                }
+                              >
+                                {turno.disponible ? 'Libre' : 'Ocupado'}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              ))
+                  </div>
+                );
+              })
             ) : (
-              <p style={{ color: '#666' }}>No hay horarios disponibles para este médico.</p>
+              <p className="sin-agendas">No hay agendas disponibles para este médico.</p>
             )}
 
-            <button onClick={retrocederPaso}>Atrás</button>
-            <button onClick={avanzarPaso} disabled={!turnoSeleccionado}>
-              Confirmar
-            </button>
+            <div className="botones-turno">
+              <button onClick={retrocederPaso}>Atrás</button>
+              <button onClick={avanzarPaso} disabled={!turnoSeleccionado}>
+                Confirmar
+              </button>
+            </div>
           </>
         )}
 
-        {/** Paso 4: Resumen y Confirmación */}
+
+
+        {/* === Paso 4: Resumen estilizado con íconos Lucide === */}
         {paso === 4 && (
-          <>
+          <div className="resumen-container">
             <h2>Resumen del Turno</h2>
-            <p>{console.log(medicoSeleccionado)}</p>
-            <p><strong>Hospital:</strong> {hospitales.find(h => h.id === hospitalSeleccionado)?.nombreHospital}</p>
-            <p><strong>Especialidad:</strong> {especialidadSeleccionada}</p>
-            <p><strong>Médico:</strong> {medicoSeleccionado}</p>
-            <p><strong>Fecha y Hora:</strong> {turnoSeleccionado}</p>
 
-            <button onClick={retrocederPaso}>Atrás</button>
-            <button onClick={() => {
-              alert('Turno finalizado!');
-              navigate('/turnos');
-            }}>Finalizar</button>
-          </>
+            <div className="resumen-card">
+              <div className="resumen-item full">
+                <Building2 className="resumen-icon" />
+                <div>
+                  <p className="resumen-titulo">Hospital</p>
+                  <p className="resumen-valor">
+                    {hospitales.find(h => h.idHospital === hospitalSeleccionado)?.nombreHospital || 'Hospital no disponible'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="resumen-row">
+                <div className="resumen-item">
+                  <User2 className="resumen-icon" />
+                  <div>
+                    <p className="resumen-titulo">Médico</p>
+                    <p className="resumen-valor">
+                      {medicos.find(m => m.idMedico === medicoSeleccionado)?.nombreMedico || 'No asignado'} {medicos.find(m => m.idMedico === medicoSeleccionado)?.apellidoMedico || 'No asignado'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="resumen-item">
+                  <Stethoscope className="resumen-icon" />
+                  <div>
+                    <p className="resumen-titulo">Especialidad</p>
+                    <p className="resumen-valor">
+                      {especialidades.find(e => e.id === parseInt(especialidadSeleccionada))?.nombre || 'No disponible'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="resumen-row">
+                <div className="resumen-item">
+                  <CalendarDays className="resumen-icon" />
+                  <div>
+                    <p className="resumen-titulo">Fecha</p>
+                    <p className="resumen-valor">
+                      {(() => {
+                        if (!turnoCompleto?.fecha) return 'Fecha no disponible';
+
+                        try {
+                          const fecha = new Date(turnoCompleto.fecha);
+                          // Verificar que la fecha sea válida
+                          if (isNaN(fecha.getTime())) return 'Fecha no disponible';
+
+                          const fechaFormateada = fecha.toLocaleDateString('es-AR', {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                          });
+
+                          // Capitalizar la primera letra
+                          return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+                        } catch (error) {
+                          console.warn('Error al formatear fecha:', turnoCompleto.fecha, error);
+                          return 'Fecha no disponible';
+                        }
+                      })()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="resumen-item">
+                  <Clock className="resumen-icon" />
+                  <div>
+                    <p className="resumen-titulo">Hora</p>
+                    <p className="resumen-valor">
+                      {turnoCompleto?.horaDesde || 'No disponible'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="resumen-item full">
+                <MapPin className="resumen-icon" />
+                <div>
+                  <p className="resumen-titulo">Ubicación</p>
+                  <p className="resumen-valor">
+                    {hospitales.find(h => h.idHospital === hospitalSeleccionado)?.direccionHospital || 'Dirección no disponible'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="botones-turno resumen-botones">
+              <button className="btn-secundario" onClick={retrocederPaso}>
+                Modificar Turno
+              </button>
+              <button
+                className="btn-primario"
+                onClick={() => {
+                  alert('Turno confirmado!');
+                  navigate('/turnos');
+                }}
+              >
+                Confirmar Turno
+              </button>
+            </div>
+          </div>
         )}
+
+
       </div>
     </div>
   );

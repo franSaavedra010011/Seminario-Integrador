@@ -6,6 +6,8 @@ import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especia
 import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
 import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
 import { DiaSemanaEnum } from 'src/domain/enums/dia-semana.enum';
+import { HorarioTurnoEnum } from 'src/domain/enums/horario-turno.enum';
+import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
 
 @Injectable()
 export class CrearAgendaSemanalUseCase {
@@ -74,9 +76,23 @@ export class CrearAgendaSemanalUseCase {
                 agendasDia: Object.values(DiaSemanaEnum).map(nombre => {
                     const dia = new AgendaDia();
                     dia.nombreAgendaDia = nombre as DiaSemanaEnum;
+
+                    // Crear los turnos para este día
+                    dia.turnosAgendaDia = Object.values(HorarioTurnoEnum).map(horario => {
+                        const [horaDesde, horaHasta] = horario.split(' - ');
+                        const turno = new TurnoAgendaDia();
+                        turno.horaDesde = horaDesde;
+                        turno.horaHasta = horaHasta;
+                        turno.disponible = true;
+                        return turno;
+                    });
+
                     return dia;
                 }),
             });
+
+            await this.agendaSemanalRepository.save(nuevaAgenda);
+
 
             await this.agendaSemanalRepository.save(nuevaAgenda);
 
