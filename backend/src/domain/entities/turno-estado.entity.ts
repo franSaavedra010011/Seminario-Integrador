@@ -9,7 +9,7 @@ export class TurnoEstado extends Base {
   fechaDesde: Date;
 
   @Column({ nullable: true })
-  fechaHasta: Date;
+  fechaHasta: Date | null;
 
   @ManyToOne(() => Turno, (turno) => turno.turnosEstados)
   turno: Turno;
