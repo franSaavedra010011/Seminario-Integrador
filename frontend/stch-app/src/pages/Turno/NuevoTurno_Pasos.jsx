@@ -26,6 +26,8 @@ export default function NuevoTurno() {
   const [medicoSeleccionado, setMedicoSeleccionado] = useState(null);
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [filtroOrden, setFiltroOrden] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -104,6 +106,99 @@ export default function NuevoTurno() {
   };
 
   const retrocederPaso = () => paso > 1 && setPaso(paso - 1);
+
+  // Función para obtener el email del usuario del token JWT
+  const obtenerEmailDelToken = (token) => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.email || payload.sub || null;
+    } catch (error) {
+      console.error('Error al decodificar token:', error);
+      return null;
+    }
+  };
+
+  // Función para confirmar y finalizar la reserva del turno
+  const confirmarTurno = async () => {
+    if (!turnoCompleto) {
+      alert('Error: No se pudo obtener la información del turno');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debe iniciar sesión para reservar un turno');
+        navigate('/login');
+        return;
+      }
+
+      // Obtener el email del usuario
+      const userEmail = localStorage.getItem('userEmail') || obtenerEmailDelToken(token);
+      if (!userEmail) {
+        alert('No se pudo obtener la información del usuario');
+        navigate('/login');
+        return;
+      }
+
+      // Encontrar los IDs necesarios para el endpoint
+      const agendaSeleccionada = agendas.find(semana => {
+        return semana.dias.some(dia =>
+          dia.turnos.some(turno => turno.idTurno === turnoSeleccionado)
+        );
+      });
+
+      const diaSeleccionado = agendaSeleccionada?.dias.find(dia =>
+        dia.turnos.some(turno => turno.idTurno === turnoSeleccionado)
+      );
+
+      if (!agendaSeleccionada || !diaSeleccionado) {
+        alert('Error: No se pudo encontrar la información de la agenda');
+        return;
+      }
+
+      // Preparar el DTO para la reserva
+      const reservaTurnoDto = {
+        emailUsuario: userEmail,
+        fechaTurno: turnoCompleto.fecha,
+        horaTurno: turnoCompleto.horaDesde
+      };
+
+      // Construir la URL del endpoint
+      const url = `http://localhost:3000/turno/solicitarTurnoFinalizar/${medicoSeleccionado}/${hospitalSeleccionado}/${agendaSeleccionada.idAgendaSemanal}/${diaSeleccionado.idDia}/${turnoSeleccionado}/${especialidadSeleccionada}/${encodeURIComponent(userEmail)}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reservaTurnoDto)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Error al reservar el turno');
+      }
+
+      const resultado = await response.json();
+      console.log('Turno reservado:', resultado);
+
+      // Mostrar mensaje de éxito y redirigir
+      alert('¡Turno reservado exitosamente!');
+      navigate('/turnos');
+
+    } catch (err) {
+      console.error('Error al confirmar turno:', err);
+      setError(err.message);
+      alert('Error al reservar el turno: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Función helper para encontrar el turno completo por ID
   const obtenerTurnoCompleto = (idTurno) => {
@@ -371,6 +466,19 @@ export default function NuevoTurno() {
           <div className="resumen-container">
             <h2>Resumen del Turno</h2>
 
+            {error && (
+              <div className="error-message" style={{
+                background: '#fee',
+                border: '1px solid #fcc',
+                borderRadius: '4px',
+                padding: '1rem',
+                margin: '1rem 0',
+                color: '#c33'
+              }}>
+                {error}
+              </div>
+            )}
+
             <div className="resumen-card">
               <div className="resumen-item full">
                 <Building2 className="resumen-icon" />
@@ -464,12 +572,10 @@ export default function NuevoTurno() {
               </button>
               <button
                 className="btn-primario"
-                onClick={() => {
-                  alert('Turno confirmado!');
-                  navigate('/turnos');
-                }}
+                onClick={confirmarTurno}
+                disabled={loading}
               >
-                Confirmar Turno
+                {loading ? 'Confirmando...' : 'Confirmar Turno'}
               </button>
             </div>
           </div>

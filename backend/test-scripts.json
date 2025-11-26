@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "test:solicitar-turno": "jest --testPathPattern=solicitar-turno --verbose",
+        "test:solicitar-turno:watch": "jest --testPathPattern=solicitar-turno --watch",
+        "test:solicitar-turno:coverage": "jest --testPathPattern=solicitar-turno --coverage --collectCoverageFrom='src/application/use-cases/modulo-turnos/solicitar-turno.use-case.ts'",
+        "test:dto": "jest --testPathPattern=dto.spec.ts --verbose",
+        "test:integration": "jest --testPathPattern=integration.spec.ts --verbose",
+        "test:all-solicitar-turno": "npm run test:solicitar-turno && npm run test:dto && npm run test:integration"
+    }
+}

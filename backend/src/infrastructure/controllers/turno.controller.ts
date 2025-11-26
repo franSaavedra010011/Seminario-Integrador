@@ -4,6 +4,7 @@ import { ConsultarDetalleDelTurnoUseCase } from 'src/application/use-cases/modul
 import { ConsultarTurnosActivosUseCase } from 'src/application/use-cases/modulo-turnos/consultar-turnos-activos.use-case';
 import { CrearAgendaSemanalUseCase } from 'src/application/use-cases/modulo-turnos/crear-agenda-semanal.use-case';
 import { DiaAgendaCancelacionDTO } from 'src/application/use-cases/modulo-turnos/dto/dia-agenda-cancelacion.dto';
+import { ReservaTurnoDto } from 'src/application/use-cases/modulo-turnos/dto/reserva-turno.dto';
 import { NotificarCancelacionDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-cancelacion-de-turno.use-case';
 import { NotificarProximidadDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-proximidad-de-turno.use-case';
 import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
@@ -131,49 +132,12 @@ export class TurnoController {
             Number(idHospital),
         );
     }
-    @Get(
-        'solicitarTurnoResumen/:idMedico/:idHospital/:idAgendaSemanal/:idAgendaDia/:idTurnoAgendaDia/:idEspecialidad/:emailUsuario',
-    )
-    solicitarTurnoResumen(
-        @Param('idMedico') idMedico: string,
-        @Param('idHospital') idHospital: string,
-        @Param('idTurnoAgendaDia') idTurnoAgendaDia: string,
-        @Param('idAgendaSemanal') idAgendaSemanal: string,
-        @Param('idAgendaDia') idAgendaDia: string,
-        @Param('idEspecialidad') idEspecialidad: string,
-        @Param('emailUsuario') emailUsuario: string,
-    ) {
-        return this.useCaseSolicitarTurno.solicitarTurnoResumen(
-            Number(idMedico),
-            Number(idHospital),
-            Number(idAgendaSemanal),
-            Number(idAgendaDia),
-            Number(idTurnoAgendaDia),
-            Number(idEspecialidad),
-            emailUsuario,
-        );
-    }
+
     @Post(
         'solicitarTurnoFinalizar/:idMedico/:idHospital/:idAgendaSemanal/:idAgendaDia/:idTurnoAgendaDia/:idEspecialidad/:emailUsuario',
     )
-    solicitarTurnoFinalizar(
-        @Param('idMedico') idMedico: string,
-        @Param('idHospital') idHospital: string,
-        @Param('idTurnoAgendaDia') idTurnoAgendaDia: string,
-        @Param('idAgendaSemanal') idAgendaSemanal: string,
-        @Param('idAgendaDia') idAgendaDia: string,
-        @Param('idEspecialidad') idEspecialidad: string,
-        @Param('emailUsuario') emailUsuario: string,
-    ) {
-        this.useCaseSolicitarTurno.solicitarTurnoFinalizar(
-            Number(idMedico),
-            Number(idHospital),
-            Number(idAgendaSemanal),
-            Number(idAgendaDia),
-            Number(idTurnoAgendaDia),
-            Number(idEspecialidad),
-            emailUsuario,
-        );
+    solicitarTurnoFinalizar(@Body() dto: ReservaTurnoDto) {
+        this.useCaseSolicitarTurno.solicitarTurnoFinalizar(dto);
     }
 
     @Post('crearAgendaSemanal/:idHospital/:idHem')
