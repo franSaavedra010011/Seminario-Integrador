@@ -4,12 +4,13 @@ import { ConsultarDetalleDelTurnoUseCase } from 'src/application/use-cases/modul
 import { ConsultarTurnosActivosUseCase } from 'src/application/use-cases/modulo-turnos/consultar-turnos-activos.use-case';
 import { CrearAgendaSemanalUseCase } from 'src/application/use-cases/modulo-turnos/crear-agenda-semanal.use-case';
 import { DiaAgendaCancelacionDTO } from 'src/application/use-cases/modulo-turnos/dto/dia-agenda-cancelacion.dto';
-import { ReservaTurnoDto } from 'src/application/use-cases/modulo-turnos/dto/reserva-turno.dto';
 import { NotificarCancelacionDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-cancelacion-de-turno.use-case';
 import { NotificarProximidadDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-proximidad-de-turno.use-case';
 import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
-import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/solicitar-turno.use-case';
+import { SolicitarTurnoUseCase, EspecialidadResumen, LocalidadResumen } from 'src/application/use-cases/modulo-turnos/solicitar-turno.use-case';
 import { VerificarAgendaVigenteUseCase } from 'src/application/use-cases/modulo-turnos/verificar-agenda-vigente.use-case';
+import { Hospital } from 'src/domain/entities/hospital.entity';
+import { Medico } from 'src/domain/entities/medico.entity';
 
 @Controller('turno')
 export class TurnoController {
@@ -100,44 +101,59 @@ export class TurnoController {
         );
     }
 
-    @Get('solicitarTurnoHospitales/:idEspecialidad/:idLocalidad')
-    solicitarTurnoHospitales(
-        @Param('idEspecialidad') idEspecialidad: string,
-        @Param('idLocalidad') idLocalidad: string,
+    //UseCase: Solicitar Turno
+    @Post('solicitarTurno/validacionDatosPaciente/:idPaciente')
+    async validacionDatosPaciente(@Param('idPaciente') idPaciente: number) {
+        return this.useCaseSolicitarTurno.validacionDatosPaciente(idPaciente);
+    }
+
+    @Get('solicitarTurno/mostrarLocalidadesYEspecialidades')
+    async mostrarLocalidadesYEspecialidades() {
+        return this.useCaseSolicitarTurno.mostrarLocalidadesYEspecialidades();
+    }
+
+    @Get('solicitarTurno/listarHospitalesConRequisitosSolicitados/:idLocalidad/:idEspecialidad')
+    async listarHospitalesConRequisitosSolicitados(@Param('idLocalidad') idLocalidad: number, @Param('idEspecialidad') idEspecialidad: number) {
+        return this.useCaseSolicitarTurno.listarHospitalesConRequisitosSolicitados(idLocalidad, idEspecialidad);
+    }
+
+    @Get('solicitarTurno/listarMedicosRelacionadosConHospitalYEspecialidad/:idHospital/:idHospitalEspecialidad')
+    async listarMedicosRelacionadosConHospitalYEspecialidad(@Param('idHospital') idHospital: number, @Param('idHospitalEspecialidad') idHospitalEspecialidad: number) {
+        return this.useCaseSolicitarTurno.listarMedicosRelacionadosConHospitalYEspecialidad(idHospital, idHospitalEspecialidad);
+    }
+
+    @Get('solicitarTurno/seleccionarAgendaSemanaProxima/:idMedico/:idHEM')
+    async seleccionarAgendaSemanaProxima(
+        @Param('idMedico') idMedico: number,
+        @Param('idHEM') idHEM: number,
     ) {
-        return this.useCaseSolicitarTurno.solicitarTurnoHospitales(
-            Number(idEspecialidad),
-            Number(idLocalidad),
+        return this.useCaseSolicitarTurno.seleccionarAgendaSemanaProxima(idMedico, idHEM);
+    }
+
+    @Get('solicitarTurno/listarHorariosDisponiblesAgenda/:idAgendaSemanal')
+    async listarHorariosDisponiblesAgenda(
+        @Param('idAgendaSemanal') idAgendaSemanal: number,
+    ) {
+        return this.useCaseSolicitarTurno.listarHorariosDisponiblesAgenda(
+            idAgendaSemanal,
         );
     }
 
-    @Get('solicitarTurnoMedicos/:idEspecialidad/:idHospital')
-    solicitarTurnoMedicos(
-        @Param('idEspecialidad') idEspecialidad: string,
-        @Param('idHospital') idHospital: string,
+    @Post('solicitarTurno/generarReservaTurno')
+    async generarReservaTurno(
+        @Body() idTurnoAgendaDia: number,
+        @Body() hospitalSeleccionado: Hospital,
+        @Body() medicoSeleccionado: Medico,
+        @Body() observaciones?: string,
     ) {
-        return this.useCaseSolicitarTurno.solicitarTurnoMedicos(
-            Number(idEspecialidad),
-            Number(idHospital),
-        );
+        return this.useCaseSolicitarTurno.generarReservaTurno(idTurnoAgendaDia, hospitalSeleccionado, medicoSeleccionado, observaciones);
     }
 
-    @Get('solicitarTurnoAgendas/:idMedico/:idHospital')
-    solicitarTurnoAgendas(
-        @Param('idMedico') idMedico: string,
-        @Param('idHospital') idHospital: string,
+    @Get('solicitarTurno/generarResumenTurno/:idTurno')
+    async generarResumenTurno(
+        @Param('idTurno') idTurno: number,
     ) {
-        return this.useCaseSolicitarTurno.solicitarTurnoAgendas(
-            Number(idMedico),
-            Number(idHospital),
-        );
-    }
-
-    @Post(
-        'solicitarTurnoFinalizar/:idMedico/:idHospital/:idAgendaSemanal/:idAgendaDia/:idTurnoAgendaDia/:idEspecialidad/:emailUsuario',
-    )
-    solicitarTurnoFinalizar(@Body() dto: ReservaTurnoDto) {
-        this.useCaseSolicitarTurno.solicitarTurnoFinalizar(dto);
+        return this.useCaseSolicitarTurno.generarResumenTurno(idTurno);
     }
 
     @Post('crearAgendaSemanal/:idHospital/:idHem')

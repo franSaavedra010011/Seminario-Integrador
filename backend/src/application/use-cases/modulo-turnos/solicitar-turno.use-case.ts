@@ -1,98 +1,25 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
-import { Repository } from 'typeorm';
-import { AbmTurnoEstadoUseCase } from '../abm/turnoEstado/abm-turno-estado.use-case';
 import { Especialidad } from 'src/domain/entities/especialidad.entity';
 import { Hospital } from 'src/domain/entities/hospital.entity';
 import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
 import { Medico } from 'src/domain/entities/medico.entity';
 import { Paciente } from 'src/domain/entities/paciente.entity';
-import { Usuario } from 'src/domain/entities/usuario.entity';
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
 import { EstadoTurnoEnum } from 'src/domain/enums/estado-turno.enum';
 import { AbmTurnoUseCase } from '../abm/turno/abm-turno.use-case';
-import { CreateTurnoDto } from '../abm/turno/dto/create-turno.dto';
 import { Turno } from 'src/domain/entities/turno.entity';
-import { CreateTurnoEstadoDto } from '../abm/turnoEstado/dto/create-turnoEstado.dto';
 import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
 import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
-import { ResumenHospitalDto } from './dto/resumen-hospital.dto';
-import { ResumenMedicoDto } from './dto/resumen-medico.dto';
-import { AgendaMedicoCompletoDto, SemanaAgendaDto, DiaAgendaDto, TurnoDisponibilidadDto } from './dto/resumen-agenda.dto';
-import { ReservaTurnoDto } from './dto/reserva-turno.dto';
 import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
 import { Localidad } from 'src/domain/entities/localidad.entity';
 import { TurnoEstado } from 'src/domain/entities/turno-estado.entity';
-
-interface LocalidadResumen {
-  idLocalidad: number;
-  nombreLocalidad: string;
-}
-
-interface EspecialidadResumen {
-  idEspecialidad: number;
-  nombreEspecialidad: string;
-}
-
-interface HospitalResumen {
-  idHospital: number;
-  idHospitalEspecialidad: number;
-  nombreHospital: string;
-  direccionHospital: string;
-  emailHospital: string;
-}
-
-interface MedicoResumen {
-  idMedico: number;
-  idHEM: number;
-  idEspecialidad: number;
-  nombreMedico: string;
-  apellidoMedico: string;
-  dniMedico: string;
-  matriculaMedico: string;
-  nombreEspecialidad: string;
-}
-
-interface AgendaSemanaProxima {
-  idAgendaSemanal: number;
-  fechaDesdeAgendaSemanal: Date;
-  fechaHastaAgendaSemanal: Date;
-  nroSemana: number;
-}
-
-interface HorarioAgenda {
-  idTurnoAgendaDia: number;
-  idAgendaDia: number;
-  disponible: boolean;
-  fechaHoraAgendaDia: Date;
-  horaDesdeTurnoAgendaDia: string;
-  horaHastaTurnoAgendaDia: string;
-}
-
-interface TurnoResumen {
-  idHospital: number;
-  nombreHospital: string;
-  direccionHospital: string;
-  emailHospital: string;
-  telHospital: string;
-  idMedico: number;
-  nombreMedico: string;
-  apellidoMedico: string;
-  matriculaMedico: string;
-  idTurno: number;
-  fechaTurno: Date;
-  horaTurno: string;
-  observacionesTurno: string;
-  idEspecialidad: number;
-  nombreEspecialidad: string;
-}
+import { AgendaSemanaProxima, EspecialidadResumen, HorarioAgenda, HospitalResumen, LocalidadResumen, MedicoResumen, TurnoResumen } from './dto/solicitar-turno.dto';
 
 @Injectable()
 export class SolicitarTurnoUseCase {
   constructor(
     private readonly genericRepository: GenericRepositoryService,
-    private readonly abmTurnoUseCase: AbmTurnoUseCase,
   ) { }
 
   async validacionDatosPaciente(idPaciente: number): Promise<Paciente> {
@@ -469,3 +396,5 @@ export class SolicitarTurnoUseCase {
     return weekNo;
   }
 }
+export { EspecialidadResumen, LocalidadResumen };
+
