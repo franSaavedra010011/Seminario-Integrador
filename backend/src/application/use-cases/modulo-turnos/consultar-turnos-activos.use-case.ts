@@ -5,6 +5,7 @@ import { GenericRepositoryService } from 'src/shared/services/genericRepository.
 import { Repository } from 'typeorm';
 import { ConsultarTurnosActivosDTO } from './dto/consultar-turnos-activos.dto';
 import { EstadoTurnoEnum } from 'src/domain/enums/estado-turno.enum';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 
 @Injectable()
 export class ConsultarTurnosActivosUseCase {
@@ -13,29 +14,30 @@ export class ConsultarTurnosActivosUseCase {
     @InjectRepository(Paciente)
     private pacienteRepository: Repository<Paciente>,
   ) { }
-  async consultarTurnosActivos(mailPaciente: string) {
-    const paciente = await this.pacienteRepository
-      .createQueryBuilder('paciente') //hacerlo con usuario
-      .leftJoinAndSelect('paciente.turnos', 'turno')
-      .leftJoinAndSelect('turno.estadoTurno', 'estadoTurno')
-      .leftJoinAndSelect('turno.hospital', 'hospital')
-      .leftJoinAndSelect('turno.medico', 'medico')
-      .leftJoinAndSelect('turno.especialidad', 'especialidad')
-      .where(
-        'paciente.correoPaciente = :mail AND paciente.fechaHoraBaja IS NULL',
-        {
-          mail: mailPaciente,
-        },
-      )
-      .getOne();
-    console.log(paciente);
-    if (!paciente) {
+  async consultarTurnosActivos(idUsuario: number) {
+    const usuario = await this.genericRepository.buscarPorId(
+      Usuario,
+      idUsuario,
+      ['paciente', 'paciente.turnos', 'paciente.turnos.medico', 'paciente.turnos.especialidad', 'paciente.turnos.hospital', 'paciente.turnos.estadoTurno'],
+    )
+
+    if (!usuario) {
       throw new BadRequestException(
-        `El paciente con email: "${mailPaciente}" no existe o ya ha sido dado de baja`,
+        `No se encontró el usuario con ID ${idUsuario}`,
       );
     }
-    const turnos = paciente.turnos;
+
+    const paciente = usuario.paciente;
+
+    if (!paciente) {
+      throw new BadRequestException(
+        `El usuario con ID ${idUsuario} no está asociado a un paciente`,
+      );
+    }
+
     const dtoLista: ConsultarTurnosActivosDTO[] = [];
+
+    const turnos = paciente.turnos;
     for (const turno of turnos) {
       if (turno.estadoTurno.nombre === EstadoTurnoEnum.RESERVADO) {
         const dto: ConsultarTurnosActivosDTO = {

@@ -10,19 +10,19 @@ export default function Turnos() {
   const [turnos, setTurnos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [payload, setPayload] = useState(null);
 
-  // Función para obtener email del token JWT
-  const obtenerEmailDelToken = (token) => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.email || payload.sub || null;
-    } catch (error) {
-      console.error('Error al decodificar token:', error);
-      return null;
+      setPayload(payload);
+    } catch (err) {
+      console.error('Error al parsear el token:', err);
     }
-  };
+  }, []);
 
-  // Cargar turnos del usuario al montar el componente
   useEffect(() => {
     const cargarTurnos = async () => {
       try {
@@ -36,15 +36,9 @@ export default function Turnos() {
           return;
         }
 
-        // Obtener el email del usuario del token o localStorage
-        const userEmail = localStorage.getItem('userEmail') || obtenerEmailDelToken(token);
-        if (!userEmail) {
-          toast.error('No se pudo obtener la información del usuario');
-          navigate('/login');
-          return;
-        }
+        const payload = JSON.parse(atob(token.split('.')[1]));
 
-        const response = await fetch(`http://localhost:3000/turno/consultarTurnosActivos/${userEmail}`, {
+        const response = await fetch(`http://localhost:3000/turno/consultarTurnosActivos/${payload.sub}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -94,15 +88,7 @@ export default function Turnos() {
         return;
       }
 
-      // Obtener el email del usuario del token o localStorage
-      const userEmail = localStorage.getItem('userEmail') || obtenerEmailDelToken(token);
-      if (!userEmail) {
-        toast.error('No se pudo obtener la información del usuario');
-        navigate('/login');
-        return;
-      }
-
-      const response = await fetch(`http://localhost:3000/turno/consultarTurnosActivos/${userEmail}`, {
+      const response = await fetch(`http://localhost:3000/turno/consultarTurnosActivos/${payload.sub}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

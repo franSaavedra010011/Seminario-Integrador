@@ -38,13 +38,15 @@ export class TurnoController {
             Number(turnoSeleccionado),
         );
     }
+
     //UseCase: Consultar turnos activos
-    @Get('consultarTurnosActivos/:mail')
-    consultarTurnosActivos(@Param('mail') mailPaciente: string) {
+    @Get('consultarTurnosActivos/:idUsuario')
+    consultarTurnosActivos(@Param('idUsuario') idUsuario: number) {
         return this.useCaseConsultarTurnosActivos.consultarTurnosActivos(
-            mailPaciente,
+            idUsuario
         );
     }
+
     //UseCase: Notificar Cancelacion de Turnos
     @Get('notificacionMuestraDeHospitales/:mail')
     notificacionMuestraDeHospitales(@Param('mail') mailUsuario: string) {

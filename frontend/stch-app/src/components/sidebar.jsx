@@ -116,7 +116,8 @@ export default function Sidebar() {
           <div className="user-info">
             <strong>{usuario.username}</strong>
             <br />
-            <small>Rol: {usuario.rol.toUpperCase()}</small>
+            <small>Rol: {usuario.rol.toUpperCase()}</small><br />
+            <small>Id: {usuario.sub}</small>
           </div>
         </div>
 
