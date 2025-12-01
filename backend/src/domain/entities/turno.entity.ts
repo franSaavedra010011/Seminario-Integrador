@@ -37,7 +37,7 @@ export class Turno extends Base {
   @ManyToOne(() => Medico, (medico) => medico.turnos)
   medico: Medico;
 
-  @OneToOne(() => EstadoTurno, (estadoTurno) => estadoTurno.turnos)
+  @ManyToOne(() => EstadoTurno, (estadoTurno) => estadoTurno.turnos)
   @JoinColumn()
   estadoTurno: EstadoTurno;
 

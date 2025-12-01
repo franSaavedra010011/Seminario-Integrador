@@ -6,12 +6,13 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { Base } from './base.entity'; 
+import { Base } from './base.entity';
 import { EstadoTurnoEnum } from '../enums/estado-turno.enum';
+
 @Entity()
 export class EstadoTurno extends Base {
   @Column()
-  nombre: String;
+  nombre: string;
 
   @OneToOne(() => Turno, (turno) => turno.estadoTurno)
   turnos: Turno[];

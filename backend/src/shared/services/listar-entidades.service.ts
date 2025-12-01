@@ -9,6 +9,7 @@ import { Injectable } from "@nestjs/common";
 import { Repository, IsNull } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Localidad } from "src/domain/entities/localidad.entity";
+import { Turno } from "src/domain/entities/turno.entity";
 
 @Injectable()
 export class ListarEntidadesService {
@@ -119,6 +120,14 @@ export class ListarEntidadesService {
         });
     }
 
+    async listarTurnos() {
+        return await this.genericRepository.buscar(
+            Turno,
+            'turno',
+            [{ atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null }],
+            ['paciente', 'medico', 'especialidad', 'hospital']
+        )
+    }
 
     async listarPacientes() {
         return await this.genericRepository.buscar(

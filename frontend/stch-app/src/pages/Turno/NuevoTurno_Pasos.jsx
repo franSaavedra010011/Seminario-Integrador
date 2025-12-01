@@ -20,9 +20,12 @@ export default function NuevoTurno() {
   const [medicos, setMedicos] = useState([]);
   const [agendas, setAgendas] = useState([]);
 
+  const [payload, setPayload] = useState(null);
   const [localidadSeleccionada, setLocalidadSeleccionada] = useState('');
   const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState('');
   const [hospitalSeleccionado, setHospitalSeleccionado] = useState(null);
+  const [hospitalEspecialidadSeleccionado, setHospitalEspecialidadSeleccionado] = useState(null);
+  const [hospitalEspecialidadMedicoSeleccionado, setHospitalEspecialidadMedicoSeleccionado] = useState(null);
   const [medicoSeleccionado, setMedicoSeleccionado] = useState(null);
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [filtroOrden, setFiltroOrden] = useState('');
@@ -30,13 +33,19 @@ export default function NuevoTurno() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    Promise.all([
-      fetch('http://localhost:3000/shared/listas/localidades').then(res => res.json()),
-      fetch('http://localhost:3000/shared/listas/especialidades').then(res => res.json())
-    ]).then(([localidades, especialidades]) => {
-      setLocalidades(localidades);
-      setEspecialidades(especialidades);
-    });
+    const cargarDatosIniciales = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/turno/solicitarTurno/mostrarLocalidadesYEspecialidades');
+        if (!response.ok) throw new Error('Error al cargar datos iniciales');
+        const data = await response.json();
+        setLocalidades(data.localidades || []);
+        setEspecialidades(data.especialidades || []);
+      } catch (err) {
+        console.error('Error al cargar localidades y especialidades:', err);
+        alert('Error al cargar datos iniciales: ' + err.message);
+      }
+    };
+    cargarDatosIniciales();
   }, []);
 
   const hospitalesFiltrados = [...hospitales].sort((a, b) => {
@@ -46,34 +55,47 @@ export default function NuevoTurno() {
   });
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      setPayload(payload);
+    } catch (error) {
+      console.error('Error al decodificar token:', error);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!localidadSeleccionada || !especialidadSeleccionada) return;
 
     const cargarHospitales = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/turno/solicitarTurnoHospitales/${especialidadSeleccionada}/${localidadSeleccionada}`
+          `http://localhost:3000/turno/solicitarTurno/listarHospitalesConRequisitosSolicitados/${localidadSeleccionada}/${especialidadSeleccionada}`
         );
         if (!res.ok) throw new Error('Error al cargar hospitales');
+
         const data = await res.json();
-        setHospitales(data);
+        setHospitales(data.hospitales || []); // data = { hospitales: [...] }
       } catch (err) {
         alert('Error al cargar hospitales: ' + err.message);
       }
     };
+
     cargarHospitales();
   }, [localidadSeleccionada, especialidadSeleccionada]);
 
+
   useEffect(() => {
     if (!especialidadSeleccionada || !hospitalSeleccionado) return;
-
     const cargarMedicos = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/turno/solicitarTurnoMedicos/${especialidadSeleccionada}/${hospitalSeleccionado}`
+          `http://localhost:3000/turno/solicitarTurno/listarMedicosRelacionadosConHospitalYEspecialidad/${hospitalSeleccionado}/${hospitalEspecialidadSeleccionado}`
         );
         if (!res.ok) throw new Error('Error al cargar médicos');
         const data = await res.json();
-        setMedicos(data);
+        setMedicos(data.medicos || []);
       } catch (err) {
         alert('Error al cargar médicos: ' + err.message);
       }
@@ -82,22 +104,117 @@ export default function NuevoTurno() {
   }, [especialidadSeleccionada, hospitalSeleccionado]);
 
   useEffect(() => {
-    if (!medicoSeleccionado || !hospitalSeleccionado) return;
+    if (!medicoSeleccionado || !hospitalEspecialidadMedicoSeleccionado) return;
 
     const cargarAgendas = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/turno/solicitarTurnoAgendas/${medicoSeleccionado}/${hospitalSeleccionado}`
+        const resAgenda = await fetch(
+          `http://localhost:3000/turno/solicitarTurno/seleccionarAgendaSemanaProxima/${medicoSeleccionado}/${hospitalEspecialidadMedicoSeleccionado}`
         );
-        if (!res.ok) throw new Error('Error al cargar agendas');
-        const data = await res.json();
-        setAgendas(data);
+        if (!resAgenda.ok) throw new Error('Error al cargar agenda semanal');
+        const agendaData = await resAgenda.json();
+
+        console.log('Agenda data recibida:', agendaData);
+
+        if (agendaData && agendaData.idAgendaSemanal) {
+          try {
+            const resHorarios = await fetch(
+              `http://localhost:3000/turno/solicitarTurno/listarHorariosDisponiblesAgenda/${agendaData.idAgendaSemanal}`
+            );
+            if (!resHorarios.ok) throw new Error('Error al cargar horarios');
+            const horariosData = await resHorarios.json();
+
+            console.log('Horarios data recibida:', horariosData);
+
+            // Obtener todos los IDs de agenda día únicos y ordenarlos
+            const idsAgendaDiaUnicos = [...new Set(horariosData.horarios.map(h => h.idAgendaDia))].sort((a, b) => a - b);
+
+            // Formatear la estructura de horarios para que sea compatible con el frontend
+            const horariosGroupedByDay = horariosData.horarios.reduce((acc, horario) => {
+              const diaKey = horario.idAgendaDia;
+
+              if (!acc[diaKey]) {
+                // Calcular el nombre del día basándose en la agenda semanal
+                let nombreDia = 'Sin fecha';
+                let fechaDia = horario.fechaHoraAgendaDia;
+
+                console.log(`Procesando día ${diaKey}, fecha original:`, fechaDia);
+
+                // Calcular la fecha basándose en la posición del día en la semana
+                try {
+                  const indiceDia = idsAgendaDiaUnicos.indexOf(horario.idAgendaDia);
+                  console.log(`Día ${diaKey} está en el índice ${indiceDia} de la semana`);
+
+                  if (indiceDia >= 0 && agendaData.fechaDesdeAgendaSemanal) {
+                    const fechaInicio = new Date(agendaData.fechaDesdeAgendaSemanal);
+                    console.log('Fecha inicio de semana:', fechaInicio);
+
+                    const fechaCalculada = new Date(fechaInicio);
+                    fechaCalculada.setDate(fechaInicio.getDate() + indiceDia);
+                    console.log(`Fecha calculada para día ${diaKey}:`, fechaCalculada);
+
+                    fechaDia = fechaCalculada.toISOString();
+                    nombreDia = obtenerNombreDia(fechaCalculada);
+                    console.log(`Nombre del día calculado: ${nombreDia}`);
+                  }
+                } catch (error) {
+                  console.warn('Error al calcular fecha del día:', error);
+                  // Fallback: usar el índice en el array de horarios
+                  const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                  const indiceEnArray = idsAgendaDiaUnicos.indexOf(horario.idAgendaDia);
+                  if (indiceEnArray >= 0 && indiceEnArray < diasSemana.length) {
+                    nombreDia = diasSemana[indiceEnArray];
+                  }
+                }
+
+                console.log(`Día final: ${diaKey} -> ${nombreDia}`);
+
+                acc[diaKey] = {
+                  idDia: horario.idAgendaDia,
+                  fecha: fechaDia,
+                  nombreDia: nombreDia,
+                  turnos: []
+                };
+              } acc[diaKey].turnos.push({
+                idTurno: horario.idTurnoAgendaDia,
+                horaDesde: horario.horaDesdeTurnoAgendaDia,
+                horaHasta: horario.horaHastaTurnoAgendaDia,
+                disponible: horario.disponible
+              });
+
+              return acc;
+            }, {});
+
+            // Convertir el objeto en un array de días
+            const diasFormateados = Object.values(horariosGroupedByDay);
+
+            // Convertir la estructura a la esperada por el frontend
+            const agendaFormateada = {
+              idAgendaSemanal: agendaData.idAgendaSemanal,
+              nroSemana: agendaData.nroSemana,
+              fechaDesde: agendaData.fechaDesdeAgendaSemanal,
+              fechaHasta: agendaData.fechaHastaAgendaSemanal,
+              dias: diasFormateados
+            };
+
+            console.log('Agenda formateada:', agendaFormateada);
+            setAgendas([agendaFormateada]); // Convertir a array
+          } catch (err) {
+            console.warn(`Error al cargar horarios para agenda ${agendaData.idAgendaSemanal}:`, err);
+            setAgendas([]);
+          }
+        } else {
+          console.warn('No se recibió una agenda válida');
+          setAgendas([]);
+        }
       } catch (err) {
+        console.error('Error al cargar agendas:', err);
         alert('Error al cargar agendas: ' + err.message);
+        setAgendas([]);
       }
     };
     cargarAgendas();
-  }, [medicoSeleccionado, hospitalSeleccionado]);
+  }, [medicoSeleccionado, hospitalEspecialidadSeleccionado]);
 
   const avanzarPaso = () => {
     if (paso === 1 && hospitalSeleccionado) setPaso(2);
@@ -106,6 +223,52 @@ export default function NuevoTurno() {
   };
 
   const retrocederPaso = () => paso > 1 && setPaso(paso - 1);
+
+  // Función helper para obtener el nombre del día en español
+  const obtenerNombreDia = (fecha) => {
+    console.log('obtenerNombreDia recibió:', fecha, typeof fecha);
+
+    if (!fecha) {
+      console.log('No hay fecha, retornando Sin fecha');
+      return 'Sin fecha';
+    }
+
+    try {
+      // Crear objeto Date manejando diferentes formatos
+      let fechaObj;
+
+      if (fecha instanceof Date) {
+        fechaObj = fecha;
+      } else if (typeof fecha === 'string') {
+        // Para fechas en formato YYYY-MM-DD, agregar hora para evitar problemas de zona horaria
+        if (fecha.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          fechaObj = new Date(fecha + 'T12:00:00');
+        } else {
+          fechaObj = new Date(fecha);
+        }
+      } else {
+        console.log('Tipo de fecha no soportado:', typeof fecha);
+        return 'Sin fecha';
+      }
+
+      // Verificar que la fecha sea válida
+      if (isNaN(fechaObj.getTime())) {
+        console.warn('Fecha inválida creada:', fechaObj, 'desde:', fecha);
+        return 'Sin fecha';
+      }
+
+      const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const dia = fechaObj.getDay();
+      const nombreDia = diasSemana[dia];
+
+      console.log(`Fecha: ${fecha} -> Día de semana: ${dia} -> Nombre: ${nombreDia}`);
+
+      return nombreDia;
+    } catch (error) {
+      console.warn('Error al obtener nombre del día:', error, 'Fecha:', fecha);
+      return 'Sin fecha';
+    }
+  };
 
   // Función para obtener el email del usuario del token JWT
   const obtenerEmailDelToken = (token) => {
@@ -160,23 +323,21 @@ export default function NuevoTurno() {
         return;
       }
 
-      // Preparar el DTO para la reserva
-      const reservaTurnoDto = {
-        emailUsuario: userEmail,
-        fechaTurno: turnoCompleto.fecha,
-        horaTurno: turnoCompleto.horaDesde
+      const reservaData = {
+        idTurnoAgendaDia: turnoSeleccionado,
+        idHospital: hospitalSeleccionado,
+        idMedico: medicoSeleccionado,
+        idUsuario: payload ? payload.sub : null,
+        observaciones: '' // Opcional
       };
 
-      // Construir la URL del endpoint
-      const url = `http://localhost:3000/turno/solicitarTurnoFinalizar/${medicoSeleccionado}/${hospitalSeleccionado}/${agendaSeleccionada.idAgendaSemanal}/${diaSeleccionado.idDia}/${turnoSeleccionado}/${especialidadSeleccionada}/${encodeURIComponent(userEmail)}`;
-
-      const response = await fetch(url, {
+      const response = await fetch('http://localhost:3000/turno/solicitarTurno/generarReservaTurno', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(reservaTurnoDto)
+        body: JSON.stringify(reservaData)
       });
 
       if (!response.ok) {
@@ -186,6 +347,26 @@ export default function NuevoTurno() {
 
       const resultado = await response.json();
       console.log('Turno reservado:', resultado);
+
+      // Opcional: obtener resumen del turno creado si el backend devuelve el ID
+      if (resultado.idTurno) {
+        try {
+          const resumenResponse = await fetch(
+            `http://localhost:3000/turno/solicitarTurno/generarResumenTurno/${resultado.idTurno}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            }
+          );
+          if (resumenResponse.ok) {
+            const resumen = await resumenResponse.json();
+            console.log('Resumen del turno:', resumen);
+          }
+        } catch (resumenErr) {
+          console.warn('Error al obtener resumen del turno:', resumenErr);
+        }
+      }
 
       // Mostrar mensaje de éxito y redirigir
       alert('¡Turno reservado exitosamente!');
@@ -227,7 +408,7 @@ export default function NuevoTurno() {
           return {
             ...turno,
             fecha: fechaTurno,
-            nombreDia: dia.nombreDia,
+            nombreDia: fechaTurno ? obtenerNombreDia(fechaTurno) : dia.nombreDia,
             semana: semana.nroSemana
           };
         }
@@ -242,6 +423,9 @@ export default function NuevoTurno() {
       console.log('Turno completo encontrado:', turnoCompleto);
       console.log('Fecha del turno:', turnoCompleto.fecha);
       console.log('Agendas disponibles:', agendas);
+      console.log('Médico seleccionado:', medicoSeleccionado);
+      console.log('Hospital seleccionado:', hospitalSeleccionado);
+      console.log('Usuario (payload):', payload);
     }
   }, [turnoCompleto, agendas]);
 
@@ -260,7 +444,7 @@ export default function NuevoTurno() {
               >
                 <option value="">Todas las localidades</option>
                 {localidades.map(loc => (
-                  <option key={loc.id} value={loc.id}>{loc.nombre}</option>
+                  <option key={loc.idLocalidad} value={loc.idLocalidad}>{loc.nombreLocalidad}</option>
                 ))}
               </select>
 
@@ -270,7 +454,7 @@ export default function NuevoTurno() {
               >
                 <option value="">Todas las especialidades</option>
                 {especialidades.map(esp => (
-                  <option key={esp.id} value={esp.id}>{esp.nombre}</option>
+                  <option key={esp.idEspecialidad} value={esp.idEspecialidad}>{esp.nombreEspecialidad}</option>
                 ))}
               </select>
 
@@ -287,7 +471,10 @@ export default function NuevoTurno() {
                   <div
                     key={h.idHospital}
                     className={`hospital-card ${hospitalSeleccionado === h.idHospital ? 'seleccionado' : ''}`}
-                    onClick={() => setHospitalSeleccionado(h.idHospital)}
+                    onClick={() => {
+                      setHospitalSeleccionado(h.idHospital);
+                      setHospitalEspecialidadSeleccionado(h.idHospitalEspecialidad);
+                    }}
                   >
                     <div className="hospital-card-header">
                       <h3>{h.nombreHospital}</h3>
@@ -296,6 +483,8 @@ export default function NuevoTurno() {
                       </span>
                     </div>
                     <p>{h.direccionHospital}</p>
+                    <p>{h.idHospital}</p>
+                    <p>{h.idHospitalEspecialidad}</p>
                   </div>
                 ))}
               </div>
@@ -320,13 +509,18 @@ export default function NuevoTurno() {
                   <div
                     key={m.idMedico}
                     className={`hospital-card ${medicoSeleccionado === m.idMedico ? 'seleccionado' : ''}`}
-                    onClick={() => setMedicoSeleccionado(m.idMedico)}
+                    onClick={() => {
+                      setMedicoSeleccionado(m.idMedico);
+                      setHospitalEspecialidadMedicoSeleccionado(m.idHEM);
+                    }}
                   >
                     <div className="hospital-card-header">
                       <h3>{m.nombreMedico} {m.apellidoMedico}</h3>
                       <span className="badge congestion-sin">Médico</span>
                     </div>
                     <p>Matrícula: {m.matriculaMedico || 'N/A'}</p>
+                    <p>idMedico: {m.idMedico}</p>
+                    <p>idHEM: {m.idHEM}</p>
                   </div>
                 ))}
               </div>

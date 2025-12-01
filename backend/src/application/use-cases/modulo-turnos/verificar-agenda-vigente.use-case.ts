@@ -11,6 +11,10 @@ export class VerificarAgendaVigenteUseCase {
     async ejecutar(idHem: number): Promise<{ vigente: boolean }> {
         const fechaActual = new Date();
 
+        // Calcular el número de la semana siguiente
+        const nroSemanaActual = this.obtenerNumeroSemana(fechaActual);
+        const nroSemanaProxima = nroSemanaActual + 1;
+
         // Buscar el HospitalEspecialidadMedico con sus agendas semanales activas
         const hem = await this.genericRepository.buscar(
             'HospitalEspecialidadMedico',
@@ -33,20 +37,34 @@ export class VerificarAgendaVigenteUseCase {
             return { vigente: false };
         }
 
-        // Verificamos si alguna agenda está vigente
+        // Verificamos si existe agenda para la semana siguiente
         const vigente = agendas.some((agenda) => {
             if (agenda.fechaHoraBaja) return false;
-
-            const desde = new Date(agenda.fechaDesdeAgendaSemanal);
-            const hasta = new Date(agenda.fechaHastaAgendaSemanal);
-
-            // Agenda vigente si está dentro del rango actual
-            return fechaActual >= desde && fechaActual <= hasta;
+            return agenda.nroSemana === nroSemanaProxima;
         });
 
-        console.log(`Verificación de agenda vigente para HospitalEspecialidadMedico ID ${idHem}: ${vigente}`);
+        console.log(`Verificación de agenda vigente para HospitalEspecialidadMedico ID ${idHem} (semana ${nroSemanaProxima}): ${vigente}`);
 
         return { vigente };
+    }
+
+    private obtenerNumeroSemana(date: Date): number {
+        // Copia la fecha para no mutar la original
+        const d = new Date(
+            Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+        );
+
+        // Mueve al jueves de la semana actual (ISO: la semana empieza el lunes y contiene al jueves)
+        const dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+
+        // Calcula la diferencia con el primer día del año
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        const weekNo = Math.ceil(
+            ((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7,
+        );
+
+        return weekNo;
     }
 
 }

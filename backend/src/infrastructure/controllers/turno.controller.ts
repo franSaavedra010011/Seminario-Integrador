@@ -141,12 +141,13 @@ export class TurnoController {
 
     @Post('solicitarTurno/generarReservaTurno')
     async generarReservaTurno(
-        @Body() idTurnoAgendaDia: number,
-        @Body() hospitalSeleccionado: Hospital,
-        @Body() medicoSeleccionado: Medico,
-        @Body() observaciones?: string,
+        @Body('idTurnoAgendaDia') idTurnoAgendaDia: number,
+        @Body('idHospital') idHospital: number,
+        @Body('idMedico') idMedico: number,
+        @Body('idUsuario') idUsuario: number,
+        @Body('observaciones') observaciones?: string,
     ) {
-        return this.useCaseSolicitarTurno.generarReservaTurno(idTurnoAgendaDia, hospitalSeleccionado, medicoSeleccionado, observaciones);
+        return this.useCaseSolicitarTurno.generarReservaTurno(idTurnoAgendaDia, idHospital, idMedico, idUsuario, observaciones);
     }
 
     @Get('solicitarTurno/generarResumenTurno/:idTurno')

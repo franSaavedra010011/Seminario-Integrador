@@ -28,6 +28,11 @@ export class ListarEntidadesController {
     return this.listarSvc.listarPacientes();
   }
 
+  @Get('turnos')
+  turnos() {
+    return this.listarSvc.listarTurnos();
+  }
+
   @Get('usuarios')
   usuarios() {
     return this.listarSvc.listarUsuarios();

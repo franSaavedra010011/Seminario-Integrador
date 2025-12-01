@@ -127,7 +127,9 @@ export default function CrearAgendaSemanal() {
                                                 <span className="estado sin-agenda">Sin agenda</span>
                                                 <button
                                                     className="btn-agenda"
-                                                    onClick={() => crearAgenda(m.idRelacion)}
+                                                    onClick={() => {
+                                                        crearAgenda(m.idRelacion);
+                                                    }}
                                                 >
                                                     Crear agenda
                                                 </button>

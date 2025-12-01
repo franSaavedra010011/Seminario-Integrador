@@ -55,7 +55,7 @@ export class CrearAgendaSemanalUseCase {
 
             // === 3. Calcular semana actual ===
             const hoy = new Date();
-            const nroSemana = this.obtenerNumeroSemana(hoy);
+            const nroSemana = this.obtenerNumeroSemana(hoy) + 1;
             const fechaDesde = this.getFechaInicioSemana(hoy);
             const fechaHasta = this.getFechaFinSemana(hoy);
 
@@ -76,6 +76,10 @@ export class CrearAgendaSemanalUseCase {
                 agendasDia: Object.values(DiaSemanaEnum).map(nombre => {
                     const dia = new AgendaDia();
                     dia.nombreAgendaDia = nombre as DiaSemanaEnum;
+                    dia.fechaAgendaDia = new Date(fechaDesde);
+                    // Ajustar la fecha al día correcto de la semana
+                    const diaNumero = Object.values(DiaSemanaEnum).indexOf(nombre) + 1; // Lunes=1, Domingo=7
+                    dia.fechaAgendaDia.setDate(fechaDesde.getDate() + (diaNumero - 1));
 
                     // Crear los turnos para este día
                     dia.turnosAgendaDia = Object.values(HorarioTurnoEnum).map(horario => {
@@ -116,17 +120,31 @@ export class CrearAgendaSemanalUseCase {
     }
 
     private obtenerNumeroSemana(fecha: Date): number {
-        const primera = new Date(fecha.getFullYear(), 0, 1);
-        const diff = (fecha.getTime() - primera.getTime()) / (1000 * 60 * 60 * 24);
-        return Math.ceil((diff + primera.getDay() + 1) / 7);
+        // Copia la fecha para no mutar la original
+        const d = new Date(
+            Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()),
+        );
+
+        // Mueve al jueves de la semana actual (ISO: la semana empieza el lunes y contiene al jueves)
+        const dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+
+        // Calcula la diferencia con el primer día del año
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        const weekNo = Math.ceil(
+            ((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7,
+        );
+
+        return weekNo;
     }
 
     private getFechaInicioSemana(fecha: Date): Date {
-        const diaSemana = fecha.getDay() || 7; // 1 = lunes, 7 = domingo
-        const inicio = new Date(fecha);
-        inicio.setDate(fecha.getDate() - (diaSemana - 1));
-        inicio.setHours(0, 0, 0, 0);
-        return inicio;
+        // Calcular el lunes de la semana siguiente
+        const proximoLunes = new Date(fecha);
+        const diasHastaLunes = (7 - fecha.getDay() + 1) % 7 || 7;
+        proximoLunes.setDate(fecha.getDate() + diasHastaLunes);
+        proximoLunes.setHours(0, 0, 0, 0);
+        return proximoLunes;
     }
 
     private getFechaFinSemana(fecha: Date): Date {

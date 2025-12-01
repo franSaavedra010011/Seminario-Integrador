@@ -5,10 +5,10 @@ import { Base } from './base.entity';
 
 @Entity()
 export class TurnoEstado extends Base {
-  @Column()
+  @Column({ type: 'timestamp' })
   fechaDesde: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   fechaHasta: Date | null;
 
   @ManyToOne(() => Turno, (turno) => turno.turnosEstados)
