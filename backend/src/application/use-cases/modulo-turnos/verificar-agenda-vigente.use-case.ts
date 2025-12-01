@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
+import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
 
 @Injectable()
 export class VerificarAgendaVigenteUseCase {
@@ -8,7 +9,8 @@ export class VerificarAgendaVigenteUseCase {
         private readonly genericRepository: GenericRepositoryService,
     ) { }
 
-    async ejecutar(idHem: number): Promise<{ vigente: boolean }> {
+    async ejecutar(idHEM: number): Promise<{ vigente: boolean }> {
+        console.log(`Iniciando verificación de agenda vigente para HospitalEspecialidadMedico ID: ${idHEM}`);
         const fechaActual = new Date();
 
         // Calcular el número de la semana siguiente
@@ -16,34 +18,32 @@ export class VerificarAgendaVigenteUseCase {
         const nroSemanaProxima = nroSemanaActual + 1;
 
         // Buscar el HospitalEspecialidadMedico con sus agendas semanales activas
-        const hem = await this.genericRepository.buscar(
-            'HospitalEspecialidadMedico',
-            'hem',
-            [
-                { atributo: 'id', operacion: '=', valor: idHem },
-                { atributo: 'fechaHasta', operacion: 'isNull', valor: null },
-            ],
+        const hem = await this.genericRepository.buscarPorId(
+            HospitalEspecialidadMedico,
+            idHEM,
             ['agendaSemanales']
         );
 
-        if (!hem || hem.length === 0) {
-            throw new NotFoundException(`No se encontró el HospitalEspecialidadMedico con id ${idHem}`);
+        if (!hem) {
+            throw new NotFoundException(`No se encontró el HospitalEspecialidadMedico con id ${idHEM}`);
         }
 
-        const agendas: AgendaSemanal[] = hem[0].agendaSemanales || [];
-
         // Si no tiene agendas, no hay ninguna vigente
-        if (agendas.length === 0) {
+        if (hem.agendaSemanales.length === 0) {
             return { vigente: false };
         }
 
         // Verificamos si existe agenda para la semana siguiente
-        const vigente = agendas.some((agenda) => {
+        const vigente = hem.agendaSemanales.some((agenda) => {
             if (agenda.fechaHoraBaja) return false;
             return agenda.nroSemana === nroSemanaProxima;
         });
 
-        console.log(`Verificación de agenda vigente para HospitalEspecialidadMedico ID ${idHem} (semana ${nroSemanaProxima}): ${vigente}`);
+        if (!vigente) {
+            return { vigente: false };
+        }
+
+        console.log(`Verificación de agenda vigente para HospitalEspecialidadMedico ID ${idHEM} (semana ${nroSemanaProxima}): ${vigente}`);
 
         return { vigente };
     }

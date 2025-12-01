@@ -45,31 +45,41 @@ export class ListarEntidadesService {
             throw new Error(`No se encontró el hospital con id ${idHospital}`)
         }
 
-        const nroSemanaActual = this.obtenerNumeroSemana(new Date());
+        const fechaActual = new Date();
+        const nroSemanaActual = this.obtenerNumeroSemana(fechaActual);
+        const nroSemanaProxima = nroSemanaActual + 1;
 
         return hospital.hospitalEspecialidades.map((he) => ({
-            idRelacion: he.id,
+            idHEM: he.id,
             nombreEspecialidad: he.especialidad.nombre,
             medicos: he.hospitalEspecialidadMedico.map((hem) => ({
-                idRelacion: hem.id,
-                nombreMedico: hem.medico.nombreMedico,
-                apellidoMedico: hem.medico.apellidoMedico,
+                idHEM: hem.id,
+                nombreMedico: `${hem.medico.nombreMedico} ${hem.medico.apellidoMedico}`,
                 tieneAgendaVigente: hem.agendaSemanales?.some((agenda) => {
-                    const hoy = new Date();
-                    return (
-                        (!agenda.fechaHoraBaja || agenda.fechaHoraBaja > hoy) &&
-                        agenda.fechaDesdeAgendaSemanal <= hoy &&
-                        agenda.fechaHastaAgendaSemanal >= hoy
-                    );
-                }),
+                    if (agenda.fechaHoraBaja) return false;
+                    return agenda.nroSemana === nroSemanaProxima;
+                }) || false,
             })),
         }));
     }
 
-    private obtenerNumeroSemana(fecha: Date): number {
-        const primera = new Date(fecha.getFullYear(), 0, 1);
-        const diff = (fecha.getTime() - primera.getTime()) / (1000 * 60 * 60 * 24);
-        return Math.ceil((diff + primera.getDay() + 1) / 7);
+    private obtenerNumeroSemana(date: Date): number {
+        // Copia la fecha para no mutar la original
+        const d = new Date(
+            Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+        );
+
+        // Mueve al jueves de la semana actual (ISO: la semana empieza el lunes y contiene al jueves)
+        const dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+
+        // Calcula la diferencia con el primer día del año
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        const weekNo = Math.ceil(
+            ((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7,
+        );
+
+        return weekNo;
     }
 
     async listarHospitales(

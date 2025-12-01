@@ -108,6 +108,7 @@ export default function NuevoTurno() {
 
     const cargarAgendas = async () => {
       try {
+        console.log('Cargando agendas para médico:', medicoSeleccionado, 'y hospitalEspecialidad:', hospitalEspecialidadMedicoSeleccionado);
         const resAgenda = await fetch(
           `http://localhost:3000/turno/solicitarTurno/seleccionarAgendaSemanaProxima/${medicoSeleccionado}/${hospitalEspecialidadMedicoSeleccionado}`
         );

@@ -14,10 +14,10 @@ export default function CrearAgendaSemanal() {
         }
     }, []);
 
-    const cargarEspecialidades = async (id) => {
+    const cargarEspecialidades = async (idHospital) => {
         try {
             const res = await fetch(
-                `http://localhost:3000/shared/listas/especialidades-hospital?idHospital=${id}`,
+                `http://localhost:3000/shared/listas/especialidades-hospital?idHospital=${idHospital}`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 }
@@ -32,10 +32,10 @@ export default function CrearAgendaSemanal() {
         }
     };
 
-    const verificarAgendaVigente = async (idRelacion) => {
+    const verificarAgendaVigente = async (idHEM) => {
         try {
             const res = await fetch(
-                `http://localhost:3000/turno/verificarAgendaVigente/${idRelacion}`,
+                `http://localhost:3000/turno/verificarAgendaVigente/${idHEM}`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 }
@@ -48,16 +48,18 @@ export default function CrearAgendaSemanal() {
         }
     };
 
-    const crearAgenda = async (idRelacion) => {
+    const crearAgenda = async (idHEM) => {
         try {
-            const vigente = await verificarAgendaVigente(idRelacion);
+            console.log("Verificando agenda vigente para HEM ID:", idHEM);
+            const vigente = await verificarAgendaVigente(idHEM);
+
             if (vigente) {
                 alert("Ya existe una agenda semanal vigente para este médico.");
                 return;
             }
 
             const res = await fetch(
-                `http://localhost:3000/turno/crearAgendaSemanal/${hospitalId}/${idRelacion}`,
+                `http://localhost:3000/turno/crearAgendaSemanal/${hospitalId}/${idHEM}`,
                 {
                     method: "POST",
                     headers: {
@@ -70,24 +72,8 @@ export default function CrearAgendaSemanal() {
             if (!res.ok) throw new Error(await res.text());
             alert("Agenda creada correctamente.");
 
-            // Esperar un breve tiempo antes de recargar datos
-            await new Promise((resolve) => setTimeout(resolve, 300));
-
-            // 1. Recalcular el estado de agenda de todos los médicos
-            const nuevasEspecialidades = await Promise.all(
-                especialidades.map(async (esp) => ({
-                    ...esp,
-                    medicos: await Promise.all(
-                        esp.medicos.map(async (med) => ({
-                            ...med,
-                            tieneAgendaVigente: await verificarAgendaVigente(med.idRelacion),
-                        }))
-                    ),
-                }))
-            );
-
-            // 2. Actualizar el estado de React
-            setEspecialidades(nuevasEspecialidades);
+            // Recargar las especialidades para reflejar los cambios
+            await cargarEspecialidades(hospitalId);
         } catch (err) {
             console.error(err);
             alert("Error: " + err.message);
@@ -103,7 +89,7 @@ export default function CrearAgendaSemanal() {
             <p>Visualice las especialidades y el estado de agenda de cada médico.</p>
 
             {especialidades.map((esp) => (
-                <div key={esp.idRelacion} className="especialidad-card">
+                <div key={esp.idHEM} className="especialidad-card">
                     <h3>{esp.nombreEspecialidad}</h3>
 
                     <table className="tabla-agendas">
@@ -115,7 +101,7 @@ export default function CrearAgendaSemanal() {
                         </thead>
                         <tbody>
                             {esp.medicos.map((m) => (
-                                <tr key={m.idRelacion}>
+                                <tr key={m.idHEM}>
                                     <td>{m.nombreMedico}</td>
                                     <td>
                                         {m.tieneAgendaVigente ? (
@@ -128,7 +114,7 @@ export default function CrearAgendaSemanal() {
                                                 <button
                                                     className="btn-agenda"
                                                     onClick={() => {
-                                                        crearAgenda(m.idRelacion);
+                                                        crearAgenda(m.idHEM);
                                                     }}
                                                 >
                                                     Crear agenda

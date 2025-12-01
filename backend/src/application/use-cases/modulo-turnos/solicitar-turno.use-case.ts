@@ -188,6 +188,7 @@ export class SolicitarTurnoUseCase {
   }
 
   async seleccionarAgendaSemanaProxima(idMedico: number, idHEM: number): Promise<AgendaSemanaProxima> {
+    console.log(`Seleccionando agenda para la próxima semana del médico ID ${idMedico} y HEM ID ${idHEM}`);
     if (!idMedico || idMedico <= 0) {
       throw new BadRequestException(`El ID del Médico es inválido`);
     }
@@ -204,15 +205,18 @@ export class SolicitarTurnoUseCase {
         "medico",
       ]
     )
+    console.log(`HEM encontrado: ${hem.id}`);
 
     if (!hem) {
       throw new BadRequestException(`La relación entre el Médico y el Hospital no existe o está inactiva`);
     }
 
+    console.log(`Buscando agenda semanal para la próxima semana...`);
     let agendaSemanaProxima: AgendaSemanaProxima | null = null;
     const nroSemanaActual = this.obtenerNumeroSemana(new Date());
     const nroSemanaProxima = nroSemanaActual + 1;
 
+    console.log(`Número de semana actual: ${nroSemanaActual}, próxima semana: ${nroSemanaProxima}`);
     for (const agenda of hem.agendaSemanales) {
       if (agenda.nroSemana === nroSemanaProxima && !agenda.fechaHoraBaja) {
         agendaSemanaProxima = {
