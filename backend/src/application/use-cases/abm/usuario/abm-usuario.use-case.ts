@@ -177,58 +177,6 @@ export class AbmUsuarioUseCase {
       usuario
     );
 
-    // Agregar roles
-    if (dto.idRolesAAgregar?.length) {
-      for (const idRol of dto.idRolesAAgregar) {
-        const roles = await this.genericRepository.buscar(Rol, 'rol', [
-          { atributo: 'id', operacion: '=', valor: idRol },
-        ]);
-
-        if (!roles.length) {
-          throw new BadRequestException(`Rol con ID ${idRol} no existe`);
-        }
-
-        // Buscar si ya tiene ese rol asignado
-        const existente = await this.genericRepository.buscar(
-          UsuarioRol,
-          'usuarioRol',
-          [
-            { atributo: 'usuario', operacion: 'relacion', valor: usuario.id },
-            { atributo: 'rol', operacion: 'relacion', valor: idRol },
-          ]
-        );
-
-        if (!existente.length) {
-          const usuarioRol = new UsuarioRol();
-          usuarioRol.usuario = usuarioActualizado;
-          usuarioRol.rol = roles[0];
-          usuarioRol.fechaDesde = new Date();
-
-          await this.genericRepository.guardarCambios(UsuarioRol, usuarioRol);
-        }
-      }
-    }
-
-    // Eliminar roles
-    if (dto.idRolesAEliminar?.length) {
-      for (const idRol of dto.idRolesAEliminar) {
-        const relaciones = await this.genericRepository.buscar(
-          UsuarioRol,
-          'usuarioRol',
-          [
-            { atributo: 'usuario', operacion: 'relacion', valor: usuario.id },
-            { atributo: 'rol', operacion: 'relacion', valor: idRol },
-          ]
-        );
-
-        for (const rel of relaciones) {
-          await this.genericRepository.eliminar(UsuarioRol, rel.id);
-          rel.fechaHasta = new Date();
-          await this.genericRepository.guardarCambios(UsuarioRol, rel);
-        }
-      }
-    }
-
     return usuarioActualizado;
   }
 

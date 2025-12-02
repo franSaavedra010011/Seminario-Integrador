@@ -1,48 +1,169 @@
 .ajustes-container {
-  max-width: 600px;
-  margin: 40px auto;
-  background: white;
-  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background-color: #f5f6fa;
+  min-height: 100vh;
+  padding: 40px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.ajustes-card {
+  background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.ajustes-container h2 {
-  margin-bottom: 20px;
-  color: #384179;
-}
-
-.ajustes-form label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-.ajustes-form input[type="text"],
-.ajustes-form input[type="email"],
-.ajustes-form select {
+  padding: 50px 60px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: max-width 0.3s ease;
 }
 
-.ajustes-form input[type="checkbox"] {
-  margin-right: 10px;
+.ajustes-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
-.ajustes-form button {
-  margin-top: 25px;
-  background-color: #384179;
-  color: white;
+.ajustes-card h1 {
+  text-align: center;
+  color: #384179;
+  margin-bottom: 25px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.ajustes-card hr {
   border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 20px 0 30px 0;
+}
+
+fieldset.ajustes-fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 25px;
+  background-color: #fafbff;
+}
+
+fieldset.ajustes-fieldset legend {
+  font-weight: 600;
+  color: #384179;
+  font-size: 15px;
+  padding: 0 10px;
+}
+
+.ajustes-field-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px 30px;
+  margin-top: 10px;
+}
+
+.ajustes-field-group>div {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ajustes-campo {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ajustes-campo label,
+.ajustes-campo p {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
   font-size: 14px;
 }
 
-.ajustes-form button:hover {
-  background-color: #2f3662;
+.ajustes-campo input[type="text"],
+.ajustes-campo input[type="email"],
+.ajustes-campo input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.3px solid #ccd2e0;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.ajustes-campo input[type="text"]:focus,
+.ajustes-campo input[type="email"]:focus,
+.ajustes-campo input[type="password"]:focus {
+  border-color: #384179;
+  outline: none;
+  box-shadow: 0 0 4px rgba(56, 65, 121, 0.3);
+}
+
+.ajustes-campo input::placeholder {
+  color: #999999;
+  font-style: italic;
+}
+
+.ajustes-guardar-btn {
+  width: 100%;
+  background-color: #384179;
+  color: #fff;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(56, 65, 121, 0.25);
+  cursor: pointer;
+}
+
+.ajustes-guardar-btn:hover {
+  background-color: #2e356b;
+  box-shadow: 0 6px 15px rgba(56, 65, 121, 0.4);
+}
+
+/* Estilos específicos para campos de contraseña */
+.ajustes-campo.password-field {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #384179;
+}
+
+@media (max-width: 1024px) {
+  .ajustes-card {
+    max-width: 90%;
+    padding: 40px;
+  }
+
+  .ajustes-field-group {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .ajustes-container {
+    padding: 20px;
+  }
+
+  .ajustes-card {
+    padding: 25px;
+  }
+
+  .ajustes-field-group {
+    flex-direction: column;
+  }
+
+  .ajustes-campo>div {
+    min-width: unset;
+  }
 }
