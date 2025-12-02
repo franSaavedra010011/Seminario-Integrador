@@ -149,10 +149,15 @@ export class AbmUsuarioUseCase {
     return usuarioConRelaciones[0];
   }
 
-  async actualizar(id: number, dto: UpdateUsuarioDto): Promise<Usuario> {
-    const usuarios = await this.genericRepository.buscar(Usuario, 'usuario', [
-      { atributo: 'id', operacion: '=', valor: id },
-    ]);
+  async modificar(idUsuario: number, dto: UpdateUsuarioDto): Promise<Usuario> {
+    const usuarios = await this.genericRepository.buscar(
+      Usuario,
+      'usuario',
+      [
+        { atributo: 'id', operacion: '=', valor: idUsuario },
+      ],
+      []
+    );
 
     if (!usuarios.length) {
       throw new BadRequestException('Usuario no encontrado');
