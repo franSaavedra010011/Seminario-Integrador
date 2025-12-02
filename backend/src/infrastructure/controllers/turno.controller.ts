@@ -25,12 +25,13 @@ export class TurnoController {
         private readonly useCaseCrearAgendaSemanal: CrearAgendaSemanalUseCase,
         private readonly useCaseVerificarAgendaVigente: VerificarAgendaVigenteUseCase,
     ) { }
+
     //UseCase: Cancelar Turno
-    @Delete('cancelarTurno/:id')
-    cancelarTurno(@Param('id') turnoSeleccionado: string) {
-        console.log('entre al controlador');
-        this.useCaseCancelarTurno.bajaTurno(Number(turnoSeleccionado));
+    @Delete('cancelarTurno/:idTurno')
+    cancelarTurno(@Param('idTurno') idTurno: number) {
+        this.useCaseCancelarTurno.ejecutar(idTurno);
     }
+
     //UseCase: Consultar Detaller del Turno
     @Get('consultarDetalleTurno/:id')
     consultarDetalleTurno(@Param('id') turnoSeleccionado: string) {

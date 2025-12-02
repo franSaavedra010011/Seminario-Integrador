@@ -1,6 +1,10 @@
 import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class ConsultarTurnosActivosDTO {
+
+  @IsNotEmpty()
+  idTurno: number;
+
   @IsString()
   @IsNotEmpty()
   hora: string;

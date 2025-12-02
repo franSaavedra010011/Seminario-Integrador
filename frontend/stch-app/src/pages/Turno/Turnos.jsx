@@ -53,7 +53,7 @@ export default function Turnos() {
         const data = await response.json();
         // Transformar los datos del backend al formato esperado por el frontend
         const turnosFormateados = data.map(turno => ({
-          id: `${turno.fecha}-${turno.hora}-${turno.nombreMedico}`, // ID temporal
+          idTurno: turno.idTurno, // Mantener también idTurno por claridad
           fecha: turno.fecha,
           hora: turno.hora,
           especialidad: turno.nombreEspecialidad,
@@ -103,7 +103,8 @@ export default function Turnos() {
       const data = await response.json();
       // Transformar los datos del backend al formato esperado por el frontend
       const turnosFormateados = data.map(turno => ({
-        id: `${turno.fecha}-${turno.hora}-${turno.nombreMedico}`, // ID temporal
+        id: turno.idTurno, // Usar el ID real del turno del backend
+        idTurno: turno.idTurno, // Mantener también idTurno por claridad
         fecha: turno.fecha,
         hora: turno.hora,
         especialidad: turno.nombreEspecialidad,
@@ -213,6 +214,7 @@ export default function Turnos() {
             <table>
               <thead>
                 <tr>
+                  <th>id</th>
                   <th>Fecha</th>
                   <th>Hora</th>
                   <th>Especialidad</th>
@@ -227,6 +229,7 @@ export default function Turnos() {
               <tbody>
                 {turnos.map((turno) => (
                   <tr key={turno.id}>
+                    <td>{turno.idTurno}</td>
                     <td>{formatearFecha(turno.fecha)}</td>
                     <td>{turno.hora || 'N/A'}</td>
                     <td>{turno.especialidad || 'N/A'}</td>

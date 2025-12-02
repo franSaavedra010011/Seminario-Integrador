@@ -41,6 +41,7 @@ export class ConsultarTurnosActivosUseCase {
     for (const turno of turnos) {
       if (turno.estadoTurno.nombre === EstadoTurnoEnum.RESERVADO) {
         const dto: ConsultarTurnosActivosDTO = {
+          idTurno: turno.id,
           hora: turno.hora,
           fecha: turno.fecha,
           nombreMedico: turno.medico.nombreMedico,
