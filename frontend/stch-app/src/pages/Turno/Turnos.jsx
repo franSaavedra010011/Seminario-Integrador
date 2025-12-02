@@ -206,81 +206,242 @@ export default function Turnos() {
 
       const resumen = await response.json();
 
-      // Crear el contenido HTML para imprimir
+      // Crear el contenido HTML para imprimir con fondo negro
       const contenidoPDF = `
         <!DOCTYPE html>
         <html>
         <head>
           <title>Resumen de Turno - ${resumen.nombrePaciente} ${resumen.apellidoPaciente}</title>
           <style>
-            body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
-            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #384179; padding-bottom: 20px; }
-            .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
-            .section h3 { color: #384179; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-            .info-row { margin-bottom: 8px; }
-            .label { font-weight: bold; color: #212529; }
-            .value { color: #495057; }
+            * {
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+            }
+            html, body { 
+              font-family: Arial, sans-serif; 
+              margin: 0;
+              padding: 0;
+              background-color: black !important;
+              height: 100vh;
+              width: 100vw;
+              overflow: hidden;
+            }
+            .content {
+              display: none;
+              background-color: white;
+              padding: 15px;
+              margin: 10px;
+              border-radius: 8px;
+              max-width: 100%;
+              box-sizing: border-box;
+            }
+            .header { 
+              text-align: center; 
+              margin-bottom: 20px; 
+              border-bottom: 2px solid #384179; 
+              padding-bottom: 15px; 
+            }
+            .header h1 {
+              font-size: 20px;
+              margin-bottom: 5px;
+            }
+            .header p {
+              font-size: 14px;
+              margin: 0;
+            }
+            .section { 
+              margin-bottom: 15px; 
+              padding: 12px; 
+              border: 1px solid #ddd; 
+              border-radius: 6px; 
+              page-break-inside: avoid;
+            }
+            .section h3 { 
+              color: #384179; 
+              margin-bottom: 8px; 
+              border-bottom: 1px solid #ddd; 
+              padding-bottom: 4px; 
+              font-size: 16px;
+            }
+            .info-row { 
+              margin-bottom: 6px; 
+              font-size: 14px;
+            }
+            .label { 
+              font-weight: bold; 
+              color: #212529; 
+            }
+            .value { 
+              color: #495057; 
+            }
+            .footer {
+              margin-top: 20px; 
+              text-align: center; 
+              color: #6c757d; 
+              font-size: 10px;
+              page-break-inside: avoid;
+            }
             @media print {
-              body { margin: 0; }
-              .no-print { display: none; }
+              html, body { 
+                margin: 0 !important; 
+                padding: 0 !important;
+                background-color: white !important;
+                height: auto !important;
+                width: auto !important;
+                overflow: visible !important;
+              }
+              .content {
+                display: block !important;
+                background-color: white !important;
+                margin: 0 !important;
+                padding: 15px !important;
+                max-width: none !important;
+                border-radius: 0 !important;
+              }
+              .section {
+                margin-bottom: 12px !important;
+                page-break-inside: avoid;
+              }
+              .footer {
+                margin-top: 15px !important;
+              }
+            }
+            @media screen {
+              .content {
+                display: none !important;
+              }
             }
           </style>
         </head>
         <body>
-          <div class="header">
-            <h1>Resumen de Turno Médico</h1>
-            <p>Sistema de Turnos - Hospital ${resumen.nombreHospital}</p>
-          </div>
-          
-          <div class="section">
-            <h3>Información del Paciente</h3>
-            <div class="info-row"><span class="label">Nombre:</span> <span class="value">${resumen.nombrePaciente} ${resumen.apellidoPaciente}</span></div>
-            <div class="info-row"><span class="label">DNI:</span> <span class="value">${resumen.dniPaciente}</span></div>
-            <div class="info-row"><span class="label">Fecha de Nacimiento:</span> <span class="value">${resumen.fechaNacimiento ? new Date(resumen.fechaNacimiento).toLocaleDateString('es-AR') : 'N/A'}</span></div>
-          </div>
-          
-          <div class="section">
-            <h3>Información del Turno</h3>
-            <div class="info-row"><span class="label">Fecha:</span> <span class="value">${resumen.fechaTurno ? new Date(resumen.fechaTurno).toLocaleDateString('es-AR') : 'N/A'}</span></div>
-            <div class="info-row"><span class="label">Hora:</span> <span class="value">${resumen.horaTurno || 'N/A'}</span></div>
-            <div class="info-row"><span class="label">Especialidad:</span> <span class="value">${resumen.nombreEspecialidad || 'N/A'}</span></div>
-            <div class="info-row"><span class="label">Médico:</span> <span class="value">${resumen.nombreMedico} ${resumen.apellidoMedico}</span></div>
-            <div class="info-row"><span class="label">Matrícula:</span> <span class="value">${resumen.matriculaMedico || 'N/A'}</span></div>
-          </div>
-          
-          <div class="section">
-            <h3>Información del Hospital</h3>
-            <div class="info-row"><span class="label">Hospital:</span> <span class="value">${resumen.nombreHospital || 'N/A'}</span></div>
-            <div class="info-row"><span class="label">Dirección:</span> <span class="value">${resumen.direccionHospital || 'N/A'}</span></div>
-            <div class="info-row"><span class="label">Teléfono:</span> <span class="value">${resumen.telHospital || 'N/A'}</span></div>
-            <div class="info-row"><span class="label">Email:</span> <span class="value">${resumen.emailHospital || 'N/A'}</span></div>
-          </div>
-          
-          ${resumen.observacionesTurno ? `
+          <div class="content">
+            <div class="header">
+              <h1>Resumen de Turno Médico</h1>
+              <p>Sistema de Turnos - Hospital ${resumen.nombreHospital}</p>
+            </div>
+            
+            <div class="section">
+              <h3>Información del Paciente</h3>
+              <div class="info-row"><span class="label">Nombre:</span> <span class="value">${resumen.nombrePaciente} ${resumen.apellidoPaciente}</span></div>
+              <div class="info-row"><span class="label">DNI:</span> <span class="value">${resumen.dniPaciente}</span></div>
+              <div class="info-row"><span class="label">Fecha de Nacimiento:</span> <span class="value">${resumen.fechaNacimiento ? new Date(resumen.fechaNacimiento).toLocaleDateString('es-AR') : 'N/A'}</span></div>
+            </div>
+            
+            <div class="section">
+              <h3>Información del Turno</h3>
+              <div class="info-row"><span class="label">Fecha:</span> <span class="value">${resumen.fechaTurno ? new Date(resumen.fechaTurno).toLocaleDateString('es-AR') : 'N/A'}</span></div>
+              <div class="info-row"><span class="label">Hora:</span> <span class="value">${resumen.horaTurno || 'N/A'}</span></div>
+              <div class="info-row"><span class="label">Especialidad:</span> <span class="value">${resumen.nombreEspecialidad || 'N/A'}</span></div>
+              <div class="info-row"><span class="label">Médico:</span> <span class="value">${resumen.nombreMedico} ${resumen.apellidoMedico}</span></div>
+              <div class="info-row"><span class="label">Matrícula:</span> <span class="value">${resumen.matriculaMedico || 'N/A'}</span></div>
+            </div>
+            
+            <div class="section">
+              <h3>Información del Hospital</h3>
+              <div class="info-row"><span class="label">Hospital:</span> <span class="value">${resumen.nombreHospital || 'N/A'}</span></div>
+              <div class="info-row"><span class="label">Dirección:</span> <span class="value">${resumen.direccionHospital || 'N/A'}</span></div>
+              <div class="info-row"><span class="label">Teléfono:</span> <span class="value">${resumen.telHospital || 'N/A'}</span></div>
+              <div class="info-row"><span class="label">Email:</span> <span class="value">${resumen.emailHospital || 'N/A'}</span></div>
+            </div>
+            
             <div class="section">
               <h3>Observaciones</h3>
-              <div class="info-row"><span class="value">${resumen.observacionesTurno}</span></div>
+              <div class="info-row"><span class="value">${resumen.observacionesTurno || 'Sin observaciones'}</span></div>
             </div>
-          ` : ''}
-          
-          <div style="margin-top: 40px; text-align: center; color: #6c757d; font-size: 12px;">
-            <p>Documento generado el ${new Date().toLocaleDateString('es-AR')} a las ${new Date().toLocaleTimeString('es-AR')}</p>
+            
+            <div class="footer">
+              <p>Documento generado el ${new Date().toLocaleDateString('es-AR')} a las ${new Date().toLocaleTimeString('es-AR')}</p>
+            </div>
           </div>
         </body>
         </html>
       `;
 
-      // Abrir una nueva ventana con el contenido para imprimir
+      // Abrir una nueva ventana con fondo negro y mostrar directamente el diálogo
       const ventanaImpresion = window.open('', '_blank');
       ventanaImpresion.document.write(contenidoPDF);
       ventanaImpresion.document.close();
 
-      // Esperar a que se cargue y luego mostrar el diálogo de impresión
+      // Inmediatamente después de cargar, mostrar el diálogo
       ventanaImpresion.onload = () => {
-        ventanaImpresion.focus();
-        ventanaImpresion.print();
-      };
+        // Variable para rastrear si se está imprimiendo
+        let imprimiendo = false;
+        let intervaloCancelacion = null;
 
+        // Detectar cuando comienza la impresión
+        ventanaImpresion.onbeforeprint = () => {
+          imprimiendo = true;
+          if (intervaloCancelacion) {
+            clearInterval(intervaloCancelacion);
+          }
+        };
+
+        // Detectar cuando termina la impresión
+        ventanaImpresion.onafterprint = () => {
+          if (intervaloCancelacion) {
+            clearInterval(intervaloCancelacion);
+          }
+          ventanaImpresion.close();
+        };
+
+        // Función para detectar cancelación
+        const detectarCancelacion = () => {
+          intervaloCancelacion = setInterval(() => {
+            // Si no está imprimiendo y la ventana sigue abierta, probablemente canceló
+            if (!imprimiendo && !ventanaImpresion.closed) {
+              clearInterval(intervaloCancelacion);
+              ventanaImpresion.close();
+            }
+          }, 100); // Revisar cada 100ms para respuesta más rápida
+        };
+
+        // Mostrar el diálogo de impresión y empezar a detectar cancelación
+        setTimeout(() => {
+          if (!ventanaImpresion.closed) {
+            ventanaImpresion.print();
+
+            // Empezar a detectar cancelación inmediatamente después de mostrar el diálogo
+            setTimeout(() => {
+              if (!imprimiendo && !ventanaImpresion.closed) {
+                detectarCancelacion();
+              }
+            }, 200); // Dar un pequeño delay para que se abra el diálogo
+
+            // Timeout de seguridad para cerrar después de 5 segundos
+            setTimeout(() => {
+              if (intervaloCancelacion) {
+                clearInterval(intervaloCancelacion);
+              }
+              if (!imprimiendo && !ventanaImpresion.closed) {
+                ventanaImpresion.close();
+              }
+            }, 5000);
+          }
+        }, 100);
+
+        // Cerrar con Escape o al perder foco
+        ventanaImpresion.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            if (intervaloCancelacion) {
+              clearInterval(intervaloCancelacion);
+            }
+            ventanaImpresion.close();
+          }
+        });
+
+        // Detectar si la ventana pierde el foco (posible cancelación)
+        ventanaImpresion.addEventListener('blur', () => {
+          setTimeout(() => {
+            if (!imprimiendo && !ventanaImpresion.closed) {
+              if (intervaloCancelacion) {
+                clearInterval(intervaloCancelacion);
+              }
+              ventanaImpresion.close();
+            }
+          }, 300);
+        });
+      };
     } catch (err) {
       console.error('Error al generar PDF:', err);
       toast.error('Error al generar el PDF: ' + err.message);
