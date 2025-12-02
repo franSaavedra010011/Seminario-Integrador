@@ -434,20 +434,9 @@ export default function Turnos() {
                   <p><strong>Email:</strong> {resumenTurno.emailHospital || 'N/A'}</p>
                 </div>
 
-                {resumenTurno.observacionesTurno && (
-                  <div className="resumen-seccion">
-                    <h3>Observaciones</h3>
-                    <p>{resumenTurno.observacionesTurno}</p>
-                  </div>
-                )}
-
-                <div className="resumen-acciones">
-                  <button
-                    onClick={() => window.print()}
-                    className="btn-imprimir"
-                  >
-                    <i className="fas fa-print"></i> Imprimir
-                  </button>
+                <div className="resumen-seccion">
+                  <h3>Observaciones</h3>
+                  <p>{resumenTurno.observacionesTurno || 'Sin observaciones'}</p>
                 </div>
               </div>
             ) : (
