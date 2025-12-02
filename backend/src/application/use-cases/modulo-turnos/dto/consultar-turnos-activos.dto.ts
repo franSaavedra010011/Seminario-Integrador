@@ -28,4 +28,7 @@ export class ConsultarTurnosActivosDTO {
   @IsString()
   @IsNotEmpty()
   nombreEspecialidad: string;
+
+  @IsString()
+  observaciones: string;
 }

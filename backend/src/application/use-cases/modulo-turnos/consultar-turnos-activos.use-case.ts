@@ -48,6 +48,7 @@ export class ConsultarTurnosActivosUseCase {
           apellidoMedico: turno.medico.apellidoMedico,
           nombreEspecialidad: turno.especialidad.nombre,
           nombreHospital: turno.hospital.nombre,
+          observaciones: turno.observaciones || 'Sin observaciones',
         };
         dtoLista.push(dto);
       }

@@ -28,8 +28,9 @@ export class TurnoController {
 
     //UseCase: Cancelar Turno
     @Delete('cancelarTurno/:idTurno')
-    cancelarTurno(@Param('idTurno') idTurno: number) {
-        this.useCaseCancelarTurno.ejecutar(idTurno);
+    async cancelarTurno(@Param('idTurno') idTurno: number) {
+        await this.useCaseCancelarTurno.ejecutar(idTurno);
+        return { message: 'Turno cancelado correctamente', success: true };
     }
 
     //UseCase: Consultar Detaller del Turno

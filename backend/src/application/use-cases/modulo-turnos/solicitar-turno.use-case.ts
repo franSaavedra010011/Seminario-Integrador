@@ -472,6 +472,7 @@ export class SolicitarTurnoUseCase {
         'hospital',
         'medico',
         'especialidad',
+        'paciente',
       ]
     );
 
@@ -495,6 +496,11 @@ export class SolicitarTurnoUseCase {
       observacionesTurno: turno.observaciones,
       idEspecialidad: turno.especialidad.id,
       nombreEspecialidad: turno.especialidad.nombre,
+      idPaciente: turno.paciente.id,
+      nombrePaciente: turno.paciente.nombrePaciente,
+      apellidoPaciente: turno.paciente.apellidoPaciente,
+      dniPaciente: turno.paciente.dniPaciente,
+      fechaNacimiento: turno.paciente.fechaNacimientoPaciente,
     }
 
     return turnoResumen;

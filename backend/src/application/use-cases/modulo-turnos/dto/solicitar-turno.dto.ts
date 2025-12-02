@@ -62,4 +62,10 @@ export interface TurnoResumen {
     observacionesTurno: string;
     idEspecialidad: number;
     nombreEspecialidad: string;
+    // Información del paciente
+    idPaciente: number;
+    nombrePaciente: string;
+    apellidoPaciente: string;
+    dniPaciente: string;
+    fechaNacimiento: Date;
 }
