@@ -12,6 +12,13 @@ import { Usuario } from 'src/domain/entities/usuario.entity';
 import { PacienteNotificacion } from 'src/domain/entities/paciente-notificacion.entity';
 import { Localidad } from './localidad.entity';
 
+// 🔹 Tipo de dato embebido
+export class Vacuna {
+  nombre: string;
+  fechaAplicacion?: Date;
+  dosis?: string;
+}
+
 @Entity()
 export class Paciente extends Base {
   @Column()
@@ -38,7 +45,30 @@ export class Paciente extends Base {
   @Column()
   grupoSanguineoPaciente: string;
 
-  @OneToMany(() => Turno, (turno) => turno.paciente, { nullable: true, cascade: true, onDelete: 'CASCADE' })
+  // 🔹 Campos nuevos (opcionales)
+  @Column({ nullable: true })
+  familiaresACargo?: string;
+
+  @Column({ type: 'text', nullable: true })
+  problemasEnCurso?: string;
+
+  @Column({ type: 'text', nullable: true })
+  antecedentesHeredofamiliares?: string;
+
+  @Column({ type: 'text', nullable: true })
+  habitos?: string;
+
+  @Column({ type: 'text', nullable: true })
+  alergias?: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  vacunas?: Vacuna[];
+
+  @OneToMany(() => Turno, (turno) => turno.paciente, {
+    nullable: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   turnos: Turno[];
 
   @OneToOne(() => Usuario, (usuario) => usuario.paciente, { nullable: true })
@@ -54,5 +84,4 @@ export class Paciente extends Base {
 
   @ManyToOne(() => Localidad, { nullable: false })
   localidad: Localidad;
-  fechaNacimiento: any;
 }

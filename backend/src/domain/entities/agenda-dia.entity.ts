@@ -19,6 +19,9 @@ export class AgendaDia extends Base {
   })
   nombreAgendaDia: DiaSemanaEnum;
 
+  @Column({ nullable: true })
+  fechaAgendaDia: Date;
+
   @ManyToOne(() => AgendaSemanal, agendaSemanal => agendaSemanal.agendasDia, {
     nullable: false,
     onDelete: 'CASCADE',

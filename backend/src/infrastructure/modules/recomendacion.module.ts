@@ -16,6 +16,8 @@ import { SharedModule } from 'src/infrastructure/modules/shared.module';
 import { RegistrarCongestionHistoricaUseCase } from 'src/application/use-cases/modulo-recomendacion/registrar-congestion-historica.use-case';
 import { ConsultarCongestionDeHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-congestion-de-hospital.use-case';
 import { ConsultarDetalleDelHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-detalle-del-hospital.use-case';
+import { SolicitarRecomendacionDeHospitalUseCase } from 'src/application/use-cases/modulo-recomendacion/solicitar-recomendacion-de-hospital.use-case';
+import { ConsultarHospitalesSegunCriteriosUseCase } from 'src/application/use-cases/modulo-recomendacion/consultar-hospitales-segun-criterios.use-case';
 
 @Module({
   imports: [
@@ -34,14 +36,18 @@ import { ConsultarDetalleDelHospitalUseCase } from 'src/application/use-cases/mo
     CompararHospitalesUseCase,
     ConsultarCongestionDeHospitalUseCase,
     RegistrarCongestionHistoricaUseCase,
-    ConsultarDetalleDelHospitalUseCase
+    ConsultarDetalleDelHospitalUseCase,
+    SolicitarRecomendacionDeHospitalUseCase,
+    ConsultarHospitalesSegunCriteriosUseCase
   ],
   exports: [
     ActualizarNivelDeCongestionUseCase,
     CompararHospitalesUseCase,
     ConsultarCongestionDeHospitalUseCase,
     RegistrarCongestionHistoricaUseCase,
-    ConsultarDetalleDelHospitalUseCase
+    ConsultarDetalleDelHospitalUseCase,
+    SolicitarRecomendacionDeHospitalUseCase,
+    ConsultarHospitalesSegunCriteriosUseCase
   ],
 })
 export class RecomendacionModule { }

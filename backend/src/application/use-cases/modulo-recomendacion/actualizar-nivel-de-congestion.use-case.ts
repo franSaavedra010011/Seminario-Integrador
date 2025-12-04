@@ -6,9 +6,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ActualizarNivelDeCongestionUseCase {
-  constructor(private readonly genericRepository: GenericRepositoryService) {
-    console.log('✅ GenericRepositoryService inyectado:', !!genericRepository);
-  }
+  constructor(private readonly genericRepository: GenericRepositoryService) { }
 
   async ejecutar(dto: UpdateCongestionDto): Promise<CongestionActual> {
     /*

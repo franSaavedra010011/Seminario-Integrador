@@ -10,6 +10,8 @@ import { AbmModule } from './infrastructure/modules/abm.module';
 import { RouterModule } from '@nestjs/core';
 import { RecomendacionModule } from './infrastructure/modules/recomendacion.module';
 import { SharedModule } from './infrastructure/modules/shared.module';
+import { Turno } from './domain/entities/turno.entity';
+import { TurnoModule } from './infrastructure/modules/turno.module';
 
 @Module({
   imports: [
@@ -18,7 +20,7 @@ import { SharedModule } from './infrastructure/modules/shared.module';
       host: 'localhost',
       port: 5432,
       username: 'postgres', // el que configuraste
-      password: '1234', // reemplaza con la real
+      password: 'admin', // reemplaza con la real
       database: 'turnos_db',
       autoLoadEntities: true,
       synchronize: true, // ¡solo en desarrollo!
@@ -33,9 +35,9 @@ import { SharedModule } from './infrastructure/modules/shared.module';
         module: SharedModule,
       },
     ]),
-    AuthModule, AbmModule, RecomendacionModule, SharedModule 
+    AuthModule, AbmModule, RecomendacionModule, SharedModule, TurnoModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

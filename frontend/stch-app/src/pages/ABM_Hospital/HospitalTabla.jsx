@@ -4,18 +4,16 @@ import { useNavigate } from 'react-router-dom';
 
 export default function HospitalTabla() {
   const navigate = useNavigate();
-  const [hospitales, setHospitales] = useState([])
+  const [hospitales, setHospitales] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [filtroLocalidad, setFiltroLocalidad] = useState('');
   const [busquedaNombre, setBusquedaNombre] = useState('');
 
-
   useEffect(() => {
-
     fetch('http://localhost:3000/shared/listas/localidades', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(res => res.json())
       .then(data => setLocalidades(data))
@@ -23,8 +21,8 @@ export default function HospitalTabla() {
 
     fetch('http://localhost:3000/shared/listas/hospitales?modo=localidad', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(res => res.json())
       .then(data => setHospitales(data))
@@ -32,10 +30,9 @@ export default function HospitalTabla() {
   }, []);
 
   const handleEditar = (hospital) => {
-    navigate('/modificarHospital', {
-        state: { hospital }
-    });
-   };  
+    navigate('/modificarHospital', { state: { id: hospital.id } });
+  };
+
   const handleEliminar = (id) => {
     if (confirm('¿Estás seguro de eliminar este hospital?')) {
       setHospitales(prev => prev.filter(h => h.id !== id));
@@ -43,13 +40,17 @@ export default function HospitalTabla() {
   };
 
   const handleCrear = () => {
-    //alert('Redirigir a crear nuevo hospital');
-    navigate('/crearHospital')
+    navigate('/crearHospital');
+  };
+
+  const handleCrearAgenda = async (hospitalId) => {
+    localStorage.setItem('hospitalSeleccionado', hospitalId);
+    navigate('/crearAgendaSemanal');
   };
 
   return (
     <div className="hospitales-admin-container">
-      <div className="header">
+      <div className="btn-crear-contenedor">
         <h2>Gestión de Hospitales</h2>
         <button className="crear-btn" onClick={handleCrear}>
           Crear nuevo hospital
@@ -87,7 +88,6 @@ export default function HospitalTabla() {
         </div>
       </div>
 
-
       <table>
         <thead>
           <tr>
@@ -104,31 +104,31 @@ export default function HospitalTabla() {
           </tr>
         </thead>
 
-      <tbody>
-        {hospitales
-          .filter(h => 
-            (!filtroLocalidad || h.localidad?.nombre === filtroLocalidad) &&
-            (!busquedaNombre || h.nombre.toLowerCase().includes(busquedaNombre.toLowerCase()))
-          )
-          .map(h => (
-            <tr key={h.id}>
-              <td>{h.id}</td>
-              <td>{h.nombre}</td>
-              <td>{h.direccion}</td>
-              <td>{h.email}</td>
-              <td>{h.telefono}</td>
-              <td>{h.localidad?.nombre || '-'}</td>
-              <td>{new Date(h.fechaHoraCreacion).toLocaleString()}</td>
-              <td>{new Date(h.fechaHoraModificacion).toLocaleString()}</td>
-              <td>{h.fechaHoraBaja ? new Date(h.fechaHoraBaja).toLocaleString() : '-'}</td>
-              <td>
-                <button className="icon-button edit" onClick={() => handleEditar(h)}>✏️</button>
-                <button className="icon-button delete" onClick={() => handleEliminar(h.id)}>🗑️</button>
-              </td>
-            </tr>
-        ))}
-      </tbody>
-
+        <tbody>
+          {hospitales
+            .filter(h =>
+              (!filtroLocalidad || h.localidad?.nombre === filtroLocalidad) &&
+              (!busquedaNombre || h.nombre.toLowerCase().includes(busquedaNombre.toLowerCase()))
+            )
+            .map(h => (
+              <tr key={h.id}>
+                <td>{h.id}</td>
+                <td>{h.nombre}</td>
+                <td>{h.direccion}</td>
+                <td>{h.email}</td>
+                <td>{h.telefono}</td>
+                <td>{h.localidad?.nombre || '-'}</td>
+                <td>{new Date(h.fechaHoraCreacion).toLocaleString()}</td>
+                <td>{new Date(h.fechaHoraModificacion).toLocaleString()}</td>
+                <td>{h.fechaHoraBaja ? new Date(h.fechaHoraBaja).toLocaleString() : '-'}</td>
+                <td>
+                  <button className="icon-button edit" title="Editar" onClick={() => handleEditar(h)}>✏️</button>
+                  <button className="icon-button clock" title="Crear agenda semanal" onClick={() => handleCrearAgenda(h.id)}>🕒</button>
+                  <button className="icon-button delete" title="Eliminar" onClick={() => handleEliminar(h.id)}>🗑️</button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
       </table>
     </div>
   );

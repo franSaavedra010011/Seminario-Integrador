@@ -47,6 +47,180 @@
   color: #2f3662;
 }
 
+/* Modal de resumen del turno */
+.modal .modal-content.resumen-turno {
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.resumen-detalles {
+  text-align: left;
+}
+
+.resumen-seccion {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #384179;
+}
+
+.resumen-seccion h3 {
+  color: #384179;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 5px;
+}
+
+.resumen-seccion p {
+  margin: 8px 0;
+  color: #495057;
+}
+
+.resumen-seccion strong {
+  color: #212529;
+  font-weight: 600;
+}
+
+.resumen-acciones {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.btn-imprimir {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-imprimir:hover {
+  background-color: #0056b3;
+}
+
+.btn-imprimir i {
+  margin-right: 5px;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  border-top: 1px solid #dee2e6;
+  padding-top: 15px;
+}
+
+.btn-cerrar {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-cerrar:hover {
+  background-color: #545b62;
+}
+
+.loading-resumen {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loading-resumen p {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Estados de carga y error */
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.error-container button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #384179;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Sin turnos */
+.no-turnos {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.no-turnos p {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.no-turnos button {
+  padding: 0.75rem 1.5rem;
+  background-color: #384179;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.no-turnos button:hover {
+  background-color: #2f3662;
+}
+
+/* Estados de turno */
+.estado-turno {
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.estado-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.estado-confirmado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.estado-anulado {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.estado-completado {
+  background-color: #cce7ff;
+  color: #004085;
+}
+
 /* Modal para observaciones */
 .modal {
   position: fixed;
