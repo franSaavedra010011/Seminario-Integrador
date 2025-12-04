@@ -1,11 +1,12 @@
 import { Body, Delete, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 
 export abstract class AbmBaseController<T, CreateDto, UpdateDto> {
   constructor(
     protected readonly useCase: {
       crear(dto: CreateDto): Promise<T>;
       actualizar(id: number, dto: UpdateDto): Promise<T>;
+      eliminar?(id: number): Promise<void>;
     },
     protected readonly genericRepositoryService: GenericRepositoryService,
     private readonly entity: new () => T,
@@ -26,6 +27,10 @@ export abstract class AbmBaseController<T, CreateDto, UpdateDto> {
 
   @Delete('baja/:id')
   async baja(@Param('id', ParseIntPipe) id: number) {
-    return this.genericRepositoryService.eliminar(this.entity, id);
+    if (this.useCase.eliminar) {
+      return this.useCase.eliminar(id);
+    } else {
+      return this.genericRepositoryService.eliminar(this.entity, id);
+    }
   }
 }

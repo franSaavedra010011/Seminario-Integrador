@@ -3,7 +3,7 @@ import { AbmRolUseCase } from "src/application/use-cases/abm/rol/abm-rol.use-cas
 import { CreateRolDto } from "src/application/use-cases/abm/rol/dto/create-rol.dto";
 import { UpdateRolDto } from "src/application/use-cases/abm/rol/dto/update-rol.dto";
 import { Rol } from "src/domain/entities/rol.entity";
-import { GenericRepositoryService } from "src/shared/utils/genericRepository.service";
+import { GenericRepositoryService } from "src/shared/services/genericRepository.service";
 import { AbmBaseController } from "./abm-base.controller";
 
 @Controller('rol')

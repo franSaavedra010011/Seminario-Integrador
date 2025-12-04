@@ -38,30 +38,14 @@ import { AbmEspecialidadUseCase } from 'src/application/use-cases/abm/especialid
 import { AbmEstadoTurnoUseCase } from 'src/application/use-cases/abm/estado-turno/abm-estado-turno.use-case';
 
 // SERVICIOS
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { PermisoController } from '../controllers/abm/permiso.controller';
 import { EspecialidadController } from '../controllers/abm/especialidad.controller';
-import { AbmTurnoUseCase } from 'src/application/use-cases/abm/turno/abm-turno.use-case';
-import { CancelarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/cancelar-turno.use-case';
-import { ModuloDeTurnoController } from '../controllers/modulo-turnos/modulo-turnos.controller';
-import { ConsultarDetalleDelTurnoUseCase } from 'src/application/use-cases/modulo-turnos/consultar-detalle-del-turno.use-case';
-import { ConsultarTurnosActivosUseCase } from 'src/application/use-cases/modulo-turnos/consultar-turnos-activos.use-case';
-import { NotificarCancelacionDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-cancelacion-de-turno.use-case';
-import { AbmAgendaSemanalUseCase } from 'src/application/use-cases/abm/agendaSemanal/abm-agendaSemanal.use-case';
-import { AbmAgendaDiaUseCase } from 'src/application/use-cases/abm/agendaDia/abm-agendaDia.use-case';
-import { AbmPacienteNotificacionUseCase } from 'src/application/use-cases/abm/pacienteNotificacion/abm-pacienteNotificacion.use-case';
-import { AbmTurnoAgendaDiaUseCase } from 'src/application/use-cases/abm/turno-agenda-dia/abm-turno-agenda-dia.use-case';
-import { NotificarProximidadDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-proximidad-de-turno.use-case';
-import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
-import { AbmTurnoEstadoUseCase } from 'src/application/use-cases/abm/turnoEstado/abm-turno-estado.use-case';
-import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/solicitar-turno.use-case';
-import { ModuloDeReporteController } from '../controllers/modulo-reportes/modulo-reportes.controller';
-import { ConsultarCantidadDeTurnosAsignadosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-cantidad-de-turnos-asignados.use-case';
-import { ConsultarHistorialDeTurnosUseCase } from 'src/application/use-cases/modulo-reportes/consultar-historial-de-turnos.use-case';
-import { ConsultarPorcentajeDeAsistenciaDePacientesUseCase } from 'src/application/use-cases/modulo-reportes/consultar-porcentaje-de-asistencia-de-pacientes.use-case';
-import { GenerarReporteAdministrativoUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-administrativo.use-case';
-import { GenerarReporteMedicoUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-de-medico.use-case';
-import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-reportes/generar-reporte-de-paciente.use-case';
+import { UsuarioController } from '../controllers/abm/usuario.controller';
+import { PacienteController } from '../controllers/abm/paciente.controller';
+import { MedicoController } from '../controllers/abm/medico.controller';
+import { HospitalController } from '../controllers/abm/hospital.controller';
+import { RolController } from '../controllers/abm/rol.controller';
 
 @Module({
   imports: [
@@ -89,14 +73,17 @@ import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-
       TurnoEstado,
       Turno,
       UsuarioRol,
-      Usuario,
-    ]),
+      Usuario
+    ])
   ],
   controllers: [
     PermisoController,
     EspecialidadController,
-    ModuloDeTurnoController,
-    ModuloDeReporteController,
+    UsuarioController,
+    PacienteController,
+    RolController,
+    MedicoController,
+    HospitalController
   ],
   providers: [
     GenericRepositoryService,
@@ -107,26 +94,7 @@ import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-
     AbmMedicoUseCase,
     AbmHospitalUseCase,
     AbmEspecialidadUseCase,
-    AbmEstadoTurnoUseCase,
-    AbmTurnoUseCase,
-    AbmAgendaSemanalUseCase,
-    AbmAgendaDiaUseCase,
-    AbmPacienteNotificacionUseCase,
-    AbmTurnoAgendaDiaUseCase,
-    AbmTurnoEstadoUseCase,
-    CancelarTurnoUseCase,
-    ConsultarDetalleDelTurnoUseCase,
-    ConsultarTurnosActivosUseCase,
-    NotificarCancelacionDeTurnoUseCase,
-    NotificarProximidadDeTurnoUseCase,
-    RegistrarAsistenciaDePacienteUseCase,
-    SolicitarTurnoUseCase,
-    ConsultarCantidadDeTurnosAsignadosUseCase,
-    ConsultarHistorialDeTurnosUseCase,
-    ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
-    GenerarReporteAdministrativoUseCase,
-    GenerarReporteMedicoUseCase,
-    GenerarReportePacienteUseCase,
+    AbmEstadoTurnoUseCase
   ],
   exports: [
     AbmUsuarioUseCase,
@@ -136,26 +104,7 @@ import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-
     AbmMedicoUseCase,
     AbmHospitalUseCase,
     AbmEspecialidadUseCase,
-    AbmEstadoTurnoUseCase,
-    AbmTurnoUseCase,
-    AbmAgendaSemanalUseCase,
-    AbmAgendaDiaUseCase,
-    AbmPacienteNotificacionUseCase,
-    AbmTurnoAgendaDiaUseCase,
-    AbmTurnoEstadoUseCase,
-    CancelarTurnoUseCase,
-    ConsultarDetalleDelTurnoUseCase,
-    ConsultarTurnosActivosUseCase,
-    NotificarCancelacionDeTurnoUseCase,
-    NotificarProximidadDeTurnoUseCase,
-    RegistrarAsistenciaDePacienteUseCase,
-    SolicitarTurnoUseCase,
-    ConsultarCantidadDeTurnosAsignadosUseCase,
-    ConsultarHistorialDeTurnosUseCase,
-    ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
-    GenerarReporteAdministrativoUseCase,
-    GenerarReporteMedicoUseCase,
-    GenerarReportePacienteUseCase,
-  ],
+    AbmEstadoTurnoUseCase
+  ]
 })
-export class AbmModule {}
+export class AbmModule { }
