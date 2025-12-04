@@ -1,477 +1,512 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
-import { Repository } from 'typeorm';
-import { AbmTurnoEstadoUseCase } from '../abm/turnoEstado/abm-turno-estado.use-case';
-import { Localidad } from 'src/domain/entities/localidad.entity';
-import { LocalidadSolicitarTurnoDto } from './dto/localidad-solicitar-turno.dto';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Especialidad } from 'src/domain/entities/especialidad.entity';
-import { EspecialidadSolicitarTurnoDto } from './dto/especialdiad-solicitar-turno.dto';
 import { Hospital } from 'src/domain/entities/hospital.entity';
-import { HospitalSolicitarTurnoDto } from './dto/hospital-solicitar-turno.dto';
-import { MedicoSolicitarTurnoDto } from './dto/medico-solicitar-turno.dto';
-import { AgendasSolicitarTurnoDTO } from './dto/agendas-solicitar-turno.dto';
-import { DiasSolicitarTurnoDTO } from './dto/dias-solicitar-turno.dto';
-import { TurnosSolicitarTurnoDTO } from './dto/turnos-solicitar-turno.dto';
 import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
 import { Medico } from 'src/domain/entities/medico.entity';
 import { Paciente } from 'src/domain/entities/paciente.entity';
-import { ResumenSolicitarTurnoDTO } from './dto/resumen-solicitar-turno.dto';
-import { Usuario } from 'src/domain/entities/usuario.entity';
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
 import { EstadoTurnoEnum } from 'src/domain/enums/estado-turno.enum';
 import { AbmTurnoUseCase } from '../abm/turno/abm-turno.use-case';
-import { CreateTurnoDto } from '../abm/turno/dto/create-turno.dto';
 import { Turno } from 'src/domain/entities/turno.entity';
-import { CreateTurnoEstadoDto } from '../abm/turnoEstado/dto/create-turnoEstado.dto';
 import { AgendaSemanal } from 'src/domain/entities/agenda-semanal.entity';
+import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
+import { AgendaDia } from 'src/domain/entities/agenda-dia.entity';
+import { Localidad } from 'src/domain/entities/localidad.entity';
+import { TurnoEstado } from 'src/domain/entities/turno-estado.entity';
+import { AgendaSemanaProxima, EspecialidadResumen, HorarioAgenda, HospitalResumen, LocalidadResumen, MedicoResumen, TurnoResumen } from './dto/solicitar-turno.dto';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 
 @Injectable()
 export class SolicitarTurnoUseCase {
   constructor(
     private readonly genericRepository: GenericRepositoryService,
-    @InjectRepository(Especialidad)
-    private especialidadRepository: Repository<Especialidad>,
-    @InjectRepository(Hospital)
-    private hospitalRepository: Repository<Hospital>,
-    @InjectRepository(TurnoAgendaDia)
-    private turnoAgendaDiaRepository: Repository<TurnoAgendaDia>,
-    @InjectRepository(Medico)
-    private medicoDiaRepository: Repository<Medico>,
-    @InjectRepository(Usuario)
-    private usuarioRepository: Repository<Usuario>,
-    @InjectRepository(EstadoTurno)
-    private estadoTurnoRepository: Repository<EstadoTurno>,
-    @InjectRepository(Paciente)
-    private pacienteRepository: Repository<Paciente>,
-    @InjectRepository(AgendaSemanal)
-    private agendaSemanalRepository: Repository<AgendaSemanal>,
-    private readonly abmTurnoEstadoUseCase: AbmTurnoEstadoUseCase,
-    private readonly abmTurnoUseCase: AbmTurnoUseCase,
-  ) {}
-  async solicitarTurnoEspecialidades() {
-    const especialidades = await this.especialidadRepository
-      .createQueryBuilder('especialidad') //hacerlo con usuario
-      .where('especialidad.fechaHoraBaja IS NULL')
-      .getMany();
-    if (!especialidades) {
+  ) { }
+
+  async validacionDatosPaciente(idPaciente: number): Promise<Paciente> {
+
+    if (!idPaciente || idPaciente <= 0) {
+      throw new BadRequestException(`El ID del Paciente es inválido`);
+    }
+
+    const paciente = await this.genericRepository.buscarPorId(
+      Paciente,
+      idPaciente,
+      []
+    )
+
+    if (!paciente) {
+      throw new BadRequestException(`El Paciente con ID ${idPaciente} no existe`);
+    }
+
+    return paciente;
+  }
+
+  async mostrarLocalidadesYEspecialidades(): Promise<{ localidades: LocalidadResumen[]; especialidades: EspecialidadResumen[] }> {
+    const localidades = await this.genericRepository.buscar(
+      Localidad,
+      "localidad",
+      [{ atributo: "fechaHoraBaja", operacion: "isNull", valor: null }],
+      []
+    );
+
+    if (!localidades || localidades.length === 0) {
+      throw new BadRequestException(`No hay localidades disponibles`);
+    }
+
+    const localidadesResumen: LocalidadResumen[] = localidades.map(localidad => ({
+      idLocalidad: localidad.id,
+      nombreLocalidad: localidad.nombre,
+    }))
+
+    const especialidades = await this.genericRepository.buscar(
+      Especialidad,
+      "especialidad",
+      [{ atributo: "fechaHoraBaja", operacion: "isNull", valor: null }],
+      []
+    );
+
+    if (!especialidades || especialidades.length === 0) {
       throw new BadRequestException(`No hay especialidades disponibles`);
     }
-    const listaEspecialidadesDTO: EspecialidadSolicitarTurnoDto[] = [];
-    for (const especialidad of especialidades) {
-      const especialidadDTO: EspecialidadSolicitarTurnoDto = {
-        idEspecialidad: especialidad.id,
-        nombreEspecialidad: especialidad.nombre,
-      };
-      listaEspecialidadesDTO.push(especialidadDTO);
-    }
-    return listaEspecialidadesDTO;
+
+    const especialidadesResumen: EspecialidadResumen[] = especialidades.map(especialidad => ({
+      idEspecialidad: especialidad.id,
+      nombreEspecialidad: especialidad.nombre,
+    }))
+
+    return {
+      localidades: localidadesResumen,
+      especialidades: especialidadesResumen
+    };
+
   }
-  async solicitarTurnoLocalidades(idEspecialidad: number) {
-    const hospitales = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .leftJoinAndSelect('hospital.hospitalEspecialidades', 'he')
-      .leftJoinAndSelect('he.especialidad', 'esp')
-      .leftJoinAndSelect('hospital.localidad', 'loc')
-      .where('hospital.fechaHoraBaja IS NULL')
-      .getMany();
-    if (!hospitales) {
-      throw new BadRequestException(`No hay hospitales disponibles`);
+
+  async listarHospitalesConRequisitosSolicitados(idLocalidad: number, idEspecialidad: number): Promise<{ hospitales: HospitalResumen[] }> {
+    if (!idLocalidad || idLocalidad <= 0) {
+      throw new BadRequestException(`El ID de la Localidad es inválido`);
     }
-    const listaLocalidadesDTO: LocalidadSolicitarTurnoDto[] = [];
-    for (const hospital of hospitales) {
-      const hospitalEspecialidades = hospital.hospitalEspecialidades;
-      for (const hospitalEspecialidad of hospitalEspecialidades) {
-        const especialdiad = hospitalEspecialidad.especialidad;
-        if (
-          especialdiad.id === idEspecialidad &&
-          hospitalEspecialidad.fechaHoraBaja === null
-        ) {
-          const localidad = hospital.localidad;
-          const localidadDTO: LocalidadSolicitarTurnoDto = {
-            idLocalidad: localidad.id,
-            nombreLocalidad: localidad.nombre,
+
+    if (!idEspecialidad || idEspecialidad <= 0) {
+      throw new BadRequestException(`El ID de la Especialidad es inválido`);
+    }
+
+    const localidad = await this.genericRepository.buscarPorId(
+      Localidad,
+      idLocalidad,
+      []
+    );
+
+    if (!localidad) {
+      throw new BadRequestException(`La Localidad con ID ${idLocalidad} no existe`);
+    }
+
+    const hospital = await this.genericRepository.buscar(
+      Hospital,
+      "hospital",
+      [{ atributo: "fechaHoraBaja", operacion: "isNull", valor: null },
+      { atributo: "localidad.id", operacion: "=", valor: idLocalidad },
+      ],
+      [
+        'hospitalEspecialidades',
+        'hospitalEspecialidades.especialidad',
+      ]
+    )
+
+    let hospitalesResumen: HospitalResumen[] = [];
+
+    for (const hosp of hospital) {
+      for (const he of hosp.hospitalEspecialidades) {
+        if (!he.especialidad.fechaHoraBaja && he.especialidad.id === idEspecialidad) {
+          const hospitalResumen: HospitalResumen = {
+            idHospital: hosp.id,
+            idHospitalEspecialidad: he.id,
+            nombreHospital: hosp.nombre,
+            direccionHospital: hosp.direccion,
+            emailHospital: hosp.email,
           };
-          listaLocalidadesDTO.push(localidadDTO);
+          hospitalesResumen.push(hospitalResumen);
         }
       }
     }
-    return listaLocalidadesDTO;
+
+    return { hospitales: hospitalesResumen };
+
   }
-  async solicitarTurnoHospitales(idEspecialidad: number, idLocalidad: number) {
-    const hospitales = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .leftJoinAndSelect('hospital.hospitalEspecialidades', 'he')
-      .leftJoinAndSelect('he.especialidad', 'esp')
-      .leftJoinAndSelect('hospital.localidad', 'loc')
-      .leftJoinAndSelect('hospital.congestionesActual', 'con')
-      .where('hospital.fechaHoraBaja IS NULL')
-      .getMany();
-    if (!hospitales) {
-      throw new BadRequestException(`No hay hospitales disponibles`);
+
+  async listarMedicosRelacionadosConHospitalYEspecialidad(idHospital: number, idHospitalEspecialidad: number): Promise<{ medicos: MedicoResumen[] }> {
+    if (!idHospital || idHospital <= 0) {
+      throw new BadRequestException(`El ID del Hospital es inválido`);
     }
-    const listaHospitalesDTO: HospitalSolicitarTurnoDto[] = [];
-    for (const hospital of hospitales) {
-      const localidad = hospital.localidad;
-      if (localidad.id === idLocalidad) {
-        const hospitalEspecialidades = hospital.hospitalEspecialidades;
-        for (const hospitalEspecialidad of hospitalEspecialidades) {
-          const especialdiad = hospitalEspecialidad.especialidad;
-          if (
-            especialdiad.id === idEspecialidad &&
-            hospitalEspecialidad.fechaHoraBaja === null &&
-            hospitalEspecialidad.fechaHasta === null
-          ) {
-            const congestionesActuales = hospital.congestionesActual;
-            let congestionActualGuardar;
-            if (congestionesActuales) {
-              for (const congestionActual of congestionesActuales) {
-                if (congestionActual.fechaHoraBaja === null) {
-                  congestionActualGuardar = congestionActual.nivelCongestion;
-                }
-              }
-              const hospitalDTO: HospitalSolicitarTurnoDto = {
-                idHospital: hospital.id,
-                nombreHospital: hospital.nombre,
-                direccionHospital: hospital.direccion,
-                nivelCongestion: congestionActualGuardar,
-              };
-              listaHospitalesDTO.push(hospitalDTO);
-            }
-          }
-        }
-      }
+
+    if (!idHospitalEspecialidad || idHospitalEspecialidad <= 0) {
+      throw new BadRequestException(`El ID de la Relación Hospital-Especialidad es inválido`);
     }
-    return listaHospitalesDTO;
-  }
-  async solicitarTurnoMedicos(idEspecialidad: number, idHospital: number) {
-    const hospital = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .leftJoinAndSelect('hospital.hospitalEspecialidades', 'he')
-      .leftJoinAndSelect('he.especialidad', 'esp')
-      .leftJoinAndSelect('he.hospitalEspecialidadMedico', 'hem')
-      .leftJoinAndSelect('hem.medico', 'med')
-      .where('hospital.id = :id AND hospital.fechaHoraBaja IS NULL', {
-        id: idHospital,
-      })
-      .getOne();
+
+    const hospital = await this.genericRepository.buscarPorId(
+      Hospital,
+      idHospital,
+      [
+        'hospitalEspecialidades',
+        'hospitalEspecialidades.especialidad',
+        'hospitalEspecialidades.hospitalEspecialidadMedico',
+        'hospitalEspecialidades.hospitalEspecialidadMedico.medico',
+      ]
+    );
+
     if (!hospital) {
-      throw new BadRequestException(`No hay hospital disponible`);
+      throw new BadRequestException(`El Hospital con ID ${idHospital} no existe`);
     }
-    const listaMedicosDTO: MedicoSolicitarTurnoDto[] = [];
-    const hospitalEspecialidades = hospital.hospitalEspecialidades;
-    for (const hospitalEspecialidad of hospitalEspecialidades) {
-      const especialdiad = hospitalEspecialidad.especialidad;
-      if (
-        especialdiad.id === idEspecialidad &&
-        hospitalEspecialidad.fechaHoraBaja === null &&
-        hospitalEspecialidad.fechaHasta === null
-      ) {
-        const hospitalEspecialidadMedicos =
-          hospitalEspecialidad.hospitalEspecialidadMedico;
-        for (const hospitalEspecialidadMedico of hospitalEspecialidadMedicos) {
-          if (
-            hospitalEspecialidadMedico.fechaHoraBaja === null &&
-            hospitalEspecialidadMedico.fechaHasta === null
-          ) {
-            const medicoEncontrado = hospitalEspecialidadMedico.medico;
-            const medicoDTO: MedicoSolicitarTurnoDto = {
-              idMedico: medicoEncontrado.id,
-              nombreMedico: medicoEncontrado.nombreMedico,
-              apellidoMedico: medicoEncontrado.apellidoMedico,
+
+    let medicosResumen: MedicoResumen[] = [];
+
+    for (const he of hospital.hospitalEspecialidades) {
+      if (he.id === idHospitalEspecialidad && !he.fechaHoraBaja) {
+        for (const hem of he.hospitalEspecialidadMedico) {
+          if (hem.medico && !hem.fechaHoraBaja && !hem.fechaHasta) {
+            const medicoResumen: MedicoResumen = {
+              idMedico: hem.medico.id,
+              idHEM: hem.id,
+              idEspecialidad: he.especialidad.id,
+              nombreMedico: hem.medico.nombreMedico,
+              apellidoMedico: hem.medico.apellidoMedico,
+              dniMedico: hem.medico.dniMedico,
+              matriculaMedico: hem.medico.matriculaMedico,
+              nombreEspecialidad: he.especialidad.nombre,
             };
-            listaMedicosDTO.push(medicoDTO);
+            medicosResumen.push(medicoResumen);
           }
         }
       }
     }
-    return listaMedicosDTO;
+
+    if (medicosResumen.length === 0) {
+      throw new BadRequestException(`No hay médicos disponibles para la especialidad seleccionada en este hospital`);
+    }
+
+    return { medicos: medicosResumen };
   }
-  async solicitarTurnoAgendas(idMedico: number, idHospital: number) {
-    const fechaActual = new Date();
-    const nroSemanaActual = this.getWeekNumber(fechaActual);
-    const hospital = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .leftJoinAndSelect('hospital.hospitalEspecialidades', 'he')
-      .leftJoinAndSelect('he.hospitalEspecialidadMedico', 'hem')
-      .leftJoinAndSelect('hem.medico', 'med')
-      .leftJoinAndSelect('hem.agendaSemanales', 'as')
-      .leftJoinAndSelect('as.agendasDia', 'ad')
-      .leftJoinAndSelect('ad.turnosAgendaDia', 'tad')
-      .where('hospital.id = :id AND hospital.fechaHoraBaja IS NULL', {
-        id: idHospital,
-      })
-      .getOne();
+
+  async seleccionarAgendaSemanaProxima(idMedico: number, idHEM: number): Promise<AgendaSemanaProxima> {
+    console.log(`Seleccionando agenda para la próxima semana del médico ID ${idMedico} y HEM ID ${idHEM}`);
+    if (!idMedico || idMedico <= 0) {
+      throw new BadRequestException(`El ID del Médico es inválido`);
+    }
+
+    if (!idHEM || idHEM <= 0) {
+      throw new BadRequestException(`El ID de la Relación Hospital-Especialidad-Médico es inválido`);
+    }
+
+    const hem = await this.genericRepository.buscarPorId(
+      HospitalEspecialidadMedico,
+      idHEM,
+      [
+        "agendaSemanales",
+        "medico",
+      ]
+    )
+    console.log(`HEM encontrado: ${hem.id}`);
+
+    if (!hem) {
+      throw new BadRequestException(`La relación entre el Médico y el Hospital no existe o está inactiva`);
+    }
+
+    console.log(`Buscando agenda semanal para la próxima semana...`);
+    let agendaSemanaProxima: AgendaSemanaProxima | null = null;
+    const nroSemanaActual = this.obtenerNumeroSemana(new Date());
+    const nroSemanaProxima = nroSemanaActual + 1;
+
+    console.log(`Número de semana actual: ${nroSemanaActual}, próxima semana: ${nroSemanaProxima}`);
+    for (const agenda of hem.agendaSemanales) {
+      if (agenda.nroSemana === nroSemanaProxima && !agenda.fechaHoraBaja) {
+        agendaSemanaProxima = {
+          idAgendaSemanal: agenda.id,
+          fechaDesdeAgendaSemanal: agenda.fechaDesdeAgendaSemanal,
+          fechaHastaAgendaSemanal: agenda.fechaHastaAgendaSemanal,
+          nroSemana: agenda.nroSemana,
+        };
+      }
+    }
+
+    if (!agendaSemanaProxima) {
+      throw new BadRequestException(`No hay agenda disponible para la próxima semana`);
+    }
+
+    return agendaSemanaProxima;
+  }
+
+  async listarHorariosDisponiblesAgenda(idAgendaSemanal: number): Promise<{ horarios: HorarioAgenda[] }> {
+    console.log(`Listando horarios disponibles para la agenda semanal ID ${idAgendaSemanal}`);
+    if (!idAgendaSemanal || idAgendaSemanal <= 0) {
+      throw new BadRequestException(`El ID de la Agenda Semanal es inválido`);
+    }
+
+    console.log(`Buscando agenda semanal con ID ${idAgendaSemanal}`);
+    const agendaSemanal = await this.genericRepository.buscarPorId(
+      AgendaSemanal,
+      idAgendaSemanal,
+      [
+        'agendasDia',
+        'agendasDia.turnosAgendaDia',
+      ]
+    );
+
+    let horarios: HorarioAgenda[] = [];
+
+    console.log(`Procesando días de la agenda semanal ID ${idAgendaSemanal}`);
+    for (const agendaDia of agendaSemanal.agendasDia) {
+      if (!agendaDia.fechaHoraBaja) {
+        for (const turnoAgendaDia of agendaDia.turnosAgendaDia) {
+          if (turnoAgendaDia.disponible && !turnoAgendaDia.fechaHoraBaja) {
+            const horario: HorarioAgenda = {
+              idTurnoAgendaDia: turnoAgendaDia.id,
+              idAgendaDia: agendaDia.id,
+              disponible: turnoAgendaDia.disponible,
+              fechaHoraAgendaDia: agendaDia.fechaAgendaDia,
+              horaDesdeTurnoAgendaDia: turnoAgendaDia.horaDesde,
+              horaHastaTurnoAgendaDia: turnoAgendaDia.horaHasta,
+            };
+            horarios.push(horario);
+          }
+        }
+      }
+    }
+
+    if (horarios.length === 0) {
+      throw new BadRequestException(`No hay horarios disponibles en la agenda seleccionada`);
+    }
+
+    return { horarios };
+  }
+
+  async generarReservaTurno(idTurnoAgendaDia: number, idHospital: number, idMedico: number, idUsuario: number, observaciones?: string): Promise<Turno> {
+    // Controlar consistencia de los datos
+    if (!idTurnoAgendaDia || idTurnoAgendaDia <= 0) {
+      throw new BadRequestException(`El ID del Turno de la Agenda del Día es inválido`);
+    }
+
+    if (!idHospital || idHospital <= 0) {
+      throw new BadRequestException(`El ID del Hospital es inválido`);
+    }
+
+    if (!idMedico || idMedico <= 0) {
+      throw new BadRequestException(`El ID del Médico es inválido`);
+    }
+
+    if (observaciones && observaciones.length > 500) {
+      throw new BadRequestException(`Las observaciones no pueden exceder los 500 caracteres`);
+    }
+
+    console.log('Validaciones de datos de entrada completada')
+
+    // Buscar instancia de TurnoAgendaDia
+    // Leer instancia de TurnoAgendaDia
+    const turnoAgendaDia = await this.genericRepository.buscarPorId(
+      TurnoAgendaDia,
+      idTurnoAgendaDia,
+      ['turno']
+    );
+
+    console.log(`turnoAgendaDia: ${turnoAgendaDia}`)
+
+    // COMPROBAR QUE (TurnoAgendaDia no tenga instancia de Turno relacionada && disponible == true)
+    if (!turnoAgendaDia || !turnoAgendaDia.disponible || turnoAgendaDia.fechaHoraBaja) {
+      throw new BadRequestException(`El Turno de la Agenda del Día no está disponible para reserva`);
+    }
+
+    if (turnoAgendaDia.turno) {
+      throw new BadRequestException(`Este slot de agenda ya tiene un turno reservado`);
+    }
+
+    console.log('Validaciones de turnoAgendaDia completada')
+
+    const hospital = await this.genericRepository.buscarPorId(
+      Hospital,
+      idHospital,
+      []
+    );
+
+    console.log(`hospital: ${hospital}`)
+
     if (!hospital) {
-      throw new BadRequestException(`No hay hospital disponible`);
+      throw new BadRequestException(`El Hospital con ID ${idHospital} no existe`);
     }
-    const hospitalEspecialidades = hospital.hospitalEspecialidades;
-    const ListaDeAgendasDTO: AgendasSolicitarTurnoDTO[] = [];
-    for (const hospitalEspecialidad of hospitalEspecialidades) {
-      if (
-        hospitalEspecialidad.fechaHoraBaja === null &&
-        hospitalEspecialidad.fechaHasta === null
-      ) {
-        const hospitalEspecialidadMedicos =
-          hospitalEspecialidad.hospitalEspecialidadMedico;
-        console.log(hospitalEspecialidadMedicos);
-        for (const hospitalEspecialidadMedico of hospitalEspecialidadMedicos) {
-          if (
-            hospitalEspecialidadMedico.fechaHoraBaja === null &&
-            hospitalEspecialidadMedico.fechaHasta === null
-          ) {
-            const medicoEncontrado = hospitalEspecialidadMedico.medico;
-            if (medicoEncontrado.id === idMedico) {
-              const agendasSemanales =
-                hospitalEspecialidadMedico.agendaSemanales;
-              for (const agendaSemanal of agendasSemanales) {
-                if (
-                  (agendaSemanal.nroSemana === nroSemanaActual ||
-                    agendaSemanal.nroSemana === nroSemanaActual + 1 ||
-                    agendaSemanal.nroSemana === nroSemanaActual + 2 ||
-                    agendaSemanal.nroSemana === nroSemanaActual + 3) &&
-                  agendaSemanal.fechaHoraBaja === null
-                ) {
-                  const agendaDias = agendaSemanal.agendasDia;
-                  const ListaAgendaDia: DiasSolicitarTurnoDTO[] = [];
-                  for (const agendaDia of agendaDias) {
-                    let fechaBajaAgendaDiaDTO;
-                    if (agendaDia.fechaHoraBaja !== null) {
-                      fechaBajaAgendaDiaDTO = agendaDia.fechaHoraBaja!;
-                    } else {
-                      fechaBajaAgendaDiaDTO = null;
-                    }
-                    const turnosAgendaDia = agendaDia.turnosAgendaDia;
-                    const ListaTurnosDTO: TurnosSolicitarTurnoDTO[] = [];
-                    for (const turnoAgendaDia of turnosAgendaDia) {
-                      const turnoDTO: TurnosSolicitarTurnoDTO = {
-                        disponible: turnoAgendaDia.disponible,
-                        horaDesde: turnoAgendaDia.horaDesde,
-                        horaHasta: turnoAgendaDia.horaHasta,
-                        fechaBaja: turnoAgendaDia.fechaHoraBaja!,
-                        idTurno: turnoAgendaDia.id,
-                      };
-                      ListaTurnosDTO.push(turnoDTO);
-                    }
-                    const agendaDiaDTO: DiasSolicitarTurnoDTO = {
-                      idDia: agendaDia.id,
-                      nombreDia: agendaDia.nombreAgendaDia,
-                      fechaHoraBajaAgendaDia: fechaBajaAgendaDiaDTO,
-                      turnos: ListaTurnosDTO,
-                    };
-                    ListaAgendaDia.push(agendaDiaDTO);
-                  }
-                  const agendaSemanalDTO: AgendasSolicitarTurnoDTO = {
-                    idSemana: agendaSemanal.id,
-                    nroSemana: agendaSemanal.nroSemana,
-                    fechaDesde: agendaSemanal.fechaDesdeAgendaSemanal,
-                    fechaHasta: agendaSemanal.fechaHastaAgendaSemanal,
-                    dias: ListaAgendaDia,
-                  };
-                  ListaDeAgendasDTO.push(agendaSemanalDTO);
-                }
-              }
-            }
-          }
-        }
-      }
+
+    console.log('Validaciones de hospital completada')
+
+    const medico = await this.genericRepository.buscarPorId(
+      Medico,
+      idMedico,
+      []
+    );
+
+    console.log(`medico: ${medico}`)
+
+    if (!medico) {
+      throw new BadRequestException(`El Médico con ID ${idMedico} no existe`);
     }
-    return ListaDeAgendasDTO;
+
+    console.log('Validaciones de medico completada')
+
+    const hospitalEspecialidadMedico = await this.genericRepository.buscar(
+      HospitalEspecialidadMedico,
+      "hem",
+      [
+        { atributo: "medico.id", operacion: "=", valor: idMedico },
+        { atributo: "fechaHoraBaja", operacion: "isNull", valor: null }
+      ],
+      [
+        'hospitalEspecialidad',
+        'hospitalEspecialidad.especialidad',
+        'hospitalEspecialidad.hospital'
+      ]
+    );
+
+    console.log(`HEM: ${hospitalEspecialidadMedico}`)
+
+    if (!hospitalEspecialidadMedico || hospitalEspecialidadMedico.length === 0) {
+      throw new BadRequestException(`No se encontró la relación entre el médico y ningún hospital`);
+    }
+
+    console.log('Validaciones de HEM completada')
+
+    const hemParaHospital = hospitalEspecialidadMedico.find(hem =>
+      hem.hospitalEspecialidad.hospital.id === idHospital
+    );
+
+    if (!hemParaHospital) {
+      throw new BadRequestException(`No se encontró la relación entre el médico y el hospital especificado`);
+    }
+
+    const especialidad = hemParaHospital.hospitalEspecialidad.especialidad;
+
+    console.log('Buscando AgendaDia...')
+    // Primero buscamos el TurnoAgendaDia específico con su AgendaDia
+    const turnoAgendaDiaEncontrado = await this.genericRepository.buscarPorId(
+      TurnoAgendaDia,
+      idTurnoAgendaDia,
+      ['agendaDia']
+    );
+
+    if (!turnoAgendaDiaEncontrado || turnoAgendaDiaEncontrado.fechaHoraBaja) {
+      throw new BadRequestException(`El Turno de la Agenda del Día con ID ${idTurnoAgendaDia} no existe o está dado de baja`);
+    }
+
+    const agendaDia = turnoAgendaDiaEncontrado.agendaDia;
+    console.log('AgendaDia encontrada')
+    console.log(`fechaAgendaDia: ${agendaDia.fechaAgendaDia}`)
+
+    if (!agendaDia || agendaDia.fechaHoraBaja) {
+      throw new BadRequestException(`No se encontró el día de la agenda asociado al turno seleccionado`);
+    }
+
+    const estadoTurno = await this.genericRepository.buscar(
+      EstadoTurno,
+      "estadoTurno",
+      [
+        { atributo: "nombre", operacion: "=", valor: EstadoTurnoEnum.RESERVADO },
+        { atributo: "fechaHoraBaja", operacion: "isNull", valor: null }
+      ],
+      []
+    );
+
+    if (!estadoTurno || estadoTurno.length === 0) {
+      throw new BadRequestException(`No se encontró el estado de turno 'RESERVADO'`);
+    }
+
+    const usuario = await this.genericRepository.buscarPorId(
+      Usuario,
+      idUsuario,
+      [
+        'paciente',
+      ]
+    );
+
+    if (!usuario) {
+      throw new BadRequestException(`El Paciente con ID ${idUsuario} no existe`);
+    }
+
+    const paciente = usuario.paciente;
+
+    if (!paciente) {
+      throw new BadRequestException(`El Usuario con ID ${idUsuario} no está asociado a ningún Paciente`);
+    }
+
+    const nuevoTurnoEstado = new TurnoEstado();
+    nuevoTurnoEstado.estadoTurno = estadoTurno[0];
+    nuevoTurnoEstado.fechaDesde = new Date();
+    nuevoTurnoEstado.fechaHasta = null;
+
+    const nuevoTurno = new Turno();
+    nuevoTurno.fecha = agendaDia.fechaAgendaDia;
+    nuevoTurno.hora = turnoAgendaDiaEncontrado.horaDesde;
+    nuevoTurno.presentismo = false;
+    nuevoTurno.observaciones = observaciones ? observaciones : "";
+    nuevoTurno.estadoTurno = estadoTurno[0];
+    nuevoTurno.turnosEstados = [nuevoTurnoEstado];
+    nuevoTurno.hospital = hospital;
+    nuevoTurno.paciente = paciente
+    nuevoTurno.medico = medico;
+    nuevoTurno.especialidad = especialidad;
+
+    // Guardar el nuevo turno en la base de datos
+    const turnoGuardado = await this.genericRepository.guardarCambios(Turno, nuevoTurno);
+
+    // Actualizar el turno agenda día
+    turnoAgendaDiaEncontrado.disponible = false;
+    turnoAgendaDiaEncontrado.turno = turnoGuardado;
+    await this.genericRepository.guardarCambios(TurnoAgendaDia, turnoAgendaDiaEncontrado);
+
+    return turnoGuardado;
   }
-  async solicitarTurnoResumen(
-    idMedico: number,
-    idHospital: number,
-    idAgendaSemanal: number,
-    idAgendaDia: number,
-    idTurnoAgendaDia: number,
-    idEspecialidad: number,
-    emailUsuario: string,
-  ) {
-    const agendaSemanal = await this.agendaSemanalRepository
-      .createQueryBuilder('agendaSemanal')
-      .leftJoinAndSelect('agendaSemanal.agendasDia', 'ad')
-      .leftJoinAndSelect('ad.turnosAgendaDia', 'tad')
-      .where('agendaSemanal.id = :id AND agendaSemanal.fechaHoraBaja IS NULL', {
-        id: idAgendaSemanal,
-      })
-      .getOne();
-    const hospital = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .where('hospital.id = :id AND hospital.fechaHoraBaja IS NULL', {
-        id: idHospital,
-      })
-      .getOne();
-    const especialidad = await this.especialidadRepository
-      .createQueryBuilder('especialidad')
-      .where('especialidad.id = :id AND especialidad.fechaHoraBaja IS NULL', {
-        id: idEspecialidad,
-      })
-      .getOne();
-    const medico = await this.medicoDiaRepository
-      .createQueryBuilder('medico')
-      .where('medico.id = :id AND medico.fechaHoraBaja IS NULL', {
-        id: idMedico,
-      })
-      .getOne();
-    const usuario = await this.usuarioRepository
-      .createQueryBuilder('usuario')
-      .leftJoinAndSelect('usuario.paciente', 'pac')
-      .where(
-        'usuario.emailUsuario = :email AND usuario.fechaHoraBaja IS NULL',
-        {
-          email: emailUsuario,
-        },
-      )
-      .getOne();
-    if (!agendaSemanal || !hospital || !especialidad || !medico || !usuario) {
-      throw new BadRequestException(
-        `La seleccion ha fallado, vuelva a intentarlo`,
-      );
+
+  async generarResumenTurno(idTurno: number): Promise<TurnoResumen> {
+    if (!idTurno || idTurno <= 0) {
+      throw new BadRequestException(`El ID del Turno es inválido`);
     }
-    let resumenDTO: ResumenSolicitarTurnoDTO;
-    const agendasDias = agendaSemanal.agendasDia;
-    for (const agendaDia of agendasDias) {
-      if (agendaDia.id === idAgendaDia) {
-        const turnos = agendaDia.turnosAgendaDia;
-        for (const turnoAgendaSeleccionado of turnos) {
-          if (
-            turnoAgendaSeleccionado.disponible === true &&
-            turnoAgendaSeleccionado.id === idTurnoAgendaDia
-          ) {
-            turnoAgendaSeleccionado.disponible = false;
-            this.turnoAgendaDiaRepository.save(turnoAgendaSeleccionado);
-            resumenDTO = {
-              nombreEspecialidad: especialidad.nombre,
-              nombreHospital: hospital.nombre,
-              nombreMedico: medico.nombreMedico,
-              apellidoMedico: medico.apellidoMedico,
-              fechaTurno: this.obtenerFechaDesdeDia(
-                agendaSemanal.fechaDesdeAgendaSemanal,
-                agendaDia.nombreAgendaDia,
-              ),
-              fechaHoraActual: new Date(),
-              nombrePaciente: usuario.paciente.nombrePaciente,
-              apellidoPaciente: usuario.paciente.apellidoPaciente,
-            };
-          } else {
-            throw new BadRequestException(
-              `El turno seleccionado no esta disponible`,
-            );
-          }
-        }
-      }
+
+    const turno = await this.genericRepository.buscarPorId(
+      Turno,
+      idTurno,
+      [
+        'hospital',
+        'medico',
+        'especialidad',
+        'paciente',
+      ]
+    );
+
+    if (!turno) {
+      throw new BadRequestException(`El turno con ID ${idTurno} no existe`);
     }
-    console.log(resumenDTO!);
-    return resumenDTO!;
+
+    const turnoResumen: TurnoResumen = {
+      idHospital: turno.hospital.id,
+      nombreHospital: turno.hospital.nombre,
+      direccionHospital: turno.hospital.direccion,
+      emailHospital: turno.hospital.email,
+      telHospital: turno.hospital.telefono,
+      idMedico: turno.medico.id,
+      nombreMedico: turno.medico.nombreMedico,
+      apellidoMedico: turno.medico.apellidoMedico,
+      matriculaMedico: turno.medico.matriculaMedico,
+      idTurno: turno.id,
+      fechaTurno: turno.fecha,
+      horaTurno: turno.hora,
+      observacionesTurno: turno.observaciones,
+      idEspecialidad: turno.especialidad.id,
+      nombreEspecialidad: turno.especialidad.nombre,
+      idPaciente: turno.paciente.id,
+      nombrePaciente: turno.paciente.nombrePaciente,
+      apellidoPaciente: turno.paciente.apellidoPaciente,
+      dniPaciente: turno.paciente.dniPaciente,
+      fechaNacimiento: turno.paciente.fechaNacimientoPaciente,
+    }
+
+    return turnoResumen;
   }
-  async solicitarTurnoFinalizar(
-    idMedico: number,
-    idHospital: number,
-    idAgendaSemanal: number,
-    idAgendaDia: number,
-    idTurnoAgendaDia: number,
-    idEspecialidad: number,
-    emailUsuario: string,
-  ) {
-    const agendaSemanal = await this.agendaSemanalRepository
-      .createQueryBuilder('agendaSemanal')
-      .leftJoinAndSelect('agendaSemanal.agendasDia', 'ad')
-      .leftJoinAndSelect('ad.turnosAgendaDia', 'tad')
-      .where('agendaSemanal.id = :id AND agendaSemanal.fechaHoraBaja IS NULL', {
-        id: idAgendaSemanal,
-      })
-      .getOne();
-    const hospitalAsignar = await this.hospitalRepository
-      .createQueryBuilder('hospital')
-      .where('hospital.id = :id AND hospital.fechaHoraBaja IS NULL', {
-        id: idHospital,
-      })
-      .getOne();
-    const especialidadAsignar = await this.especialidadRepository
-      .createQueryBuilder('especialidad')
-      .where('especialidad.id = :id AND especialidad.fechaHoraBaja IS NULL', {
-        id: idEspecialidad,
-      })
-      .getOne();
-    const medicoAsignar = await this.medicoDiaRepository
-      .createQueryBuilder('medico')
-      .where('medico.id = :id AND medico.fechaHoraBaja IS NULL', {
-        id: idMedico,
-      })
-      .getOne();
-    const estadoAsignar = await this.estadoTurnoRepository
-      .createQueryBuilder('estadoTurno')
-      .where(
-        'estadoTurno.nombre = :nombre AND estadoTurno.fechaHoraBaja IS NULL',
-        {
-          nombre: EstadoTurnoEnum.RESERVADO,
-        },
-      )
-      .getOne();
-    const usuarioAsignar = await this.usuarioRepository
-      .createQueryBuilder('usuario')
-      .leftJoinAndSelect('usuario.paciente', 'pac')
-      .leftJoinAndSelect('pac.turnos', 'tur')
-      .where(
-        'usuario.emailUsuario = :email AND usuario.fechaHoraBaja IS NULL',
-        {
-          email: emailUsuario,
-        },
-      )
-      .getOne();
-    if (
-      !agendaSemanal ||
-      !hospitalAsignar ||
-      !especialidadAsignar ||
-      !medicoAsignar ||
-      !usuarioAsignar
-    ) {
-      throw new BadRequestException(
-        `La seleccion ha fallado, vuelva a intentarlo`,
-      );
-    }
-    const agendasDias = agendaSemanal.agendasDia;
-    for (const agendaDia of agendasDias) {
-      if (agendaDia.id === idAgendaDia) {
-        const turnos = agendaDia.turnosAgendaDia;
-        for (const turnoAgendaSeleccionado of turnos) {
-          if (
-            turnoAgendaSeleccionado.disponible === false &&
-            turnoAgendaSeleccionado.id === idTurnoAgendaDia
-          ) {
-            console.log('entre');
-            const dtoTurno: CreateTurnoDto = {
-              fechaTurno: this.obtenerFechaDesdeDia(
-                agendaSemanal.fechaDesdeAgendaSemanal,
-                agendaDia.nombreAgendaDia,
-              ),
-              horaTurno: turnoAgendaSeleccionado.horaDesde,
-              estadoTurno: estadoAsignar!,
-              especialidad: especialidadAsignar!,
-              hospital: hospitalAsignar!,
-              medico: medicoAsignar!,
-              descripcion: '',
-            };
-            const turnoCreado: Turno =
-              await this.abmTurnoUseCase.crear(dtoTurno);
-            const turnoEstadoDTO: CreateTurnoEstadoDto = {
-              estadoTurno: estadoAsignar!,
-              turno: turnoCreado,
-            };
-            this.abmTurnoEstadoUseCase.crear(turnoEstadoDTO);
-            const paciente = usuarioAsignar.paciente;
-            console.log(paciente.turnos);
-            paciente.turnos.push(turnoCreado);
-            this.pacienteRepository.save(paciente);
-          } else {
-            throw new BadRequestException(`Hubo un problema`);
-          }
-        }
-      }
-    }
-  }
-  //Algoritmo para calcular numero de Semana
-  private getWeekNumber(date: Date): number {
+
+  private obtenerNumeroSemana(date: Date): number {
     // Copia la fecha para no mutar la original
     const d = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
@@ -489,36 +524,6 @@ export class SolicitarTurnoUseCase {
 
     return weekNo;
   }
-  //calcular la fecha del turno
-  private obtenerFechaDesdeDia(fechaDesde: Date, nombreDia: string): Date {
-    // Normalizo nombres de días
-    const dias = [
-      'domingo',
-      'lunes',
-      'martes',
-      'miércoles',
-      'jueves',
-      'viernes',
-      'sábado',
-    ];
-
-    // Índice del día deseado
-    const diaDeseado = dias.indexOf(nombreDia.toLowerCase());
-    if (diaDeseado === -1) throw new Error('Día inválido');
-
-    // Clonamos fecha para no mutar el original
-    const fecha = new Date(fechaDesde);
-
-    // Calcular inicio de semana (lunes como base)
-    const diaSemana = fecha.getDay(); // 0=domingo, 1=lunes...
-    const diff = diaSemana === 0 ? -6 : 1 - diaSemana; // mover al lunes de esa semana
-    fecha.setDate(fecha.getDate() + diff);
-
-    // Ahora sumamos hasta llegar al día deseado
-    const resultado = new Date(fecha);
-    const desplazamiento = diaDeseado === 0 ? 6 : diaDeseado - 1; // ajustar domingo al final
-    resultado.setDate(fecha.getDate() + desplazamiento);
-
-    return resultado;
-  }
 }
+export { EspecialidadResumen, LocalidadResumen };
+

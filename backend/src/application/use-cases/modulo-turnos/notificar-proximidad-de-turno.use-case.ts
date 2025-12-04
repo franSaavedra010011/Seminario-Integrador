@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
 import { ConsultarTurnosActivosDTO } from './dto/consultar-turnos-activos.dto';
 import { EstadoTurnoEnum } from 'src/domain/enums/estado-turno.enum';
@@ -18,7 +18,7 @@ export class NotificarProximidadDeTurnoUseCase {
     @InjectRepository(Paciente)
     private pacienteRepository: Repository<Paciente>,
     private readonly abmPacienteNotificacionUseCase: AbmPacienteNotificacionUseCase,
-  ) {}
+  ) { }
   async notificarProximidadDeTurno() {
     const fechaProximaAviso = new Date();
     fechaProximaAviso.setDate(fechaProximaAviso.getDate() + 1); // 1 dia de anticipacion

@@ -1,4 +1,5 @@
-import { IsString, IsEmail, IsDateString, IsInt, Min } from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreatePacienteDto {
   @IsString()
@@ -10,22 +11,44 @@ export class CreatePacienteDto {
   @IsString()
   dniPaciente: string;
 
-  @IsInt()
+  @IsNumber()
   edadPaciente: number;
 
   @IsDateString()
-  fechaNacimientoPaciente: string;
+  fechaNacimientoPaciente: Date;
 
   @IsString()
   celularPaciente: string;
 
-  @IsEmail()
+  @IsString()
   correoPaciente: string;
 
   @IsString()
   grupoSanguineoPaciente: string;
 
-  @IsInt()
-  @Min(1)
+  @IsOptional()
+  @IsString()
+  familiaresACargo?: string;
+
+  @IsOptional()
+  @IsString()
+  problemasEnCurso?: string;
+
+  @IsOptional()
+  @IsString()
+  antecedentesHeredofamiliares?: string;
+
+  @IsOptional()
+  @IsString()
+  habitos?: string;
+
+  @IsOptional()
+  @IsString()
+  alergias?: string;
+
+  @IsOptional()
+  vacunas?: any[];
+
+  @IsNumber()
   idLocalidad: number;
 }

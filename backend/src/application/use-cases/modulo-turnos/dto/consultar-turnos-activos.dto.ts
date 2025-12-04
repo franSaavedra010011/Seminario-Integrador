@@ -1,6 +1,10 @@
 import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class ConsultarTurnosActivosDTO {
+
+  @IsNotEmpty()
+  idTurno: number;
+
   @IsString()
   @IsNotEmpty()
   hora: string;
@@ -24,4 +28,7 @@ export class ConsultarTurnosActivosDTO {
   @IsString()
   @IsNotEmpty()
   nombreEspecialidad: string;
+
+  @IsString()
+  observaciones: string;
 }

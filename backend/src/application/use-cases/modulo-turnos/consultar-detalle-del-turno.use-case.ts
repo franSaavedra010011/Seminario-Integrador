@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Turno } from 'src/domain/entities/turno.entity';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { ConsultarDetalleDelTurnoDTO } from './dto/consultar-detalle-turno.dto';
 
 @Injectable()
 export class ConsultarDetalleDelTurnoUseCase {
-  constructor(private readonly genericRepository: GenericRepositoryService) {}
+  constructor(private readonly genericRepository: GenericRepositoryService) { }
   async consultarDetalleTurno(idTurnoSeleccionado: number) {
     const turnosSeleccionados = await this.genericRepository.buscar(
       Turno,

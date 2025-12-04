@@ -4,7 +4,7 @@ import { ArrayMinSize, IsArray, IsInt, IsNumber, IsString } from 'class-validato
 export class CreateMedicoDto {
   @IsString()
   nombreMedico: string;
-  
+
   @IsString()
   apellidoMedico: string;
 
@@ -18,8 +18,9 @@ export class CreateMedicoDto {
   matriculaMedico: string;
 
   @IsNumber()
+  @Type(() => Number)
   tiempoConsultaMedico: number;
-  
+
   @IsInt()
   @Type(() => Number)
   idHospital: number;

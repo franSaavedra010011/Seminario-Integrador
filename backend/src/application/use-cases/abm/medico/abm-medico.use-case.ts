@@ -1,6 +1,7 @@
+import { PersonalHospital } from 'src/domain/entities/personal-hospital.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
 import { CreateMedicoDto } from './dto/create-medico.dto';
 import { Medico } from 'src/domain/entities/medico.entity';
@@ -8,6 +9,7 @@ import { Hospital } from 'src/domain/entities/hospital.entity';
 import { EspecialidadMedico } from 'src/domain/entities/especialidad-medico.entity';
 import { HospitalEspecialidad } from 'src/domain/entities/hospital-especialidad.entity';
 import { HospitalEspecialidadMedico } from 'src/domain/entities/hospital-especialidad-medico.entity';
+import { Usuario } from 'src/domain/entities/usuario.entity';
 
 @Injectable()
 export class AbmMedicoUseCase {
@@ -19,9 +21,9 @@ export class AbmMedicoUseCase {
     @InjectRepository(HospitalEspecialidad)
     private readonly hospitalEspecialidadRepo: Repository<HospitalEspecialidad>,
     private readonly genericRepository: GenericRepositoryService,
-  ) {}
+  ) { }
 
-  async crear(dto: CreateMedicoDto): Promise<Medico> {
+  async crear(dto: CreateMedicoDto, usuario: Usuario): Promise<Medico> {
     // Crear instancia base
     const medico = new Medico();
     medico.nombreMedico = dto.nombreMedico;
@@ -30,6 +32,7 @@ export class AbmMedicoUseCase {
     medico.telMedico = dto.telefonoMedico;
     medico.matriculaMedico = dto.matriculaMedico;
     medico.tiempoConsulta = dto.tiempoConsultaMedico;
+    medico.usuario = usuario;
 
     const medicoGuardado = await this.genericRepository.guardarCambios(Medico, medico);
 
@@ -72,7 +75,11 @@ export class AbmMedicoUseCase {
           });
           await this.especialidadMedicoRepo.save(em);
 
-          // No guardamos `especialidad` porque no se requiere en tu diseño.
+          const personalHospital = new PersonalHospital();
+          personalHospital.hospital = hospital;
+          personalHospital.usuario = usuario;
+          personalHospital.fechaDesde = new Date();
+          await this.genericRepository.guardarCambios(PersonalHospital, personalHospital);
         }
       }
     }

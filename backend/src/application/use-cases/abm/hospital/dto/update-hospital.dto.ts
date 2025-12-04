@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsEmail, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsEmail, MinLength, IsArray } from 'class-validator';
 
 export class UpdateHospitalDto {
   @IsOptional()
@@ -18,4 +19,14 @@ export class UpdateHospitalDto {
   @IsOptional()
   @IsString()
   telHospital?: string;
+
+  @IsOptional()
+  @IsArray()
+  @Type(() => Number)
+  idEspecialidadesAAgregar?: number[];
+
+  @IsOptional()
+  @IsArray()
+  @Type(() => Number)
+  idEspecialidadesAEliminar?: number[];
 }

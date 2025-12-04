@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
 import { Turno } from 'src/domain/entities/turno.entity';
 import { EstadoTurno } from 'src/domain/entities/estado-turno.entity';
@@ -18,7 +18,7 @@ export class RegistrarAsistenciaDePacienteUseCase {
     @InjectRepository(EstadoTurno)
     private estadoTurnoRepository: Repository<EstadoTurno>,
     private readonly abmTurnoEstadoUseCase: AbmTurnoEstadoUseCase,
-  ) {}
+  ) { }
   async registrarAsistenciaDePaciente(idTurno: Number) {
     const turno = await this.turnoRepository
       .createQueryBuilder('turno') //hacerlo con usuario
