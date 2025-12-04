@@ -8,15 +8,63 @@ export default function Ajustes() {
   const [email, setEmail] = useState('juan@email.com');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleGuardar = (e) => {
+  const handleGuardar = async (e) => {
     e.preventDefault();
+
     if (password && password !== confirmPassword) {
       alert('Las contraseñas no coinciden');
       return;
     }
-    alert('Cambios guardados correctamente.');
-    // Aquí iría la lógica real para enviar los cambios al backend
+
+    setLoading(true);
+
+    try {
+      // Preparar los datos para enviar
+      const updateData = {
+        usernameUsuario: username,
+        emailUsuario: email,
+      };
+
+      // Solo agregar la contraseña si se ha ingresado
+      if (password.trim()) {
+        updateData.passwordUsuario = password;
+      }
+
+      // TODO: Obtener el ID del usuario autenticado desde el contexto/localStorage
+      const userId = 1; // Placeholder - esto debería venir del contexto de autenticación
+
+      const response = await fetch(`http://localhost:3000/usuario/modificar/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          // TODO: Agregar token de autenticación
+          // 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al actualizar usuario');
+      }
+
+      const result = await response.json();
+      console.log('Usuario actualizado:', result);
+
+      alert('Cambios guardados correctamente.');
+
+      // Limpiar campos de contraseña
+      setPassword('');
+      setConfirmPassword('');
+
+    } catch (error) {
+      console.error('Error al guardar cambios:', error);
+      alert('Error al guardar los cambios: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -78,7 +126,9 @@ export default function Ajustes() {
             </div>
           </fieldset>
 
-          <button type="submit" className="ajustes-guardar-btn">Guardar Cambios</button>
+          <button type="submit" className="ajustes-guardar-btn" disabled={loading}>
+            {loading ? 'Guardando...' : 'Guardar Cambios'}
+          </button>
         </form>
       </div>
     </div>
