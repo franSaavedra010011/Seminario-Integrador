@@ -14,10 +14,10 @@ export class AgendaSemanal extends Base {
   @Column()
   nroSemana: number;
 
-  @ManyToOne(() => HospitalEspecialidadMedico, (hospitalEspecialidadMedico) => hospitalEspecialidadMedico.agendaSemanales)
-  @JoinColumn({ name: 'idHospitalEspecialidadMedico' }) 
+  @ManyToOne(() => HospitalEspecialidadMedico, (hospitalEspecialidadMedico) => hospitalEspecialidadMedico.agendaSemanales, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'idHospitalEspecialidadMedico' })
   hospitalEspecialidadMedico: HospitalEspecialidadMedico;
 
-  @OneToMany(() => AgendaDia, (agendaDia) => agendaDia.agendaSemanal)
+  @OneToMany(() => AgendaDia, (agendaDia) => agendaDia.agendaSemanal, { cascade: ['insert', 'update'], onDelete: 'CASCADE', eager: true })
   agendasDia: AgendaDia[];
 }

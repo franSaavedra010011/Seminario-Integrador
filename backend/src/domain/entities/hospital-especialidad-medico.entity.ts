@@ -20,18 +20,21 @@ export class HospitalEspecialidadMedico extends Base {
 
   @ManyToOne(
     () => HospitalEspecialidad,
-    (hospitalEspecialidad) => hospitalEspecialidad.hospitalEspecialidadMedico,
+    (hospitalEspecialidad) => hospitalEspecialidad.hospitalEspecialidadMedico, {
+      onDelete: 'CASCADE',
+    }
   )
-  @JoinColumn({ name: 'idHospitalEspecialidad' })
+  @JoinColumn({ name: 'idHospitalEspecialidad', referencedColumnName: 'id' })
   hospitalEspecialidad: HospitalEspecialidad;
 
-  @ManyToOne(() => Medico, (medico) => medico.hospitalEspecialidadMedico)
-  @JoinColumn({ name: 'idMedico' })
+  @ManyToOne(() => Medico, (medico) => medico.hospitalEspecialidadMedico, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'idMedico', referencedColumnName: 'id' })
   medico: Medico;
 
   @OneToMany(
     () => AgendaSemanal,
     (agendaSemanal) => agendaSemanal.hospitalEspecialidadMedico,
+    { cascade: true, onDelete: 'CASCADE' }
   )
   agendaSemanales: AgendaSemanal[];
 }

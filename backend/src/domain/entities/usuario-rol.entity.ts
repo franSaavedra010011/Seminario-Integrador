@@ -17,6 +17,6 @@ export class UsuarioRol extends Base{
   @ManyToOne(() => Rol, (rol) => rol.usuarioRoles)
   rol: Rol;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.usuarioRoles)
+  @ManyToOne(() => Usuario, (usuario) => usuario.usuarioRoles, {  cascade: true, onDelete: 'CASCADE' })
   usuario: Usuario;
 }

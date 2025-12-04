@@ -38,6 +38,7 @@ export class Turno extends Base {
   medico: Medico;
 
   @ManyToOne(() => EstadoTurno, (estadoTurno) => estadoTurno.turnos)
+  @JoinColumn()
   estadoTurno: EstadoTurno;
 
   @OneToMany(() => TurnoEstado, (turnoEstado) => turnoEstado.turno)
@@ -52,7 +53,9 @@ export class Turno extends Base {
   @OneToOne(() => TurnoAgendaDia, (turnoAgendaDia) => turnoAgendaDia.turno)
   turnoAgendaDia: TurnoAgendaDia;
 
-  @ManyToOne(() => Hospital, (hospital) => hospital.turnos)
+  @ManyToOne(() => Hospital, (hospital) => hospital.turnos, {
+    onDelete: 'CASCADE',
+  })
   hospital: Hospital;
 
   @OneToMany(

@@ -8,7 +8,12 @@ export class PersonalHospital extends Base {
   @Column()
   fechaDesde: Date;
 
-  @ManyToOne(() => Hospital, (hospital) => hospital.personalHospital)
+  @Column({ nullable: true })
+  fechaHasta: Date;
+
+  @ManyToOne(() => Hospital, (hospital) => hospital.personalHospital, {
+    onDelete: 'CASCADE',
+  })
   hospital: Hospital;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.personalHospital)

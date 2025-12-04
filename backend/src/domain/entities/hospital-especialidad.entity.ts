@@ -18,7 +18,9 @@ export class HospitalEspecialidad extends Base {
   @Column({ nullable: true })
   fechaHasta: Date;
 
-  @ManyToOne(() => Hospital, (hospital) => hospital.hospitalEspecialidades)
+  @ManyToOne(() => Hospital, (hospital) => hospital.hospitalEspecialidades, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'idHospital' })
   hospital: Hospital;
 
@@ -30,7 +32,11 @@ export class HospitalEspecialidad extends Base {
 
   @OneToMany(
     () => HospitalEspecialidadMedico,
-    (heMedico) => heMedico.hospitalEspecialidad,
+    (heMedico) => heMedico.hospitalEspecialidad, {
+      cascade: true,
+      onDelete: 'CASCADE',
+      eager: true,
+    }
   )
   hospitalEspecialidadMedico: HospitalEspecialidadMedico[];
 }
