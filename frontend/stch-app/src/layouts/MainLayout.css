@@ -6,9 +6,11 @@ body {
   height: 100%;
   width: 100%;
 }
+
 #root {
   width: 100%;
 }
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -26,10 +28,19 @@ body {
 /* ===== MAIN CONTENT ===== */
 .main-content {
   flex: 1;
-  padding: 30px;
+  padding: 90px 30px 30px;
+  margin-left: 72px;
   overflow-y: auto;
   min-height: 100%;
   box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+  transition: margin-left 0.3s ease;
+}
+
+/* Si el sidebar está expandido, actualizá el margen izquierdo */
+body.sidebar-expanded .main-content {
+  margin-left: 230px;
 }
 
 /* ===== CARDS CONTAINER ===== */
@@ -48,6 +59,8 @@ body {
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s;
+  position: relative;
+  z-index: 0;
 }
 
 .card:hover {

@@ -1,63 +1,154 @@
-.crear-hospital-container {
+/* CrearHospital.css */
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f6fa;
+}
+
+.hospital-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.hospital-form {
+  background-color: #fff;
+  padding: 3rem 3rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 1200px;
+  align-items: stretch;
+}
+
+/* Título principal */
+.hospital-form h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2d3d;
+  margin-bottom: 0.5rem;
+}
+
+.hospital-form p {
+  text-align: center;
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 2.5rem;
+}
+
+/* Sección con dos columnas principales */
+.form-dual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Encabezados de sección con línea vertical azul */
+.form-section h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1f2d3d;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid #384179;
+  padding-left: 10px;
+}
+
+/* Inputs */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+input,
+select {
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #212529;
+  font-weight: 500;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input::placeholder {
+  color: #adb5bd;
+}
+
+/* Especialidades tipo "tags" */
+.specialties-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.specialty-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background-color: #f1f3f5;
+  color: #212529;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.specialty-tag.selected {
+  background-color: #384179;
+  color: white;
+  border-color: #384179;
+}
+
+.specialty-tag:hover {
+  background-color: #e2e6ea;
+}
+
+/* Botones */
+.btn-primary {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.05rem;
+  background-color: #384179;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+}
+
+.btn-primary:hover {
+  background-color: #2e376a;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 0.95rem;
+  font-size: 1rem;
+  background-color: #f1f3f5;
+  color: #374151;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  background-color: #f8f9fa;
+  gap: 0.5rem;
 }
 
-.crear-hospital-form {
-  background-color: #fff;
-  padding: 2rem 2.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-}
-
-.crear-hospital-form h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #384179;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.2rem 2rem;
-}
-
-.form-grid div {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-grid label {
-  margin-bottom: 0.4rem;
-  font-weight: 500;
-  color: #495057;
-}
-
-.form-grid input {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-button[type="submit"] {
-  margin-top: 2rem;
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  background-color: #384179;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-  background-color: #4c58a3;
+.btn-secondary:hover {
+  background-color: #e3e6e9;
 }

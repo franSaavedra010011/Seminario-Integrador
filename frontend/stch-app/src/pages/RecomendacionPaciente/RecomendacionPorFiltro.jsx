@@ -1,71 +1,56 @@
 import { useState } from 'react';
 import './RecomendacionPorFiltro.css';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 export default function RecomendacionPorFiltro() {
+  const [hospitalesRecomendados, setHospitalesRecomendados] = useState([]);
+  const [cargando, setCargando] = useState(false);
   const [opcionSeleccionada, setOpcionSeleccionada] = useState('');
-  const localidadUsuario = 'Ciudad';
-  const ultimoVisitado = 'Hospital Lagomaggiore';
-
-    const navigate = useNavigate();
-
-  const hospitales = [
-    {
-      nombre: 'Hospital Central',
-      localidad: 'Ciudad',
-      congestion: 'Alta',
-      actualizacion: '10:00 AM',
-      telefono: '261-1234567',
-      direccion: 'Calle Falsa 123',
-      email: 'central@hospital.com',
-    },
-    {
-      nombre: 'Hospital Lagomaggiore',
-      localidad: 'Ciudad',
-      congestion: 'Baja',
-      actualizacion: '09:30 AM',
-      telefono: '261-9876543',
-      direccion: 'Av. Salud 456',
-      email: 'lago@hospital.com',
-    },
-    {
-      nombre: 'Hospital Perrupato',
-      localidad: 'San Martín',
-      congestion: 'Media',
-      actualizacion: '08:45 AM',
-      telefono: '263-5551234',
-      direccion: 'Ruta 50 s/n',
-      email: 'perrupato@hospital.com',
-    },
-    {
-      nombre: 'Hospital del Este',
-      localidad: 'Ciudad',
-      congestion: 'Baja',
-      actualizacion: '08:15 AM',
-      telefono: '261-1122334',
-      direccion: 'Calle Este 100',
-      email: 'este@hospital.com',
-    },
-  ];
+  const navigate = useNavigate();
 
   const handleSeleccion = (opcion) => {
-    setOpcionSeleccionada(prev => (prev === opcion ? '' : opcion));
+    if (opcion === opcionSeleccionada) {
+      setOpcionSeleccionada('');
+      setHospitalesRecomendados([]);
+      return;
+    }
+    solicitarRecomendacion(opcion);
   };
 
-  const filtrarHospitales = () => {
-    if (opcionSeleccionada === 'cercania') {
-      return hospitales.filter(h => h.localidad === localidadUsuario);
+  const solicitarRecomendacion = async (opcion) => {
+    setOpcionSeleccionada(opcion);
+    setCargando(true);
+
+    try {
+      const token = localStorage.getItem('token');
+      const decoded = jwtDecode(token);
+      const idUsuario = decoded?.sub;
+
+      const response = await fetch('http://localhost:3000/recomendacion/solicitar-recomendacion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          criterioRecomendacion: opcion === 'cercania' ? 0 : 1,
+          idUsuario
+        })
+      });
+
+      if (!response.ok) throw new Error('Error en la solicitud');
+      const data = await response.json();
+      setHospitalesRecomendados(data);
+    } catch (error) {
+      console.error('Error al solicitar recomendación:', error);
+      setHospitalesRecomendados([]);
+    } finally {
+      setCargando(false);
     }
-    if (opcionSeleccionada === 'congestion') {
-      return hospitales.filter(h => h.congestion.toLowerCase() === 'baja' && h.localidad === localidadUsuario);
-    }
-    if (opcionSeleccionada === 'ultimo') {
-      return hospitales.filter(h => h.nombre === ultimoVisitado);
-    }
-    return [];
   };
 
-  const hospitalesFiltrados = filtrarHospitales();
+  const hospitalesFiltrados = hospitalesRecomendados;
 
   return (
     <div className="contenedor-recomendacion">
@@ -84,13 +69,9 @@ export default function RecomendacionPorFiltro() {
         >
           Por congestión
         </button>
-        <button
-          className={opcionSeleccionada === 'ultimo' ? 'activo' : ''}
-          onClick={() => handleSeleccion('ultimo')}
-        >
-          Último visitado
-        </button>
       </div>
+
+      {cargando && <p className="cargando">Cargando hospitales...</p>}
 
       {opcionSeleccionada && (
         <div className="tabla-hospitales">
@@ -98,9 +79,10 @@ export default function RecomendacionPorFiltro() {
             Resultados: {opcionSeleccionada === 'cercania'
               ? 'Por cercanía'
               : opcionSeleccionada === 'congestion'
-              ? 'Por congestión baja'
-              : 'Último hospital visitado'}
+                ? 'Por congestión baja'
+                : 'Último hospital visitado'}
           </h2>
+
           {hospitalesFiltrados.length > 0 ? (
             <table>
               <thead>
@@ -118,9 +100,9 @@ export default function RecomendacionPorFiltro() {
                 {hospitalesFiltrados.map((h, index) => (
                   <tr key={index}>
                     <td>{h.nombre}</td>
-                    <td>{h.localidad}</td>
-                    <td>{h.congestion}</td>
-                    <td>{h.actualizacion}</td>
+                    <td>{h.localidad?.nombre ?? '-'}</td>
+                    <td>{h.nivelCongestion ?? 'No informado'}</td>
+                    <td>{h.fechaActualizacionCongestion ?? '-'}</td>
                     <td>{h.telefono}</td>
                     <td>{h.direccion}</td>
                     <td>{h.email}</td>
@@ -129,12 +111,15 @@ export default function RecomendacionPorFiltro() {
               </tbody>
             </table>
           ) : (
-            <p className="sin-resultados">
-              No se encontraron hospitales para esta opción.
-            </p>
+            !cargando && (
+              <p className="sin-resultados">
+                No se encontraron hospitales para esta opción.
+              </p>
+            )
           )}
         </div>
       )}
+
       <hr />
       <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
         Volver al inicio

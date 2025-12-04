@@ -1,46 +1,114 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
 .hospitales-admin-container {
   padding: 40px 20px;
   background-color: #f4f6fa;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
+  margin-top: 20px;
+  /* espacio por el navbar */
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
-.header {
+/* ===== ENCABEZADO (título + botón) ===== */
+.btn-crear-contenedor {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 12;
 }
 
-.hospitales-admin-container h2 {
+.btn-crear-contenedor h2 {
   color: #384179;
+  font-size: 1.9rem;
+  font-weight: 700;
   margin: 0;
 }
 
+/* ===== BOTÓN CREAR ===== */
 .crear-btn {
-  background-color: #289c42;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e8f3f;
   color: white;
   border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .crear-btn:hover {
-  background-color: #13b613;
+  background-color: #16a34a;
+  transform: translateY(-1px);
 }
 
+.crear-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== FILTROS ===== */
+.filtros-contenedor {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.filtro-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.filtro-item label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #343a40;
+}
+
+.input-filtro,
+.select-filtro {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #fefefe;
+  color: #212529;
+}
+
+.select-filtro {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20fill%3D'%23212529'%20viewBox%3D'0%200%2024%2024'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M7%2010l5%205%205-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2rem;
+}
+
+/* ===== TABLA ===== */
 table {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
+th,
+td {
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
@@ -56,6 +124,7 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
+/* ===== ICONOS ===== */
 .icon-button {
   background: none;
   border: none;
@@ -70,4 +139,10 @@ tr:hover {
 
 .icon-button.delete:hover {
   color: #dc3545;
+}
+
+.icon-button.clock:hover {
+  color: #f59e0b;
+  transform: scale(1.2);
+  transition: all 0.2s ease-in-out;
 }

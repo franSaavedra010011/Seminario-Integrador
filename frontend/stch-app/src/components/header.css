@@ -1,35 +1,112 @@
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  background-color: #384179;
-  color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+/* ======= HEADER GENERAL ======= */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* punto de partida; lo ajustamos con las clases de layout */
+  right: 0;
+  /* garantiza que llegue hasta el borde derecho */
+  height: 60px;
   z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 0 24px;
+  background-color: #384179;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .05);
+
+  transition: left .3s ease;
+  /* ya no animamos width */
 }
 
+/* ======= MODOS DE LAYOUT ======= */
+/* Con sidebar colapsado */
+.sidebar-layout {
+  left: 72px;
+}
+
+/* Con sidebar expandido */
+body.sidebar-expanded .sidebar-layout {
+  left: 230px;
+}
+
+/* Sin sidebar (AuthLayout) */
+.full-layout {
+  left: 0;
+}
+
+/* ======= CONTENIDO INTERNO ======= */
 .header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 20px;
-  font-weight: bold;
-  color: #ffffff;
+  font-weight: 700;
+  flex: 0 0 auto;
+  /* no crece, no se encoge */
 }
 
 .header-left i {
   font-size: 22px;
 }
 
+/* El contenedor derecho ocupa todo el resto del ancho */
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+
+  flex: 1 1 auto;
+  /* crece y puede encoger */
+  min-width: 0;
+  /* clave para permitir encogimiento en flexbox */
+}
+
 .header-right a {
-  margin-left: 20px;
+  color: #fff;
   text-decoration: none;
-  color: #ffffff;
   font-weight: 500;
-  transition: color 0.2s;
+  font-size: 15px;
+  white-space: nowrap;
+  /* evita cortes raros; ver media query abajo */
 }
 
 .header-right a:hover {
   text-decoration: underline;
+}
+
+/* ======= SEPARACIÓN DEL CONTENIDO ======= */
+/* Asegura que el contenido no quede debajo del header */
+.main-content {
+  padding-top: 80px;
+}
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 900px) {
+  .header-right {
+    gap: 12px;
+  }
+
+  .header-right a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 720px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    /* si no entra, que baje a segunda línea */
+    row-gap: 6px;
+  }
 }

@@ -6,7 +6,7 @@ import './MainLayout.css';
 export default function MainLayout() {
   return (
     <div className="app-container">
-      <Header />
+      <Header conSidebar={true} />
       <div className="layout">
         <Sidebar />
         <div className="main-content">

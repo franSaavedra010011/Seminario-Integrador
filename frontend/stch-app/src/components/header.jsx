@@ -1,8 +1,9 @@
+// components/header.jsx
 import './header.css';
 
-export default function Header() {
+export default function Header({ conSidebar = true }) {
   return (
-    <header>
+    <header className={conSidebar ? 'header sidebar-layout' : 'header full-layout'}>
       <div className="header-left">
         <i className="fas fa-hospital"></i> STCH
       </div>

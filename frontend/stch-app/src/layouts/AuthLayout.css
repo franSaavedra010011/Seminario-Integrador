@@ -23,6 +23,11 @@ body {
   min-height: 0;
 }
 
+.auth-container {
+  padding-top: 60px; /* altura del header fijo */
+}
+
+
 /* ===== MAIN CONTENT ===== */
 .main-content {
   flex: 1;

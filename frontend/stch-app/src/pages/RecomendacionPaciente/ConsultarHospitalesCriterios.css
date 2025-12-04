@@ -1,0 +1,31 @@
+.contenedor-busqueda-criterios {
+  padding: 30px;
+  background-color: #f5f6fa;
+}
+
+.filtros {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filtros select,
+.filtros button {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.resultados table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.resultados th,
+.resultados td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}

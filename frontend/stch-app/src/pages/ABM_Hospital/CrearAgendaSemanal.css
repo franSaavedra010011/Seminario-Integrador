@@ -1,0 +1,217 @@
+/* ===== Contenedor principal ===== */
+.crear-agenda-container {
+    padding: 2.5rem 1.5rem;
+    background-color: #f9fbfd;
+    border-radius: 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+    font-family: "Inter", sans-serif;
+}
+
+.crear-agenda-container h2 {
+    text-align: center;
+    color: #0f172a;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.crear-agenda-container p {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
+
+/* ===== Card por especialidad ===== */
+.especialidad-card {
+    background-color: #ffffff;
+    padding: 1.75rem;
+    border-radius: 14px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
+}
+
+.especialidad-card:hover {
+    transform: translateY(-2px);
+}
+
+.especialidad-card h3 {
+    color: #384179;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    border-left: 4px solid #4f46e5;
+    padding-left: 0.75rem;
+}
+
+/* ===== Tabla de médicos ===== */
+.tabla-agendas {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabla-agendas th {
+    background-color: #f1f5f9;
+    color: #475569;
+    width: auto;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+    vertical-align: middle !important;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.tabla-agendas td {
+    padding: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.95rem;
+    color: #0f172a;
+    vertical-align: middle;
+    line-height: 1.3;
+    /* Centra contenido verticalmente */
+}
+
+.tabla-agendas td:nth-child(2),
+.tabla-agendas td:nth-child(3) {
+    text-align: center;
+}
+
+
+
+.tabla-agendas tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== Estados ===== */
+.estado {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.82rem;
+    line-height: 1;
+    height: 32px;
+    /* altura igual al botón */
+    white-space: nowrap;
+}
+
+.estado.vigente {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.estado.vigente::before {
+    content: "🟢";
+    font-size: 0.9rem;
+}
+
+/* ===== Estado "sin agenda" ===== */
+.estado.sin-agenda {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-radius: 20px;
+    padding: 0.35rem 0.8rem;
+    font-weight: 600;
+    font-size: 0.82rem;
+    height: 32px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.estado.sin-agenda::before {
+    content: "⚠️";
+    font-size: 0.9rem;
+    margin-right: 0.25rem;
+}
+
+/* ===== Contenedor de estado y botón ===== */
+.estado-agenda-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: nowrap;
+    width: fit-content;
+    height: 32px;
+    /* mismo que el botón y span */
+}
+
+/* ===== Botón crear agenda ===== */
+.btn-agenda {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    height: auto;
+    align-self: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #fff;
+    border: none;
+    padding: 0.25rem 0.9rem;
+    border-radius: 18px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    line-height: 1;
+    margin-top: auto;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.btn-agenda::before {
+    content: "+";
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-right: 0.2rem;
+}
+
+.btn-agenda:hover {
+    background: linear-gradient(135deg, #4338ca, #4f46e5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+
+.btn-agenda:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+}
+
+/* ===== Responsividad ===== */
+@media (max-width: 768px) {
+
+    .tabla-agendas th,
+    .tabla-agendas td {
+        display: block;
+        text-align: left;
+        width: 100%;
+    }
+
+    .tabla-agendas th {
+        display: block;
+    }
+
+    .tabla-agendas tr {
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem;
+        display: block;
+        background-color: #fff;
+    }
+
+    .btn-agenda {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,164 @@
+/* Contenedor general */
+.contenedor-detalle-hospital {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2d3d;
+}
+
+/* Título general */
+.titulo-detalle-hospital {
+  font-size: 32px;
+  font-weight: 700;
+  color: #384179;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Select de hospital */
+.filtros-detalle {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.selector-hospital {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* Grid de tarjetas */
+.card-hospital-dual {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .card-hospital-dual {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .card-info-hospital,
+  .card-congestion-nivel {
+    width: 48%;
+  }
+}
+
+/* Card izquierda */
+.card-info-hospital {
+  background-color: #ffffff;
+  padding: 20px 24px 1px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.card-title {
+  font-size: 18px;
+  text-align: left;
+  font-weight: 700;
+  color: #2563EB;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+/* Fila con ícono + label + contenido en una sola línea */
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 14.5px;
+  color: #374151;
+}
+
+.info-row i {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.info-label {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 14.5px;
+  color: #374151;
+}
+
+
+/* Card derecha */
+.card-congestion-nivel {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.label-congestion {
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #1f2d3d;
+  font-size: 16px;
+}
+
+.nivel-circulo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nivel-circulo.baja {
+  background-color: #d1f9d9;
+  color: #27ae60;
+}
+
+.nivel-circulo.media {
+  background-color: #ffe6a3;
+  color: #e67e22;
+}
+
+.nivel-circulo.alta {
+  background-color: #f8caca;
+  color: #c0392b;
+}
+
+/* Botón */
+.boton-volver {
+  margin: 30px auto 0;
+  display: block;
+  background-color: #384179;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.boton-volver:hover {
+  background-color: #2d3365;
+  transform: scale(1.03);
+}

@@ -5,134 +5,113 @@ import { useEffect, useState } from 'react';
 export default function ConsultarCongestion() {
   const navigate = useNavigate();
 
-  const [hospitalesOriginales, setHospitalesOriginales] = useState([]);
-  const [hospitalesFiltrados, setHospitalesFiltrados] = useState([]);
+  const [hospitales, setHospitales] = useState([]);
+  const [idHospitalSeleccionado, setIdHospitalSeleccionado] = useState('');
+  const [resultado, setResultado] = useState(null);
 
-  const [localidadSeleccionada, setLocalidadSeleccionada] = useState('');
-  const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState('');
-
+  // Obtener lista de hospitales al montar
   useEffect(() => {
-    const dataSimulada = [
-      {
-        nombre: 'Hospital Perrupato',
-        localidad: 'San Martín',
-        especialidades: ['Pediatría', 'Cardiología'],
-        nivel: 'Alta',
-        porcentaje: 87,
-        ultimaActualizacion: 'Hace 5 minutos',
-      },
-      {
-        nombre: 'Hospital Central',
-        localidad: 'Ciudad',
-        especialidades: ['Clínica Médica', 'Cardiología'],
-        nivel: 'Media',
-        porcentaje: 55,
-        ultimaActualizacion: 'Hace 8 minutos',
-      },
-      {
-        nombre: 'Hospital Lagomaggiore',
-        localidad: 'Ciudad',
-        especialidades: ['Pediatría'],
-        nivel: 'Baja',
-        porcentaje: 20,
-        ultimaActualizacion: 'Hace 10 minutos',
-      },
-    ];
-
-    setHospitalesOriginales(dataSimulada);
+    fetch('http://localhost:3000/shared/listas/hospitales?modo=simple', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => setHospitales(data))
+      .catch(err => console.error('Error al cargar hospitales:', err));
   }, []);
 
+  // Consultar congestión cuando cambia el hospital seleccionado
   useEffect(() => {
-    if (localidadSeleccionada && especialidadSeleccionada) {
-      const filtrados = hospitalesOriginales.filter(
-        (h) =>
-          h.localidad === localidadSeleccionada &&
-          h.especialidades.includes(especialidadSeleccionada)
-      );
-      setHospitalesFiltrados(filtrados);
-    } else {
-      setHospitalesFiltrados([]);
+    if (!idHospitalSeleccionado) {
+      setResultado(null);
+      return;
     }
-  }, [localidadSeleccionada, especialidadSeleccionada, hospitalesOriginales]);
 
-  const colorSemaforo = (nivel) => {
-    switch (nivel) {
-      case 'Alta':
-        return '🔴';
-      case 'Media':
-        return '🟡';
-      case 'Baja':
-        return '🟢';
-      default:
-        return '⚪';
-    }
-  };
+    const consultar = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/recomendacion/consultar-congestion-de-hospital', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ idHospital: Number(idHospitalSeleccionado) }),
+        });
+
+        const data = await response.json();
+        setResultado(data);
+      } catch (error) {
+        console.error('Error al consultar congestión:', error);
+      }
+    };
+
+    consultar();
+  }, [idHospitalSeleccionado]);
 
   return (
-    <div className="contenedor-congestion">
-      <h1 className="titulo-congestion">Estado de Congestión en Hospitales</h1>
+  <div className="contenedor-congestion">
+    <h1 className="titulo-congestion">Estado de Congestión en Hospitales</h1>
 
-      <div className="filtros-congestion">
-        <div>
-          <label>Localidad:</label>
-          <select value={localidadSeleccionada} onChange={(e) => setLocalidadSeleccionada(e.target.value)}>
-            <option value="">Seleccione una localidad</option>
-            <option value="Ciudad">Ciudad</option>
-            <option value="San Martín">San Martín</option>
-          </select>
+    <div className="filtros-congestion">
+      <label htmlFor="hospital-select">Seleccione un Hospital:</label>
+      <select
+        id="hospital-select"
+        className="selector-hospital"
+        value={idHospitalSeleccionado}
+        onChange={(e) => setIdHospitalSeleccionado(e.target.value)}
+      >
+        <option value="">Seleccione un hospital</option>
+        {hospitales.map((h) => (
+          <option key={h.id} value={h.id}>
+            {h.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {resultado && (
+      <div className="card-congestion">
+        <div className="card-header">
+          <h2>{resultado.nombreHospital}</h2>
         </div>
-        <div>
-          <label>Especialidad:</label>
-          <select value={especialidadSeleccionada} onChange={(e) => setEspecialidadSeleccionada(e.target.value)}>
-            <option value="">Seleccione una especialidad</option>
-            <option value="Pediatría">Pediatría</option>
-            <option value="Cardiología">Cardiología</option>
-            <option value="Clínica Médica">Clínica Médica</option>
-          </select>
+
+        <div className="nivel-congestion">
+          <span>Nivel de Congestión</span>
+          <span className={`badge ${resultado.nivelDeCongestion.toLowerCase()}`}>
+            {resultado.nivelDeCongestion}
+          </span>
+        </div>
+
+        <div className="ocupacion">
+          <span>Ocupación</span>
+          <div className="barra-progreso">
+            <div
+              className="progreso"
+              style={{
+                width: `${resultado.porcentajeCongestion}%`,
+                backgroundColor:
+                  resultado.porcentajeCongestion > 60
+                    ? '#e74c3c'
+                    : resultado.porcentajeCongestion > 30
+                    ? '#f39c12'
+                    : '#2ecc71',
+              }}
+            />
+          </div>
+          <strong>{resultado.porcentajeCongestion}%</strong>
+        </div>
+
+        <div className="actualizacion">
+          ⏱️ Actualizado a las: {resultado.horaActualizacion ?? '-'}
         </div>
       </div>
+    )}
 
-      <hr />
+    <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
+      Volver al inicio
+    </button>
+  </div>
+);
 
-      {localidadSeleccionada && especialidadSeleccionada ? (
-        hospitalesFiltrados.length > 0 ? (
-          <div className="tabla-congestion">
-            <table>
-              <thead>
-                <tr>
-                  <th>Hospital</th>
-                  <th>Congestión</th>
-                  <th>Ocupación</th>
-                  <th>Última Actualización</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hospitalesFiltrados.map((h, index) => (
-                  <tr key={index}>
-                    <td>{h.nombre}</td>
-                    <td>{colorSemaforo(h.nivel)} {h.nivel}</td>
-                    <td>{h.porcentaje}%</td>
-                    <td>{h.ultimaActualizacion}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="mensaje-info">
-            No se ha encontrado ningún hospital con esas características.
-          </p>
-        )
-      ) : (
-        <p className="mensaje-info">
-          Seleccione una localidad y especialidad para ver los hospitales disponibles.
-        </p>
-      )}
-
-      <hr />
-      <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
-        Volver al inicio
-      </button>
-    </div>
-  );
 }
