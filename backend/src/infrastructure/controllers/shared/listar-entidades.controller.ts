@@ -7,9 +7,15 @@ export class ListarEntidadesController {
 
   @Get('hospitales')
   hospitales(
-    @Query('modo') modo: 'simple' | 'localidad' | 'completo' = 'simple'
+    @Query('modo') modo: 'simple' | 'localidad' | 'completo' = 'simple',
+    @Query('id') idHospital?: number
   ) {
-    return this.listarSvc.listarHospitales(modo);
+    return this.listarSvc.listarHospitales(modo, idHospital);
+  }
+
+  @Get('especialidades-hospital')
+  listarEspecialidadesHospital(@Query('idHospital') idHospital: number) {
+    return this.listarSvc.listarEspecialidadesHospital(idHospital)
   }
 
   @Get('medicos')
@@ -20,6 +26,11 @@ export class ListarEntidadesController {
   @Get('pacientes')
   pacientes() {
     return this.listarSvc.listarPacientes();
+  }
+
+  @Get('turnos')
+  turnos() {
+    return this.listarSvc.listarTurnos();
   }
 
   @Get('usuarios')
@@ -35,6 +46,11 @@ export class ListarEntidadesController {
   @Get('localidades')
   listarLocalidades() {
     return this.listarSvc.listarLocalidades();
+  }
+
+  @Get('roles')
+  listarRoles() {
+    return this.listarSvc.listarRoles();
   }
 
 }
