@@ -102,6 +102,7 @@ export default function ReporteMedico({ onVolver }) {
                             value={fechaDesde}
                             onChange={(e) => setFechaDesde(e.target.value)}
                         />
+                        <small>Sugerido: 2025-12-01 (inicio del mes)</small>
                     </div>
 
                     <div className="campo">
@@ -111,6 +112,7 @@ export default function ReporteMedico({ onVolver }) {
                             value={fechaHasta}
                             onChange={(e) => setFechaHasta(e.target.value)}
                         />
+                        <small>Sugerido: 2025-12-31 (fin del mes)</small>
                     </div>
 
                     <button
