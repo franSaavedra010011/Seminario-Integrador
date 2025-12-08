@@ -36,14 +36,14 @@
 }
 
 .header h1 {
-    color: #2c3e50;
+    color: #1f2d3d;
     font-size: 2.2rem;
     margin-bottom: 10px;
     font-weight: 600;
 }
 
 .header p {
-    color: #7f8c8d;
+    color: #6c757d;
     font-size: 1.1rem;
     margin: 0;
 }
@@ -76,7 +76,7 @@
 }
 
 .campo label {
-    color: #2c3e50;
+    color: #1f2d3d;
     font-weight: 500;
     margin-bottom: 8px;
     font-size: 0.95rem;
@@ -95,8 +95,8 @@
 .campo select:focus,
 .campo input:focus {
     outline: none;
-    border-color: #f093fb;
-    box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
+    border-color: #384179;
+    box-shadow: 0 0 0 3px rgba(56, 65, 121, 0.1);
 }
 
 .campo small {
@@ -107,7 +107,7 @@
 }
 
 .btn-generar {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #384179 0%, #2e376a 100%);
     color: white;
     border: none;
     padding: 12px 30px;
@@ -120,9 +120,9 @@
 }
 
 .btn-generar:hover:not(:disabled) {
-    background: linear-gradient(135deg, #e91e63 0%, #e74c3c 100%);
+    background: linear-gradient(135deg, #2e376a 0%, #1e2749 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+    box-shadow: 0 4px 15px rgba(56, 65, 121, 0.4);
 }
 
 .btn-generar:disabled {
@@ -139,7 +139,7 @@
 }
 
 .resultados-reporte h3 {
-    color: #2c3e50;
+    color: #1f2d3d;
     font-size: 1.6rem;
     margin-bottom: 25px;
     font-weight: 600;
@@ -218,7 +218,7 @@
 }
 
 .tabla-turnos h4 {
-    color: #2c3e50;
+    color: #1f2d3d;
     font-size: 1.3rem;
     margin-bottom: 20px;
     font-weight: 600;
@@ -234,7 +234,7 @@
 }
 
 .tabla-turnos th {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #384179 0%, #2e376a 100%);
     color: white;
     padding: 15px;
     text-align: left;
@@ -291,7 +291,7 @@
 }
 
 .analisis h4 {
-    color: #2c3e50;
+    color: #1f2d3d;
     font-size: 1.2rem;
     margin-bottom: 20px;
     font-weight: 600;
@@ -315,13 +315,13 @@
 
 .metrica-label {
     font-weight: 500;
-    color: #2c3e50;
+    color: #1f2d3d;
 }
 
 .metrica-valor {
     font-weight: 700;
     font-size: 1.1rem;
-    color: #f093fb;
+    color: #384179;
 }
 
 /* Responsive Design */
