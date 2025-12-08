@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,7 +23,7 @@ export class GenerarReporteAdministrativoUseCase {
     private hospitalRepository: Repository<Hospital>,
     @InjectRepository(EstadoTurno)
     private estadoTurnoRepository: Repository<EstadoTurno>,
-  ) {}
+  ) { }
   async generarReporteAdministrativoHospital(idHospital: number) {
     const hospital = await this.hospitalRepository
       .createQueryBuilder('hospital')
@@ -168,10 +168,10 @@ export class GenerarReporteAdministrativoUseCase {
     }
 
     const dtoMensajeCantidades: GenerarReporteAdministrativo2doPasoMensajeCantidades =
-      {
-        mensaje: mensaje,
-        dtoCantidades: listaCantidadesDTO,
-      };
+    {
+      mensaje: mensaje,
+      dtoCantidades: listaCantidadesDTO,
+    };
 
     const estadoTurnoBuscado = await this.estadoTurnoRepository
       .createQueryBuilder('estadoTurno')
@@ -220,10 +220,10 @@ export class GenerarReporteAdministrativoUseCase {
         }
       }
       const conteoEspecialidad: GenerarReporteAdministrativoConteoEspecialidad =
-        {
-          nombreEspecialidad: especialidadNombre,
-          cantidad: cantidadTurnos,
-        };
+      {
+        nombreEspecialidad: especialidadNombre,
+        cantidad: cantidadTurnos,
+      };
       listaConteoEspecialidad.push(conteoEspecialidad);
     }
     //DTO QUE UNA AMBOS

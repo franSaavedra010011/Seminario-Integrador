@@ -32,13 +32,17 @@ export class Turno extends Base {
   presentismo: boolean;
 
   @ManyToOne(() => Paciente, (paciente) => paciente.turnos)
+  @JoinColumn({ name: 'idPaciente', referencedColumnName: 'id' })
   paciente: Paciente;
 
   @ManyToOne(() => Medico, (medico) => medico.turnos)
+  @JoinColumn({ name: 'idMedico', referencedColumnName: 'id' })
   medico: Medico;
 
   @ManyToOne(() => EstadoTurno, (estadoTurno) => estadoTurno.turnos)
-  @JoinColumn()
+  @JoinColumn(
+    { name: 'idEstadoTurno', referencedColumnName: "id" },
+  )
   estadoTurno: EstadoTurno;
 
   @OneToMany(() => TurnoEstado, (turnoEstado) => turnoEstado.turno)

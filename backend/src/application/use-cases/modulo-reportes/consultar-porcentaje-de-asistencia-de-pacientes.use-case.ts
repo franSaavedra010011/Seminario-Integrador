@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,7 +18,7 @@ export class ConsultarPorcentajeDeAsistenciaDePacientesUseCase {
     private hospitalRepository: Repository<Hospital>,
     @InjectRepository(Turno)
     private turnoRepository: Repository<Turno>,
-  ) {}
+  ) { }
   async consultarPorcentajeAsistenciaPacientesHospitales(mailUsuario: string) {
     const usuario = await this.usuarioRepository
       .createQueryBuilder('usuario')

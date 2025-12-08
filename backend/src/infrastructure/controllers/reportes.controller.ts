@@ -17,7 +17,6 @@ import { GenerarReportePacienteUseCase } from 'src/application/use-cases/modulo-
 @Controller('reportes')
 export class ReportesController {
     constructor(
-        // private readonly useCaseCancelarTurno: CancelarTurnoUseCase,
         private readonly useCaseConsultarCantidadTurnosAsignados: ConsultarCantidadDeTurnosAsignadosUseCase,
         private readonly useCaseConsultarHistorialTurnos: ConsultarHistorialDeTurnosUseCase,
         private readonly useCaseConsultarPorcentajeDeAsistenciaDePacientes: ConsultarPorcentajeDeAsistenciaDePacientesUseCase,
@@ -25,12 +24,6 @@ export class ReportesController {
         private readonly useCaseGenerarReporteMedico: GenerarReporteMedicoUseCase,
         private readonly useCaseGenerarReportePaciente: GenerarReportePacienteUseCase,
     ) { }
-    //UseCase: Cancelar Turno
-    //   @Delete('cancelarTurno/:id')
-    //   cancelarTurno(@Param('id') turnoSeleccionado: string) {
-    //     console.log('entre al controlador');
-    //     this.useCaseCancelarTurno.bajaTurno(Number(turnoSeleccionado));
-    //   }
     //UseCase: Consultar cantidad de turnos asignados
     @Get('consultarTurnosAsignadosHospitales/:emailUsuario')
     consultarTurnosAsignadosHospitales(
@@ -121,9 +114,9 @@ export class ReportesController {
         );
     }
 
-    @Get('generarReportePaciente/:idPaciente/:fechaDesde/:fechaHasta')
+    @Get('generarReportePaciente/:idUsuario/:fechaDesde/:fechaHasta')
     generarReportePaciente(
-        @Param('idPaciente') idPaciente: string,
+        @Param('idUsuario') idUsuario: number,
         @Param('fechaDesde') fechaDesdeString: string,
         @Param('fechaHasta') fechaHastaString: string,
     ) {
@@ -135,7 +128,7 @@ export class ReportesController {
             );
         }
         return this.useCaseGenerarReportePaciente.generarReportePaciente(
-            Number(idPaciente),
+            idUsuario,
             fechaDesde,
             fechaHasta,
         );

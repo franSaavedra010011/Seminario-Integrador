@@ -72,7 +72,6 @@ export class Paciente extends Base {
   turnos: Turno[];
 
   @OneToOne(() => Usuario, (usuario) => usuario.paciente, { nullable: true })
-  @JoinColumn({ name: 'userEmail', referencedColumnName: 'emailUsuario' })
   usuario: Usuario;
 
   @OneToMany(

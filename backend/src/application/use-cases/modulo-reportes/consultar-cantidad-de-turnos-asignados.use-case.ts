@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { TurnoAgendaDia } from 'src/domain/entities/turno-agenda-dia.entity';
 import { AbmTurnoUseCase } from '../abm/turno/abm-turno.use-case';
@@ -15,8 +15,6 @@ import { log } from 'console';
 @Injectable()
 export class ConsultarCantidadDeTurnosAsignadosUseCase {
   constructor(
-    private readonly genericRepository: GenericRepositoryService,
-    private readonly bajaLogica: AbmTurnoUseCase,
     @InjectRepository(Usuario)
     private usuarioRepository: Repository<Usuario>,
     @InjectRepository(Turno)
@@ -25,9 +23,7 @@ export class ConsultarCantidadDeTurnosAsignadosUseCase {
     private pacienteRepository: Repository<Paciente>,
     @InjectRepository(Hospital)
     private hospitalRepository: Repository<Hospital>,
-    @InjectRepository(TurnoAgendaDia)
-    private turnoAgendaDiaRepository: Repository<TurnoAgendaDia>,
-  ) {}
+  ) { }
   async consultarTurnosAsignadosHospitales(mailUsuario: string) {
     const usuario = await this.usuarioRepository
       .createQueryBuilder('usuario')

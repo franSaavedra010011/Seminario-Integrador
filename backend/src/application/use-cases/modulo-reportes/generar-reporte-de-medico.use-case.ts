@@ -1,4 +1,4 @@
-import { GenericRepositoryService } from 'src/shared/utils/genericRepository.service';
+import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,7 +23,7 @@ export class GenerarReporteMedicoUseCase {
     private hospitalRepository: Repository<Hospital>,
     @InjectRepository(Paciente)
     private pacienteRepository: Repository<Paciente>,
-  ) {}
+  ) { }
   async generarReporteMedico(
     idMedico: number,
     fechaDesde: Date,
