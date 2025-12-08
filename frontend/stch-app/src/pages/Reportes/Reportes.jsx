@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Reportes.css';
+import '../../App.css';
 import ReporteMedico from './ReporteMedico/ReporteMedico';
 import ReportePaciente from './ReportePaciente/ReportePaciente';
 import ReporteAdministrativo from './ReporteAdministrativo/ReporteAdministrativo';
@@ -30,7 +31,7 @@ export default function Reportes() {
   return (
     <div className="content">
       <div className="reportes-container">
-        <div className="header-reportes">
+        <div className="header-principal">
           <h1>Selección de Reporte</h1>
           <p>Elija el tipo de reporte que desea generar.</p>
         </div>

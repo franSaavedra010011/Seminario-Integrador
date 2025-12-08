@@ -2,20 +2,46 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: #f0f0e8;
+  background-color: #F5F6FA;
   height: 100%;
   width: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
 }
+
 #root {
   width: 100%;
 }
+
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+}
+
+.header-principal {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.header-principal h1 {
+  color: #1f2d3d;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.header-principal p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 /* ===== LAYOUT ===== */

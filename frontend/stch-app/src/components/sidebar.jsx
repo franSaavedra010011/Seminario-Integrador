@@ -64,7 +64,7 @@ export default function Sidebar() {
           </Link>
           <Link to="/ajustes">
             <i className="fas fa-cog"></i>
-            <span>Settings</span>
+            <span>Configuración</span>
           </Link>
           <Link to="/reportes">
             <i className="fas fa-chart-line"></i>
@@ -84,7 +84,7 @@ export default function Sidebar() {
           </Link>
           <Link to="/recomendacionPaciente">
             <i className="fas fa-info"></i>
-            <span>Recomendacion Paciente</span>
+            <span>Recomendaciones</span>
           </Link>
           <Link to="/abmRoles">
             <i className="fas fa-users"></i>

@@ -12,8 +12,8 @@ h1 {
 .container-btn-volver {
     display: flex;
     justify-content: flex-start;
-    align-self: flex-start;
     padding-top: 50px;
+    width: fit-content;
 }
 
 /* Botón de volver - Estilo mejorado */
@@ -28,7 +28,7 @@ h1 {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-bottom: 25px;
+    margin: 0px !important;
     display: inline-flex;
     align-items: center;
     gap: 8px;

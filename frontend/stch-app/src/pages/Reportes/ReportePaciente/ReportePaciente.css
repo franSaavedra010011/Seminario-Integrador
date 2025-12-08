@@ -8,8 +8,8 @@
 .container-btn-volver {
     display: flex;
     justify-content: flex-start;
-    align-self: flex-start;
     padding-top: 50px;
+    width: fit-content;
 }
 
 /* Botón de volver - Estilo mejorado */
@@ -22,9 +22,9 @@
     border-radius: 25px;
     font-size: 0.9rem;
     font-weight: 500;
+    margin: 0px !important;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-bottom: 25px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
