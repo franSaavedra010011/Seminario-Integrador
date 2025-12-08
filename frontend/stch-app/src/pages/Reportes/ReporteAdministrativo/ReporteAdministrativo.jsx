@@ -73,12 +73,15 @@ export default function ReporteAdministrativo({ onVolver }) {
 
     return (
         <div className="content">
-            <button className="btn-volver" onClick={onVolver}>
-                ← Volver a Reportes
-            </button>
+            <div className='container-btn-volver'>
+                <button className="btn-volver" onClick={onVolver}>
+                    ← Volver a Reportes
+                </button>
+            </div>
 
             <div className="reporte-administrativo-container">
-                <div className="header">
+
+                <div className="header-reportes-subpage">
                     <h1>Reporte Administrativo</h1>
                     <p>Visualice datos y métricas generales del sistema para la gestión y toma de decisiones</p>
                 </div>

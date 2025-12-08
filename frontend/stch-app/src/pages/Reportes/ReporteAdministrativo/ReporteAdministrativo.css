@@ -5,12 +5,24 @@
     padding: 20px;
 }
 
+h1 {
+    margin-top: 0px !important;
+}
+
+.container-btn-volver {
+    display: flex;
+    justify-content: flex-start;
+    align-self: flex-start;
+    padding-top: 50px;
+}
+
 /* Botón de volver - Estilo mejorado */
 .btn-volver {
     background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
     color: white;
     border: none;
     padding: 10px 20px;
+    max-width: fit-content;
     border-radius: 25px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -22,6 +34,15 @@
     gap: 8px;
     text-decoration: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-reportes-subpage {
+    text-align: center;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
 }
 
 .btn-volver:hover {

@@ -65,12 +65,16 @@ export default function ReporteMedico({ onVolver }) {
 
     return (
         <div className="content">
-            <button className="btn-volver" onClick={onVolver}>
-                ← Volver a Reportes
-            </button>
+            <div className='container-btn-volver'>
+                <button className="btn-volver" onClick={onVolver}>
+                    ← Volver a Reportes
+                </button>
+            </div>
 
             <div className="reporte-medico-container">
-                <div className="header">
+
+
+                <div className="header-reportes-subpage">
                     <h1>Reporte de Médico</h1>
                     <p>Genere reportes detallados de productividad y horarios médicos</p>
                 </div>

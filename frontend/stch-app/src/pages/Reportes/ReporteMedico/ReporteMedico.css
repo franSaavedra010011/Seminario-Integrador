@@ -11,6 +11,7 @@
     color: white;
     border: none;
     padding: 10px 20px;
+    max-width: fit-content;
     border-radius: 25px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -58,6 +59,10 @@
     flex-wrap: wrap;
     gap: 20px;
     align-items: flex-end;
+}
+
+h1 {
+    margin-top: 0px !important;
 }
 
 .formulario-reporte .campo {

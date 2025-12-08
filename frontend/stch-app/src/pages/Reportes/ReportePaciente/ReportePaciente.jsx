@@ -86,12 +86,16 @@ export default function ReportePaciente({ onVolver }) {
 
     return (
         <div className="content">
-            <button className="btn-volver" onClick={onVolver}>
-                ← Volver a Reportes
-            </button>
+            <div className='container-btn-volver'>
+                <button className="btn-volver" onClick={onVolver}>
+                    ← Volver a Reportes
+                </button>
+            </div>
 
             <div className="reporte-paciente-container">
-                <div className="header">
+
+
+                <div className="header-reportes-subpage">
                     <h1>Reporte de Paciente</h1>
                     <p>Consulte el historial de citas, diagnósticos y estadísticas de un paciente específico</p>
                 </div>

@@ -30,7 +30,7 @@ export default function Reportes() {
   return (
     <div className="content">
       <div className="reportes-container">
-        <div className="header">
+        <div className="header-reportes">
           <h1>Selección de Reporte</h1>
           <p>Elija el tipo de reporte que desea generar.</p>
         </div>
