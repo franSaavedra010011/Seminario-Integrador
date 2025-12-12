@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './AltaUsuario.css';
+import '../../App.css';
 import Select from 'react-select';
 
 export default function AltaUsuario() {
@@ -9,6 +10,10 @@ export default function AltaUsuario() {
   const [hospitales, setHospitales] = useState([]);
   const [especialidades, setEspecialidades] = useState([]);
   const [rolSeleccionado, setRolSeleccionado] = useState('');
+  const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   // Usuario
   const [dtoUsuario, setDtoUsuario] = useState({
@@ -61,6 +66,25 @@ export default function AltaUsuario() {
   const handleUsuarioChange = (e) => {
     const { name, value } = e.target;
     setDtoUsuario((prev) => ({ ...prev, [name]: value }));
+
+    // Si es el campo de contraseña, validar coincidencia
+    if (name === 'passwordUsuario') {
+      validatePasswords(value, confirmPassword);
+    }
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    validatePasswords(dtoUsuario.passwordUsuario, value);
+  };
+
+  const validatePasswords = (password, confirmPass) => {
+    if (confirmPass && password !== confirmPass) {
+      setPasswordError('Las contraseñas no coinciden');
+    } else {
+      setPasswordError('');
+    }
   };
 
   const handlePacienteChange = (e) => {
@@ -146,6 +170,17 @@ export default function AltaUsuario() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validar que las contraseñas coincidan
+    if (dtoUsuario.passwordUsuario !== confirmPassword) {
+      setPasswordError('Las contraseñas no coinciden');
+      alert('Error: Las contraseñas no coinciden');
+      return;
+    }
+
+    // Limpiar error si las contraseñas coinciden
+    setPasswordError('');
+
     const datosAEnviar = crearDtoFinal();
 
     try {
@@ -181,12 +216,15 @@ export default function AltaUsuario() {
   }, []);
 
   return (
-    <div className="alta-container">
-      <form className="alta-card" onSubmit={handleSubmit}>
-        <h1>Alta de Usuario</h1>
+    <div>
+      <div className="patient-card">
+        <div className="header-principal-card">
+          <h1>Alta de Usuario</h1>
+          <p>Registre nuevos usuarios en el sistema según su rol: pacientes, médicos, recepcionistas o administradores</p>
+          <hr />
+        </div>
 
-        {/* Tipo de Usuario */}
-        <div className="field-group single">
+        <div className="seleccionar-tipo-usuario">
           <label>Seleccione el tipo de usuario</label>
           <select value={rolSeleccionado} onChange={(e) => setRolSeleccionado(Number(e.target.value))} required>
             <option value="">Seleccione</option>
@@ -196,438 +234,532 @@ export default function AltaUsuario() {
               </option>
             ))}
           </select>
-
         </div>
 
-        {/* Datos de la cuenta */}
-        <fieldset>
-          <legend>Datos de la cuenta</legend>
+        <form className='alta-usuario-form' onSubmit={handleSubmit}>
+          {/* Datos de la cuenta */}
+          <fieldset>
+            <legend>Datos de la cuenta</legend>
 
-          <div className="field-group">
-            <div>
-              <label>Nombre de Usuario</label>
-              <input
-                type="text"
-                name="usernameUsuario"
-                placeholder="Nombre de usuario"
-                value={dtoUsuario.usernameUsuario}
-                onChange={handleUsuarioChange}
-                required
-              />
+            <div className='field-group single'>
+              <div className="password-field">
+                <label>Nombre de Usuario</label>
+                <input
+                  type="text"
+                  name="usernameUsuario"
+                  placeholder="Nombre de usuario"
+                  value={dtoUsuario.usernameUsuario}
+                  onChange={handleUsuarioChange}
+                  required
+                />
+              </div>
             </div>
-            <div>
-              <label>Email</label>
-              <input
-                type="email"
-                name="emailUsuario"
-                placeholder="ejemplo@correo.com"
-                value={dtoUsuario.emailUsuario}
-                onChange={handleUsuarioChange}
-                required
-              />
-            </div>
-          </div>
 
-          <div className="field-group single">
-            <div>
-              <label>Contraseña</label>
-              <input
-                type="password"
-                name="passwordUsuario"
-                placeholder="Ingrese su contraseña"
-                value={dtoUsuario.passwordUsuario}
-                onChange={handleUsuarioChange}
-                required
-              />
-            </div>
-          </div>
-        </fieldset>
-
-
-        {/* Si es paciente */}
-        {rolSeleccionado === 5 && (
-          <>
-            <fieldset>
-              <legend>Información Personal</legend>
-              <div className="field-group">
-                <div>
-                  <label>Nombre</label>
-                  <input
-                    name="nombrePaciente"
-                    value={dtoPaciente.nombrePaciente}
-                    onChange={handlePacienteChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Apellido</label>
-                  <input
-                    name="apellidoPaciente"
-                    value={dtoPaciente.apellidoPaciente}
-                    onChange={handlePacienteChange}
-                    required
-                  />
-                </div>
+            <div className='field-group single'>
+              <div className="password-field">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="emailUsuario"
+                  placeholder="ejemplo@correo.com"
+                  value={dtoUsuario.emailUsuario}
+                  onChange={handleUsuarioChange}
+                  required
+                />
               </div>
 
-              <div className="field-group">
-                <div>
-                  <label>DNI</label>
-                  <input
-                    name="dniPaciente"
-                    value={dtoPaciente.dniPaciente}
-                    onChange={handlePacienteChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Fecha de Nacimiento</label>
-                  <input
-                    type="date"
-                    name="fechaNacimientoPaciente"
-                    value={dtoPaciente.fechaNacimientoPaciente}
-                    onChange={handlePacienteChange}
-                    required
-                  />
-                </div>
-              </div>
+            </div>
 
-              <div className="field-group">
-                <div>
-                  <label>Edad</label>
+            <div className="field-group single">
+              <div className="password-field">
+                <label>Contraseña</label>
+                <div className="password-input-container">
                   <input
-                    name="edadPaciente"
-                    value={dtoPaciente.edadPaciente}
-                    onChange={handlePacienteChange}
+                    type={mostrarPassword ? "text" : "password"}
+                    name="passwordUsuario"
+                    placeholder="Ingrese su contraseña"
+                    value={dtoUsuario.passwordUsuario}
+                    onChange={handleUsuarioChange}
                     required
                   />
-                </div>
-                <div>
-                  <label>Teléfono</label>
-                  <input
-                    name="celularPaciente"
-                    value={dtoPaciente.celularPaciente}
-                    onChange={handlePacienteChange}
-                    placeholder="600 123 456"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="field-group">
-
-                <div>
-                  <label>Localidad</label>
-                  <select
-                    name="idLocalidad"
-                    value={dtoPaciente.idLocalidad}
-                    onChange={handlePacienteChange}
-                    required
+                  <button
+                    type="button"
+                    className="toggle-password-btn"
+                    onClick={() => setMostrarPassword(!mostrarPassword)}
+                    aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                   >
-                    <option value="">Seleccione</option>
-                    {localidades.map((loc) => (
-                      <option key={loc.id} value={loc.id}>
-                        {loc.nombre}
-                      </option>
-                    ))}
-                  </select>
+                    <i className={mostrarPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                  </button>
                 </div>
               </div>
-            </fieldset>
+            </div>
 
-            {/* Ficha Clínica */}
-            <fieldset>
-              <legend>Información Clínica</legend>
-
-              <div className="field-group">
-                <div>
-                  <label>Familiares a cargo</label>
+            <div className="field-group single">
+              <div className="password-field">
+                <label>Repetir Contraseña</label>
+                <div className="password-input-container">
                   <input
-                    name="familiaresACargo"
-                    value={dtoPaciente.familiaresACargo}
-                    onChange={handlePacienteChange}
-                  />
-                </div>
-                <div>
-                  <label>Grupo Sanguíneo</label>
-                  <select
-                    name="grupoSanguineoPaciente"
-                    value={dtoPaciente.grupoSanguineoPaciente}
-                    onChange={handlePacienteChange}
+                    type={mostrarConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Repita su contraseña"
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
                     required
-                  >
-                    <option value="">Seleccione</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>Problemas en curso</label>
-                  <textarea
-                    name="problemasEnCurso"
-                    value={dtoPaciente.problemasEnCurso}
-                    onChange={handlePacienteChange}
-                  />
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>Antecedentes heredofamiliares</label>
-                  <textarea
-                    name="antecedentesHeredofamiliares"
-                    value={dtoPaciente.antecedentesHeredofamiliares}
-                    onChange={handlePacienteChange}
-                  />
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>Hábitos</label>
-                  <textarea
-                    name="habitos"
-                    value={dtoPaciente.habitos}
-                    onChange={handlePacienteChange}
-                  />
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>Alergias</label>
-                  <textarea
-                    name="alergias"
-                    value={dtoPaciente.alergias}
-                    onChange={handlePacienteChange}
-                  />
-                </div>
-              </div>
-            </fieldset>
-
-            {/* Vacunas */}
-            <fieldset className="vacunas-section">
-              <legend>Vacunas</legend>
-              <div className="vacunas-inputs">
-                <div>
-                  <label>Nombre</label>
-                  <input
-                    name="nombre"
-                    value={nuevaVacuna.nombre}
-                    onChange={handleVacunaChange}
-                  />
-                </div>
-                <div>
-                  <label>Fecha de Aplicación</label>
-                  <input
-                    type="date"
-                    name="fechaAplicacion"
-                    value={nuevaVacuna.fechaAplicacion}
-                    onChange={handleVacunaChange}
-                  />
-                </div>
-                <div>
-                  <label>Dosis</label>
-                  <input
-                    name="dosis"
-                    value={nuevaVacuna.dosis}
-                    onChange={handleVacunaChange}
-                  />
-                </div>
-              </div>
-              <button
-                type="button"
-                className="btn-agregar-vacuna"
-                onClick={agregarVacuna}
-              >
-                Agregar vacuna
-              </button>
-
-              {dtoPaciente.vacunas.length > 0 && (
-                <ul className="vacunas-lista">
-                  {dtoPaciente.vacunas.map((v, i) => (
-                    <li key={i}>
-                      <span>
-                        {v.nombre} ({v.dosis}) - {v.fechaAplicacion}
-                      </span>
-                      <button type="button" onClick={() => eliminarVacuna(i)}>
-                        ✕
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </fieldset>
-          </>
-        )}
-
-        {/* Si es médico */}
-        {rolSeleccionado === 4 && (
-          <>
-            <fieldset>
-              <legend>Información del Médico</legend>
-
-              <div className="field-group">
-                <div>
-                  <label>Nombre</label>
-                  <input
-                    name="nombreMedico"
-                    value={dtoMedico.nombreMedico}
-                    onChange={handleMedicoChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Apellido</label>
-                  <input
-                    name="apellidoMedico"
-                    value={dtoMedico.apellidoMedico}
-                    onChange={handleMedicoChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>DNI</label>
-                  <input
-                    name="dniMedico"
-                    value={dtoMedico.dniMedico}
-                    onChange={handleMedicoChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Teléfono</label>
-                  <input
-                    name="telefonoMedico"
-                    value={dtoMedico.telMedico}
-                    onChange={handleMedicoChange}
-                    placeholder="600 123 456"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>Matrícula</label>
-                  <input
-                    name="matriculaMedico"
-                    value={dtoMedico.matriculaMedico}
-                    onChange={handleMedicoChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Tiempo de consulta (minutos)</label>
-                  <input
-                    type="number"
-                    name="tiempoConsultaMedico"
-                    min="1"
-                    step="1"
-                    value={dtoMedico.tiempoConsultaMedico}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === '' || Number(value) > 0) {
-                        handleMedicoChange(e);
-                      }
+                    style={{
+                      borderColor: passwordError ? '#dc3545' : (confirmPassword && !passwordError) ? '#28a745' : '#ccd2e0'
                     }}
-                    required
                   />
-                </div>
-              </div>
-
-              <div className="field-group">
-                <div>
-                  <label>Hospital</label>
-                  <select
-                    name="idHospital"
-                    value={dtoMedico.idHospital}
-                    onChange={handleMedicoChange}
-                    required
+                  <button
+                    type="button"
+                    className="toggle-password-btn"
+                    onClick={() => setMostrarConfirmPassword(!mostrarConfirmPassword)}
+                    aria-label={mostrarConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                   >
-                    <option value="">Seleccione</option>
-                    {hospitales.map((h) => (
-                      <option key={h.id} value={h.id}>
-                        {h.nombre}
-                      </option>
-                    ))}
-                  </select>
+                    <i className={mostrarConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                  </button>
                 </div>
-                <div className="especialidades-container">
-                  <label>Especialidades</label>
-                  <Select
-                    isMulti
-                    name="especialidades"
-                    options={especialidades.map((esp) => ({
-                      value: esp.id,
-                      label: esp.nombre,
-                    }))}
-                    value={especialidades
-                      .filter((esp) => dtoMedico.especialidades.includes(esp.id))
-                      .map((esp) => ({ value: esp.id, label: esp.nombre }))}
-                    onChange={(selectedOptions) =>
-                      setDtoMedico((prev) => ({
-                        ...prev,
-                        especialidades: selectedOptions.map((opt) => opt.value),
-                      }))
-                    }
-                    placeholder="Buscar especialidad..."
-                    className="select-especialidades"
-                    classNamePrefix="react-select"
-                  />
-                  <small>Puede seleccionar una o más especialidades.</small>
-                </div>
+                {passwordError && (
+                  <div className="password-error">
+                    <i className="fas fa-exclamation-triangle"></i>
+                    {passwordError}
+                  </div>
+                )}
+                {confirmPassword && !passwordError && (
+                  <div className="password-success">
+                    <i className="fas fa-check-circle"></i>
+                    Las contraseñas coinciden
+                  </div>
+                )}
               </div>
-            </fieldset>
-          </>
-        )}
+            </div>
 
-        {/* Si es recepcionista o administrador del hospital */}
-        {(rolSeleccionado === 3 || rolSeleccionado === 6) && (
-          <>
-            <fieldset>
-              <legend>Información del {rolSeleccionado === 3 ? 'Recepcionista' : 'Administrador del Hospital'}</legend>
+          </fieldset>
 
 
-
-              <div className="field-group single">
-                <div>
-                  <label>Hospital</label>
-                  <select
-                    name="idHospital"
-                    value={dtoUsuario.idHospital || ''}
-                    onChange={(e) =>
-                      setDtoUsuario((prev) => ({ ...prev, idHospital: e.target.value }))
-                    }
-                    required
-                  >
-                    <option value="">Seleccione un hospital</option>
-                    {hospitales.map((h) => (
-                      <option key={h.id} value={h.id}>
-                        {h.nombre}
-                      </option>
-                    ))}
-                  </select>
+          {/* Si es paciente */}
+          {rolSeleccionado === 5 && (
+            <>
+              <fieldset>
+                <legend>Información Personal</legend>
+                <div className="field-group">
+                  <div>
+                    <label>Nombre</label>
+                    <input
+                      name="nombrePaciente"
+                      placeholder="Ej: María Elena"
+                      value={dtoPaciente.nombrePaciente}
+                      onChange={handlePacienteChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label>Apellido</label>
+                    <input
+                      name="apellidoPaciente"
+                      placeholder="Ej: González López"
+                      value={dtoPaciente.apellidoPaciente}
+                      onChange={handlePacienteChange}
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-            </fieldset>
-          </>
-        )}
 
-        <button type="submit">Dar de alta</button>
-      </form>
-    </div>
+                <div className="field-group">
+                  <div>
+                    <label>DNI</label>
+                    <input
+                      name="dniPaciente"
+                      placeholder="Ej: 87654321"
+                      value={dtoPaciente.dniPaciente}
+                      onChange={handlePacienteChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label>Fecha de Nacimiento</label>
+                    <input
+                      type="date"
+                      name="fechaNacimientoPaciente"
+                      value={dtoPaciente.fechaNacimientoPaciente}
+                      onChange={handlePacienteChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div>
+                    <label>Edad</label>
+                    <input
+                      name="edadPaciente"
+                      placeholder="Se calcula automáticamente"
+                      value={dtoPaciente.edadPaciente}
+                      onChange={handlePacienteChange}
+                      required
+                      readOnly
+                    />
+                  </div>
+                  <div>
+                    <label>Teléfono</label>
+                    <input
+                      name="celularPaciente"
+                      value={dtoPaciente.celularPaciente}
+                      onChange={handlePacienteChange}
+                      placeholder="600 123 456"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group">
+
+                  <div>
+                    <label>Localidad</label>
+                    <select
+                      name="idLocalidad"
+                      value={dtoPaciente.idLocalidad}
+                      onChange={handlePacienteChange}
+                      required
+                    >
+                      <option value="">Seleccione</option>
+                      {localidades.map((loc) => (
+                        <option key={loc.id} value={loc.id}>
+                          {loc.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+
+              {/* Ficha Clínica */}
+              <fieldset>
+                <legend>Información Clínica</legend>
+
+                <div className="field-group">
+                  <div>
+                    <label>Familiares a cargo</label>
+                    <input
+                      name="familiaresACargo"
+                      placeholder="Ej: 2 hijos menores"
+                      value={dtoPaciente.familiaresACargo}
+                      onChange={handlePacienteChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Grupo Sanguíneo</label>
+                    <select
+                      name="grupoSanguineoPaciente"
+                      value={dtoPaciente.grupoSanguineoPaciente}
+                      onChange={handlePacienteChange}
+                      required
+                    >
+                      <option value="">Seleccione</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div>
+                    <label>Problemas en curso</label>
+                    <textarea
+                      name="problemasEnCurso"
+                      placeholder="Ej: Hipertensión arterial en tratamiento, dolor lumbar crónico..."
+                      value={dtoPaciente.problemasEnCurso}
+                      onChange={handlePacienteChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div>
+                    <label>Antecedentes heredofamiliares</label>
+                    <textarea
+                      name="antecedentesHeredofamiliares"
+                      placeholder="Ej: Diabetes tipo 2 (padre), hipertensión arterial (madre)..."
+                      value={dtoPaciente.antecedentesHeredofamiliares}
+                      onChange={handlePacienteChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div>
+                    <label>Hábitos</label>
+                    <textarea
+                      name="habitos"
+                      placeholder="Ej: No fumador, ejercicio 3 veces por semana, consumo social de alcohol..."
+                      value={dtoPaciente.habitos}
+                      onChange={handlePacienteChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div>
+                    <label>Alergias</label>
+                    <textarea
+                      name="alergias"
+                      placeholder="Ej: Penicilina, frutos secos, polen..."
+                      value={dtoPaciente.alergias}
+                      onChange={handlePacienteChange}
+                    />
+                  </div>
+                </div>
+              </fieldset>
+
+              {/* Vacunas */}
+              <fieldset className="vacunas-section">
+                <legend>Vacunas</legend>
+                <div className="vacunas-inputs">
+                  <div>
+                    <label>Nombre</label>
+                    <input
+                      name="nombre"
+                      placeholder="Ej: COVID-19, Hepatitis B"
+                      value={nuevaVacuna.nombre}
+                      onChange={handleVacunaChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Fecha de Aplicación</label>
+                    <input
+                      type="date"
+                      name="fechaAplicacion"
+                      value={nuevaVacuna.fechaAplicacion}
+                      onChange={handleVacunaChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Dosis</label>
+                    <input
+                      name="dosis"
+                      placeholder="Ej: Primera dosis, Refuerzo"
+                      value={nuevaVacuna.dosis}
+                      onChange={handleVacunaChange}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-agregar-vacuna"
+                  onClick={agregarVacuna}
+                >
+                  Agregar vacuna
+                </button>
+
+                {dtoPaciente.vacunas.length > 0 && (
+                  <ul className="vacunas-lista">
+                    {dtoPaciente.vacunas.map((v, i) => (
+                      <li key={i}>
+                        <span>
+                          {v.nombre} ({v.dosis}) - {v.fechaAplicacion}
+                        </span>
+                        <button type="button" onClick={() => eliminarVacuna(i)}>
+                          ✕
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </fieldset>
+            </>
+          )}
+
+          {/* Si es médico */}
+          {rolSeleccionado === 4 && (
+            <>
+              <fieldset>
+                <legend>Información del Médico</legend>
+
+                <div className="field-group single">
+                  <div className='password-field'>
+                    <label>Nombre</label>
+                    <input
+                      name="nombreMedico"
+                      placeholder="Ej: Juan Carlos"
+                      value={dtoMedico.nombreMedico}
+                      onChange={handleMedicoChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group single">
+                  <div className="password-field">
+                    <label>Apellido</label>
+                    <input
+                      name="apellidoMedico"
+                      placeholder="Ej: Pérez García"
+                      value={dtoMedico.apellidoMedico}
+                      onChange={handleMedicoChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div className="field-group single">
+                    <div className="password-field">
+                      <label>DNI</label>
+                      <input
+                        name="dniMedico"
+                        placeholder="Ej: 12345678"
+                        value={dtoMedico.dniMedico}
+                        onChange={handleMedicoChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className='field-group single'>
+                    <div className="password-field">
+                      <label>Matrícula</label>
+                      <input
+                        name="matriculaMedico"
+                        placeholder="Ej: MP 12345"
+                        value={dtoMedico.matriculaMedico}
+                        onChange={handleMedicoChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="field-group">
+
+                  <div className="field-group single">
+                    <div className="password-field">
+                      <label>Teléfono</label>
+                      <input
+                        name="telefonoMedico"
+                        value={dtoMedico.telMedico}
+                        onChange={handleMedicoChange}
+                        placeholder="600 123 456"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className='field-group single'>
+                    <div className="password-field">
+                      <label>Tiempo de consulta (minutos)</label>
+                      <input
+                        type="number"
+                        name="tiempoConsultaMedico"
+                        placeholder="Ej: 30"
+                        min="1"
+                        step="1"
+                        value={dtoMedico.tiempoConsultaMedico}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '' || Number(value) > 0) {
+                            handleMedicoChange(e);
+                          }
+                        }}
+                        required
+                      />
+                    </div>
+
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div className='field-group single'>
+                    <div className="password-field">
+                      <label>Hospital</label>
+                      <select
+                        name="idHospital"
+                        value={dtoMedico.idHospital}
+                        onChange={handleMedicoChange}
+                        required
+                      >
+                        <option value="">Seleccione</option>
+                        {hospitales.map((h) => (
+                          <option key={h.id} value={h.id}>
+                            {h.nombre}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="field-group single">
+                    <div className="password-field">
+                      <label>Especialidades</label>
+                      <Select
+                        isMulti
+                        name="especialidades"
+                        options={especialidades.map((esp) => ({
+                          value: esp.id,
+                          label: esp.nombre,
+                        }))}
+                        value={especialidades
+                          .filter((esp) => dtoMedico.especialidades.includes(esp.id))
+                          .map((esp) => ({ value: esp.id, label: esp.nombre }))}
+                        onChange={(selectedOptions) =>
+                          setDtoMedico((prev) => ({
+                            ...prev,
+                            especialidades: selectedOptions.map((opt) => opt.value),
+                          }))
+                        }
+                        placeholder="Buscar especialidad..."
+                        className="select-especialidades"
+                        classNamePrefix="react-select"
+                      />
+                      <small>Puede seleccionar una o más especialidades.</small>
+                    </div>
+                  </div>
+                </div>
+
+              </fieldset>
+            </>
+          )}
+
+          {/* Si es recepcionista o administrador del hospital */}
+          {(rolSeleccionado === 3 || rolSeleccionado === 6) && (
+            <>
+              <fieldset>
+                <legend>Información del {rolSeleccionado === 3 ? 'Recepcionista' : 'Administrador del Hospital'}</legend>
+
+
+
+                <div className="field-group single">
+                  <div className='password-field'>
+                    <label>Hospital</label>
+                    <select
+                      name="idHospital"
+                      value={dtoUsuario.idHospital || ''}
+                      onChange={(e) =>
+                        setDtoUsuario((prev) => ({ ...prev, idHospital: e.target.value }))
+                      }
+                      required
+                    >
+                      <option value="">Seleccione un hospital</option>
+                      {hospitales.map((h) => (
+                        <option key={h.id} value={h.id}>
+                          {h.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+            </>
+          )}
+
+          <button type="submit">Dar de alta</button>
+        </form>
+      </div>
+
+    </div >
   );
 }

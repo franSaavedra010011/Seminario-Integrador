@@ -72,7 +72,7 @@ export default function Sidebar() {
           </Link>
           <Link to="/asistencia">
             <i className="fas fa-check"></i>
-            <span>Asistencia Paciente</span>
+            <span>Registrar Asistencia</span>
           </Link>
           <Link to="/altaUsuario">
             <i className="fas fa-user-plus"></i>
