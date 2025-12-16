@@ -1,34 +1,39 @@
-.alta-container {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  background-color: #f5f6fa;
-  min-height: 100vh;
-  padding: 40px 40px;
-  /* Aumenta el padding vertical y lateral */
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.alta-card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 50px 60px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 1100px;
-  /* Aumenta el ancho máximo */
+.alta-usuario-form {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  transition: max-width 0.3s ease;
+  width: auto;
+  padding: 10px;
+  border-radius: 10px;
+  align-items: inherit;
 }
 
-.alta-card h1 {
-  text-align: center;
+.alta-usuario-form input {
+  /* Heredará los estilos de la regla general input */
+}
+
+.seleccionar-tipo-usuario {
+  margin-bottom: 20px;
+  display: flex;
+  width: fit-content;
+  gap: 20px;
+}
+
+.seleccionar-tipo-usuario label {
+  font-weight: 600;
   color: #384179;
-  margin-bottom: 25px;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 16px;
+  margin: auto;
+}
+
+.seleccionar-tipo-usuario select {
+  padding: 10px 14px;
+  border: 1.3px solid #ccd2e0;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  margin: auto;
+  width: auto;
 }
 
 fieldset {
@@ -50,8 +55,6 @@ legend {
   display: flex;
   flex-wrap: wrap;
   gap: 25px 30px;
-  /* Más separación horizontal */
-  margin-top: 10px;
 }
 
 .field-group.single {
@@ -80,6 +83,8 @@ select {
   font-size: 15px;
   background-color: #fff;
   transition: all 0.3s ease;
+  margin-bottom: 15px;
+  /* Consistente con los inputs de password */
 }
 
 input:focus,
@@ -136,16 +141,21 @@ button:hover {
 textarea {
   min-height: 100px;
   padding: 12px 14px;
+  /* Consistente con inputs */
   resize: vertical;
   border: 1.3px solid #ccd2e0;
+  /* Consistente con inputs */
   border-radius: 8px;
+  /* Consistente con inputs */
   font-size: 15px;
+  /* Consistente con inputs */
   font-family: 'Segoe UI', sans-serif;
   background-color: #ffffff;
-  /* ← fondo blanco */
   color: #333333;
-  /* ← texto gris oscuro */
   transition: all 0.3s ease;
+  /* Consistente con inputs */
+  margin-bottom: 15px;
+  /* Consistente con inputs */
 }
 
 textarea::placeholder {
@@ -155,8 +165,10 @@ textarea::placeholder {
 
 textarea:focus {
   border-color: #384179;
+  /* Consistente con inputs */
   outline: none;
   box-shadow: 0 0 4px rgba(56, 65, 121, 0.3);
+  /* Consistente con inputs */
 }
 
 .btn-secundario {
@@ -212,12 +224,7 @@ fieldset.vacunas-section legend {
 
 .vacunas-inputs input[type="text"],
 .vacunas-inputs input[type="date"] {
-  padding: 10px 12px;
-  border: 1.3px solid #ccd2e0;
-  border-radius: 8px;
-  font-size: 15px;
-  background-color: #fff;
-  transition: all 0.3s ease;
+  /* Heredará los estilos de la regla general input */
 }
 
 .vacunas-inputs input:focus {
@@ -319,7 +326,6 @@ fieldset.vacunas-section legend {
 
 .select-especialidades {
   width: 100%;
-  margin-top: 4px;
 }
 
 .react-select__control {
@@ -384,5 +390,100 @@ fieldset,
 
 ::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
+}
 
+/* Estilos para el campo de contraseña con botón mostrar/ocultar */
+.password-field {
+  width: 100%;
+}
+
+.password-field select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+}
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding: 12px 45px 12px 14px;
+  /* Padding específico: top right bottom left */
+  margin-bottom: 15px;
+  /* Mantener el margen normal del input */
+  border: 1.3px solid #ccd2e0;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.password-input-container input:focus {
+  border-color: #384179;
+  outline: none;
+  box-shadow: 0 0 4px rgba(56, 65, 121, 0.3);
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: -7.5px;
+  /* Compensar por el margin-bottom del input */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 16px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.toggle-password-btn:hover {
+  color: #384179;
+}
+
+.toggle-password-btn:focus {
+  outline: none;
+  color: #384179;
+}
+
+/* Mensajes de validación de contraseña */
+.password-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.password-success {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #28a745;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.password-error i {
+  font-size: 12px;
+}
+
+.password-success i {
+  font-size: 12px;
 }

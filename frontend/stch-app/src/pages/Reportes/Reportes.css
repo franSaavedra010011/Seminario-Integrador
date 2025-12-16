@@ -1,41 +1,164 @@
-.main {
-  padding: 30px;
-}
-
-.content h1 {
-  margin-bottom: 10px;
-}
-
-.section-title {
-  margin-top: 40px;
-  margin-bottom: 15px;
-  font-size: 1.5em;
-  color: #444;
-}
-
-.info-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background-color: #fff;
-  border-radius: 12px;
+/* Reportes Main Styles */
+.reportes-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-3px);
+.header-reportes {
+  text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.header-reportes h1 {
+  color: #1f2d3d;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.header-reportes p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.reportes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.reporte-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.reporte-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-color: #e3f2fd;
+}
+
+.reporte-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.reporte-icon svg {
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.reporte-icon.medico {
+  background: linear-gradient(135deg, #384179 0%, #2e376a 100%);
+}
+
+.reporte-icon.paciente {
+  background: linear-gradient(135deg, #384179 0%, #495057 100%);
+}
+
+.reporte-icon.administrativo {
+  background: linear-gradient(135deg, #384179 0%, #343a40 100%);
+}
+
+.reporte-card:hover .reporte-icon {
+  transform: scale(1.1);
+}
+
+.reporte-content h3 {
+  color: #1f2d3d;
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.reporte-content p {
+  color: #6c757d;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reportes-container {
+    padding: 15px;
+  }
+
+  .header-reportes h1 {
+    font-size: 2rem;
+  }
+
+  .reportes-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .reporte-card {
+    padding: 25px;
+  }
+
+  .reporte-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .reporte-icon svg {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Botón de volver */
+.btn-volver {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-volver:hover {
+  background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card h3 {
   margin-bottom: 8px;
-  color: #2c3e50;
+  color: #1f2d3d;
 }
 
 .card p {
-  color: #555;
+  color: #6c757d;
 }

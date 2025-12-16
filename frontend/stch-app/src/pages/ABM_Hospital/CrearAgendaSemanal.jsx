@@ -85,8 +85,11 @@ export default function CrearAgendaSemanal() {
 
     return (
         <div className="crear-agenda-container">
-            <h2>Gestión de Agendas Semanales</h2>
-            <p>Visualice las especialidades y el estado de agenda de cada médico.</p>
+            <div className="header-principal">
+                <h1>Gestión de Agendas Semanales</h1>
+                <p>Visualice las especialidades y el estado de agenda de cada médico.</p>
+            </div>
+
 
             {especialidades.map((esp) => (
                 <div key={esp.idHEM} className="especialidad-card">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Ajustes.css';
+import '../../App.css';
 
 export default function Ajustes() {
   const [nombre, setNombre] = useState('Juan');
@@ -68,9 +69,12 @@ export default function Ajustes() {
   };
 
   return (
-    <div className="ajustes-container">
-      <div className="ajustes-card">
-        <h1>Ajustes del Usuario</h1>
+    <div>
+      <div className="patient-card">
+        <div className="header-principal-card">
+          <h1>Ajustes del Usuario</h1>
+          <p>Configure y personalice su información de usuario y preferencias de seguridad</p>
+        </div>
         <hr />
 
         <form onSubmit={handleGuardar} className='ajustes-form'>

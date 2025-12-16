@@ -165,6 +165,8 @@ export class ListarEntidadesService {
             [
                 'usuarioRoles.rol',
                 'personalHospital.hospital',
+                'medico',
+                'paciente',
             ],
         );
     }

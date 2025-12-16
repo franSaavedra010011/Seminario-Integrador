@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Notificaciones.css';
+import '../../App.css';
 
 export default function Notificaciones() {
   const [notificaciones, setNotificaciones] = useState([
@@ -30,8 +31,12 @@ export default function Notificaciones() {
   };
 
   return (
-    <div className="notificaciones-container">
-      <h1>Notificaciones</h1>
+    <div className="patient-card">
+      <div className="header-principal-card">
+        <h1>Notificaciones</h1>
+        <p className="page-subtitle">Mantenga al día con las actualizaciones importantes del sistema de salud</p>
+      </div>
+
       {notificaciones.length === 0 ? (
         <p>No hay notificaciones.</p>
       ) : (

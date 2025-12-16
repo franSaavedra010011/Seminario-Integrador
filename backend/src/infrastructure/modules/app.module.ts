@@ -11,6 +11,7 @@ import { RecomendacionModule } from 'src/infrastructure/modules/recomendacion.mo
 import { SharedModule } from 'src/infrastructure/modules/shared.module';
 import { Turno } from 'src/domain/entities/turno.entity';
 import { TurnoModule } from 'src/infrastructure/modules/turno.module';
+import { ReportesModule } from './reportes.module';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { TurnoModule } from 'src/infrastructure/modules/turno.module';
         module: SharedModule,
       },
     ]),
-    AuthModule, AbmModule, RecomendacionModule, SharedModule, TurnoModule
+    AuthModule, AbmModule, RecomendacionModule, SharedModule, TurnoModule, ReportesModule
   ],
   controllers: [AppController],
   providers: [AppService],

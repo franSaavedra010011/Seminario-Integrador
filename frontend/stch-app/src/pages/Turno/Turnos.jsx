@@ -1,4 +1,5 @@
 import './Turnos.css';
+import '../../App.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -473,143 +474,149 @@ export default function Turnos() {
 
   return (
     <div className="content">
-      <h1>Turnos Activos</h1>
-      <button onClick={() => navigate('/nuevo-turno')}>Nuevo Turno</button>
-      <hr />
-
-      {loading && (
-        <div className="loading-container">
-          <p>Cargando turnos...</p>
+      <div className="container-principal">
+        <div className="header-principal">
+          <h1>Turnos Activos</h1>
+          <p>Consulte y administre sus citas médicas programadas</p>
         </div>
-      )}
 
-      {error && (
-        <div className="error-container">
-          <p>Error: {error}</p>
-          <button onClick={recargarTurnos}>Reintentar</button>
-        </div>
-      )}
+        <button onClick={() => navigate('/nuevo-turno')}>Nuevo Turno</button>
+        <hr />
 
-      {!loading && !error && (
-        <div className="table-turno">
-          {turnos.length === 0 ? (
-            <div className="no-turnos">
-              <p>No tienes turnos programados.</p>
-              <button onClick={() => navigate('/nuevo-turno')}>Solicitar primer turno</button>
-            </div>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>id</th>
-                  <th>Fecha</th>
-                  <th>Hora</th>
-                  <th>Especialidad</th>
-                  <th>Especialista</th>
-                  <th>Hospital</th>
-                  <th>Estado</th>
-                  <th>Anular</th>
-                  <th>Imprimir</th>
-                  <th>Información</th>
-                </tr>
-              </thead>
-              <tbody>
-                {turnos.map((turno) => (
-                  <tr key={turno.id}>
-                    <td>{turno.idTurno}</td>
-                    <td>{formatearFecha(turno.fecha)}</td>
-                    <td>{turno.hora || 'N/A'}</td>
-                    <td>{turno.especialidad || 'N/A'}</td>
-                    <td>{turno.medico || 'N/A'}</td>
-                    <td>{turno.hospital || 'N/A'}</td>
-                    <td>
-                      <span className={`estado-turno estado-${turno.estado?.toLowerCase() || 'pendiente'}`}>
-                        {turno.estado || 'Pendiente'}
-                      </span>
-                    </td>
-                    <td>
-                      {turno.estado !== 'Anulado' && turno.estado !== 'Cancelado' && turno.estado !== 'Completado' && (
-                        <i
-                          className="fas fa-trash"
-                          onClick={() => anularTurno(turno.idTurno)}
-                          style={{ cursor: 'pointer', color: '#dc3545' }}
-                          title="Cancelar turno"
-                        ></i>
-                      )}
-                    </td>
-                    <td>
-                      <i
-                        className="fas fa-print"
-                        onClick={() => imprimirTurno(turno.idTurno)}
-                        style={{ cursor: 'pointer', color: '#007bff' }}
-                        title="Imprimir turno"
-                      ></i>
-                    </td>
-                    <td>
-                      <i
-                        className="fas fa-info"
-                        onClick={() => mostrarInfo(turno.idTurno)}
-                        style={{ cursor: 'pointer', color: '#28a745' }}
-                        title="Ver resumen del turno"
-                      ></i>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      )}
+        {loading && (
+          <div className="loading-container">
+            <p>Cargando turnos...</p>
+          </div>
+        )}
 
-      {mostrarModalResumen && (
-        <div className="modal">
-          <div className="modal-content resumen-turno">
-            <h2>Resumen del Turno</h2>
-            {loadingResumen ? (
-              <div className="loading-resumen">
-                <p>Cargando resumen...</p>
-              </div>
-            ) : resumenTurno ? (
-              <div className="resumen-detalles">
-                <div className="resumen-seccion">
-                  <h3>Información del Paciente</h3>
-                  <p><strong>Nombre:</strong> {resumenTurno.nombrePaciente} {resumenTurno.apellidoPaciente}</p>
-                  <p><strong>DNI:</strong> {resumenTurno.dniPaciente}</p>
-                  <p><strong>Fecha de Nacimiento:</strong> {resumenTurno.fechaNacimiento ? new Date(resumenTurno.fechaNacimiento).toLocaleDateString('es-AR') : 'N/A'}</p>
-                </div>
+        {error && (
+          <div className="error-container">
+            <p>Error: {error}</p>
+            <button onClick={recargarTurnos}>Reintentar</button>
+          </div>
+        )}
 
-                <div className="resumen-seccion">
-                  <h3>Información del Turno</h3>
-                  <p><strong>Fecha:</strong> {resumenTurno.fechaTurno ? new Date(resumenTurno.fechaTurno).toLocaleDateString('es-AR') : 'N/A'}</p>
-                  <p><strong>Hora:</strong> {resumenTurno.horaTurno || 'N/A'}</p>
-                  <p><strong>Especialidad:</strong> {resumenTurno.nombreEspecialidad || 'N/A'}</p>
-                  <p><strong>Médico:</strong> {resumenTurno.nombreMedico} {resumenTurno.apellidoMedico}</p>
-                  <p><strong>Matrícula:</strong> {resumenTurno.matriculaMedico || 'N/A'}</p>
-                </div>
-
-                <div className="resumen-seccion">
-                  <h3>Información del Hospital</h3>
-                  <p><strong>Hospital:</strong> {resumenTurno.nombreHospital || 'N/A'}</p>
-                  <p><strong>Dirección:</strong> {resumenTurno.direccionHospital || 'N/A'}</p>
-                  <p><strong>Teléfono:</strong> {resumenTurno.telHospital || 'N/A'}</p>
-                  <p><strong>Email:</strong> {resumenTurno.emailHospital || 'N/A'}</p>
-                </div>
-
-                <div className="resumen-seccion">
-                  <h3>Observaciones</h3>
-                  <p>{resumenTurno.observacionesTurno || 'Sin observaciones'}</p>
-                </div>
+        {!loading && !error && (
+          <div className="table-turno">
+            {turnos.length === 0 ? (
+              <div className="no-turnos">
+                <p>No tienes turnos programados.</p>
+                <button onClick={() => navigate('/nuevo-turno')}>Solicitar primer turno</button>
               </div>
             ) : (
-              <p>No se pudo cargar el resumen del turno</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>id</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Especialidad</th>
+                    <th>Especialista</th>
+                    <th>Hospital</th>
+                    <th>Estado</th>
+                    <th>Anular</th>
+                    <th>Imprimir</th>
+                    <th>Información</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {turnos.map((turno) => (
+                    <tr key={turno.id}>
+                      <td>{turno.idTurno}</td>
+                      <td>{formatearFecha(turno.fecha)}</td>
+                      <td>{turno.hora || 'N/A'}</td>
+                      <td>{turno.especialidad || 'N/A'}</td>
+                      <td>{turno.medico || 'N/A'}</td>
+                      <td>{turno.hospital || 'N/A'}</td>
+                      <td>
+                        <span className={`estado-turno estado-${turno.estado?.toLowerCase() || 'pendiente'}`}>
+                          {turno.estado || 'Pendiente'}
+                        </span>
+                      </td>
+                      <td>
+                        {turno.estado !== 'Anulado' && turno.estado !== 'Cancelado' && turno.estado !== 'Completado' && (
+                          <i
+                            className="fas fa-trash"
+                            onClick={() => anularTurno(turno.idTurno)}
+                            style={{ cursor: 'pointer', color: '#dc3545' }}
+                            title="Cancelar turno"
+                          ></i>
+                        )}
+                      </td>
+                      <td>
+                        <i
+                          className="fas fa-print"
+                          onClick={() => imprimirTurno(turno.idTurno)}
+                          style={{ cursor: 'pointer', color: '#007bff' }}
+                          title="Imprimir turno"
+                        ></i>
+                      </td>
+                      <td>
+                        <i
+                          className="fas fa-info"
+                          onClick={() => mostrarInfo(turno.idTurno)}
+                          style={{ cursor: 'pointer', color: '#28a745' }}
+                          title="Ver resumen del turno"
+                        ></i>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
+          </div>
+        )}
 
-            <div className="modal-botones">
-              <button onClick={cerrarModalResumen} className="btn-cerrar">Cerrar</button>
+        {mostrarModalResumen && (
+          <div className="modal">
+            <div className="modal-content resumen-turno">
+              <h2>Resumen del Turno</h2>
+              {loadingResumen ? (
+                <div className="loading-resumen">
+                  <p>Cargando resumen...</p>
+                </div>
+              ) : resumenTurno ? (
+                <div className="resumen-detalles">
+                  <div className="resumen-seccion">
+                    <h3>Información del Paciente</h3>
+                    <p><strong>Nombre:</strong> {resumenTurno.nombrePaciente} {resumenTurno.apellidoPaciente}</p>
+                    <p><strong>DNI:</strong> {resumenTurno.dniPaciente}</p>
+                    <p><strong>Fecha de Nacimiento:</strong> {resumenTurno.fechaNacimiento ? new Date(resumenTurno.fechaNacimiento).toLocaleDateString('es-AR') : 'N/A'}</p>
+                  </div>
+
+                  <div className="resumen-seccion">
+                    <h3>Información del Turno</h3>
+                    <p><strong>Fecha:</strong> {resumenTurno.fechaTurno ? new Date(resumenTurno.fechaTurno).toLocaleDateString('es-AR') : 'N/A'}</p>
+                    <p><strong>Hora:</strong> {resumenTurno.horaTurno || 'N/A'}</p>
+                    <p><strong>Especialidad:</strong> {resumenTurno.nombreEspecialidad || 'N/A'}</p>
+                    <p><strong>Médico:</strong> {resumenTurno.nombreMedico} {resumenTurno.apellidoMedico}</p>
+                    <p><strong>Matrícula:</strong> {resumenTurno.matriculaMedico || 'N/A'}</p>
+                  </div>
+
+                  <div className="resumen-seccion">
+                    <h3>Información del Hospital</h3>
+                    <p><strong>Hospital:</strong> {resumenTurno.nombreHospital || 'N/A'}</p>
+                    <p><strong>Dirección:</strong> {resumenTurno.direccionHospital || 'N/A'}</p>
+                    <p><strong>Teléfono:</strong> {resumenTurno.telHospital || 'N/A'}</p>
+                    <p><strong>Email:</strong> {resumenTurno.emailHospital || 'N/A'}</p>
+                  </div>
+
+                  <div className="resumen-seccion">
+                    <h3>Observaciones</h3>
+                    <p>{resumenTurno.observacionesTurno || 'Sin observaciones'}</p>
+                  </div>
+                </div>
+              ) : (
+                <p>No se pudo cargar el resumen del turno</p>
+              )}
+
+              <div className="modal-botones">
+                <button onClick={cerrarModalResumen} className="btn-cerrar">Cerrar</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -436,6 +436,7 @@ export class SolicitarTurnoUseCase {
     nuevoTurnoEstado.estadoTurno = estadoTurno[0];
     nuevoTurnoEstado.fechaDesde = new Date();
     nuevoTurnoEstado.fechaHasta = null;
+    const turnoEstadoGuardado = await this.genericRepository.guardarCambios(TurnoEstado, nuevoTurnoEstado);
 
     const nuevoTurno = new Turno();
     nuevoTurno.fecha = agendaDia.fechaAgendaDia;
@@ -443,16 +444,13 @@ export class SolicitarTurnoUseCase {
     nuevoTurno.presentismo = false;
     nuevoTurno.observaciones = observaciones ? observaciones : "";
     nuevoTurno.estadoTurno = estadoTurno[0];
-    nuevoTurno.turnosEstados = [nuevoTurnoEstado];
+    nuevoTurno.turnosEstados = [turnoEstadoGuardado];
     nuevoTurno.hospital = hospital;
     nuevoTurno.paciente = paciente
     nuevoTurno.medico = medico;
     nuevoTurno.especialidad = especialidad;
-
-    // Guardar el nuevo turno en la base de datos
     const turnoGuardado = await this.genericRepository.guardarCambios(Turno, nuevoTurno);
 
-    // Actualizar el turno agenda día
     turnoAgendaDiaEncontrado.disponible = false;
     turnoAgendaDiaEncontrado.turno = turnoGuardado;
     await this.genericRepository.guardarCambios(TurnoAgendaDia, turnoAgendaDiaEncontrado);

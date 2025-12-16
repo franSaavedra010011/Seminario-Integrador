@@ -1,9 +1,14 @@
 import './HistoriaMedica.css';
+import '../../App.css';
 export default function HistoriaMedica() {
   return (
     <div id="content">
       <div className="patient-card">
-        <h1>Historia Clínica</h1>
+        <div className="header-principal-card">
+          <h1>Historia Clínica</h1>
+          <p>Acceda a su historial médico completo y datos personales de salud</p>
+        </div>
+
         <hr />
         <section className="bloque-Register">
           <h4>Datos Personales</h4>
@@ -55,7 +60,7 @@ export default function HistoriaMedica() {
           <h4>Vacunas</h4>
           <hr />
         </section>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
