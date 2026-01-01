@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+// ModificarHospital.jsx
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import './ModificarHospital.css';
@@ -148,10 +149,14 @@ export default function ModificarHospital() {
   };
 
   return (
-    <div className="modificar-hospital-container">
-      <div className="modificar-hospital-card">
-        <h1>Modificar Hospital</h1>
+    <div>
+      <div className="patient-card">
+        <div className="header-principal-card">
+          <h1>Modificar Hospital</h1>
+          <p>Actualiza la información del hospital en el siguiente formulario</p>
+        </div>
         <hr />
+
 
         <form className="modificar-hospital-form" onSubmit={handleModificar}>
           <fieldset className="modificar-hospital-fieldset">

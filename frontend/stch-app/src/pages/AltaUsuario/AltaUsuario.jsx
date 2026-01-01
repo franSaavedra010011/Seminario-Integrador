@@ -221,8 +221,8 @@ export default function AltaUsuario() {
         <div className="header-principal-card">
           <h1>Alta de Usuario</h1>
           <p>Registre nuevos usuarios en el sistema según su rol: pacientes, médicos, recepcionistas o administradores</p>
-          <hr />
         </div>
+        <hr />
 
         <div className="seleccionar-tipo-usuario">
           <label>Seleccione el tipo de usuario</label>
