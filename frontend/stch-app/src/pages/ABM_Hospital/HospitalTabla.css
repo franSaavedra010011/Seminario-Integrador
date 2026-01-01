@@ -1,61 +1,46 @@
 /* ===== CONTENEDOR PRINCIPAL ===== */
 .hospitales-admin-container {
-  padding: 40px 20px;
+  padding: 0;
   background-color: #f4f6fa;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
-  margin-top: 20px;
-  /* espacio por el navbar */
-  overflow: visible;
+  display: flex;
+  flex-direction: column;
   position: relative;
   z-index: 10;
 }
 
-/* ===== ENCABEZADO (título + botón) ===== */
-.btn-crear-contenedor {
+
+/* ===== BOTÓN CREAR BANNER ===== */
+.crear-btn-banner {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 12;
-}
-
-.btn-crear-contenedor h2 {
-  color: #384179;
-  font-size: 1.9rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-/* ===== BOTÓN CREAR ===== */
-.crear-btn {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #1e8f3f;
+  gap: 8px;
+  background-color: #16a34a;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 18px 24px;
   font-size: 15px;
   font-weight: 600;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.crear-btn:hover {
-  background-color: #16a34a;
-  transform: translateY(-1px);
+.icon-plus {
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.crear-btn:active {
-  transform: translateY(0);
+.crear-btn-banner:hover {
+  background-color: #15803d;
+}
+
+.crear-btn-banner:active {
+  background-color: #14742f;
 }
 
 /* ===== FILTROS ===== */
@@ -63,7 +48,8 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 20px;
+  background-color: #f4f6fa;
+  margin: 0 60px 0px 60px;
 }
 
 .filtro-item {
@@ -97,52 +83,297 @@
   padding-right: 2rem;
 }
 
+/* ===== LAYOUT PRINCIPAL CON TABLA Y PANEL ===== */
+.layout-contenido {
+  display: flex;
+  gap: 20px;
+  margin: 0 60px 40px 60px;
+  flex: 1;
+}
+
+/* ===== CONTENIDO PRINCIPAL (TABLA) ===== */
+.contenido-principal {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-width: 0;
+}
+
 /* ===== TABLA ===== */
 table {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 th,
 td {
-  padding: 15px;
+  padding: 16px 20px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 th {
   background-color: #384179;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-tr:hover {
-  background-color: #f1f1f1;
-}
-
-/* ===== ICONOS ===== */
-.icon-button {
-  background: none;
-  border: none;
+tbody tr {
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+tbody tr.fila-seleccionada {
+  background-color: #e6f3ff;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== PANEL LATERAL DE DETALLES ===== */
+.panel-detalles {
+  width: 400px;
+  min-width: 400px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  overflow-y: auto;
+  border-radius: 8px;
+  animation: slideIn 0.3s ease-out;
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.panel-header h3 {
+  color: #718096;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.btn-cerrar {
+  background: none;
+  margin-top: 0px;
+  border: none;
+  font-size: 20px;
+  color: #718096;
+  width: auto;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.2s;
+}
+
+.btn-cerrar:hover {
+  color: #2d3748;
+}
+
+.hospital-nombre {
+  color: #2d3748;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 25px 0;
+}
+
+.acciones-principales {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.grupo-botones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-accion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-accion i {
+  font-size: 14px;
+}
+
+/* Botón Editar - Grande, morado, ancho completo */
+.btn-editar {
+  width: 100%;
+  background-color: #384179;
+  color: white;
+  padding: 14px 16px;
+}
+
+.btn-editar:hover {
+  background-color: #2d3460;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(56, 65, 121, 0.25);
+}
+
+.btn-editar:active {
+  transform: translateY(0);
+}
+
+/* Botón Agenda - Blanco con borde */
+.btn-registrar-agenda {
+  flex: 1;
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-registrar-agenda:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.btn-registrar-agenda:active {
+  transform: translateY(0);
+}
+
+
+/* Botón Borrar - Rosa/Rojo claro */
+.btn-borrar {
+  flex: 1;
+  background-color: #ffe5e5;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-borrar:hover {
+  background-color: #ffd5d5;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.btn-borrar:active {
+  transform: translateY(0);
+}
+
+.detalles-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.info-item {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.info-item-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.info-icon {
   font-size: 18px;
-  margin-right: 10px;
+  color: #718096;
+  width: 24px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.icon-button.edit:hover {
-  color: #2c7be5;
+.info-label {
+  color: #718096;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px 0;
 }
 
-.icon-button.delete:hover {
-  color: #dc3545;
+.info-valor {
+  color: #2d3748;
+  font-size: 0.95rem;
+  margin: 0;
+  word-break: break-word;
 }
 
-.icon-button.clock:hover {
-  color: #f59e0b;
-  transform: scale(1.2);
-  transition: all 0.2s ease-in-out;
+.fechas-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.fecha-label {
+  color: #718096;
+  font-size: 0.75rem;
+  margin: 0 0 4px 0;
+}
+
+.fecha-valor {
+  color: #2d3748;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.btn-ver-completo {
+  width: 100%;
+  padding: 12px;
+  background-color: transparent;
+  color: #384179;
+  border: 1px solid #384179;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ver-completo:hover {
+  background-color: #384179;
+  color: white;
 }
