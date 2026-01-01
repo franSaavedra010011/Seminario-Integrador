@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import './CrearHospital.css';
+import './ModificarHospital.css';
+import '../../App.css';
 
 export default function ModificarHospital() {
   const location = useLocation();
@@ -121,88 +122,136 @@ export default function ModificarHospital() {
   };
 
   return (
-    <div className="hospital-container">
-      <form className="hospital-form" onSubmit={handleModificar}>
-        <h2>Modificar hospital</h2>
-        <p>Actualiza la información del centro médico.</p>
+    <div className="modificar-hospital-container">
+      <div className="modificar-hospital-card">
+        <h1>Modificar Hospital</h1>
+        <hr />
 
-        <div className="form-dual-grid">
-          <div>
-            <h3>Datos generales</h3>
-            <div className="form-grid">
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder="Nombre del hospital"
-                required
-              />
-              <input
-                type="text"
-                value={direccion}
-                onChange={(e) => setDireccion(e.target.value)}
-                placeholder="Dirección"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3>Contacto</h3>
-            <div className="form-grid">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Correo electrónico"
-                required
-              />
-              <input
-                type="tel"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-                placeholder="Teléfono"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="form-section">
-          <h3>Eliminar especialidades actuales</h3>
-          <div className="specialties-grid">
-            {especialidadesActuales.map((esp) => (
-              <div
-                key={esp.id}
-                className={`specialty-tag ${aEliminar.includes(esp.id) ? 'selected' : ''}`}
-                onClick={() => toggleEliminar(esp.id)}
-              >
-                {esp.nombre}
+        <form className="modificar-hospital-form" onSubmit={handleModificar}>
+          <fieldset className="modificar-hospital-fieldset">
+            <legend>Datos generales</legend>
+            <div className='modificar-hospital-field-group'>
+              <div className="modificar-hospital-campo">
+                <label><strong>Nombre:</strong></label>
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Nombre del hospital"
+                  required
+                />
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="form-section">
-          <h3>Agregar nuevas especialidades</h3>
-          <div className="specialties-grid">
-            {especialidadesDisponibles.map((esp) => (
-              <div
-                key={esp.id}
-                className={`specialty-tag ${aAgregar.includes(esp.id) ? 'selected' : ''}`}
-                onClick={() => toggleAgregar(esp.id)}
-              >
-                {esp.nombre}
+              <div className="modificar-hospital-campo">
+                <label><strong>Dirección:</strong></label>
+                <input
+                  type="text"
+                  value={direccion}
+                  onChange={(e) => setDireccion(e.target.value)}
+                  placeholder="Dirección"
+                  required
+                />
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          </fieldset>
 
-        <button type="submit" className="btn-primary">Guardar Cambios</button>
-        <button type="button" className="btn-secondary" onClick={() => navigate('/hospitalTabla')}>
-          ← Volver a la tabla
-        </button>
-      </form>
+          <fieldset className="modificar-hospital-fieldset">
+            <legend>Contacto</legend>
+            <div className="modificar-hospital-field-group">
+              <div className="modificar-hospital-campo">
+                <label><strong>Email:</strong></label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Correo electrónico"
+                  required
+                />
+              </div>
+
+              <div className="modificar-hospital-campo">
+                <label><strong>Teléfono:</strong></label>
+                <input
+                  type="tel"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  placeholder="Teléfono"
+                  required
+                />
+              </div>
+
+            </div>
+          </fieldset>
+
+          <fieldset className="modificar-hospital-fieldset">
+            <legend>Editor de Especialidades</legend>
+            <p className="subtitle-especialidades">Administra tus especialidades médicas moviendo elementos entre las listas.</p>
+
+            <div className="especialidades-container">
+              {/* Columna Izquierda - Especialidades Actuales */}
+              <div className="especialidades-columna">
+                <div className="columna-header">
+                  <div className="header-title">
+                    <i className="fas fa-user-md"></i>
+                    <span>Mis Especialidades</span>
+                  </div>
+                  <span className="badge-count">{especialidadesActuales.length} Activas</span>
+                </div>
+                <div className="especialidades-lista">
+                  {especialidadesActuales.map((esp) => (
+                    <div key={esp.id} className="especialidad-item">
+                      <div className="item-content">
+                        <span className="dot-indicator"></span>
+                        <span className="item-text">{esp.nombre}</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-eliminar"
+                        onClick={() => toggleEliminar(esp.id)}
+                        title="Eliminar especialidad"
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Columna Derecha - Especialidades Disponibles */}
+              <div className="especialidades-columna">
+                <div className="columna-header">
+                  <div className="header-title">
+                    <i className="fas fa-plus-square"></i>
+                    <span>Todas las Especialidades del Hospital</span>
+                  </div>
+                </div>
+                <div className="especialidades-lista">
+                  {especialidadesDisponibles.map((esp) => (
+                    <div key={esp.id} className="especialidad-item">
+                      <span className="item-text">{esp.nombre}</span>
+                      <button
+                        type="button"
+                        className="btn-agregar"
+                        onClick={() => toggleAgregar(esp.id)}
+                      >
+                        <i className="fas fa-plus"></i> Agregar
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <div className="form-actions">
+            <button type="button" className="btn-secondary" onClick={() => navigate('/hospitalTabla')}>
+              <i className="fas fa-arrow-left"></i> Volver a la tabla
+            </button>
+            <button type="submit" className="btn-primary">
+              <i className="fas fa-save"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

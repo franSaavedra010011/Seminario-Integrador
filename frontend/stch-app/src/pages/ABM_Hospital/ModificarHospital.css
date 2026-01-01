@@ -1,0 +1,374 @@
+.modificar-hospital-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    background-color: #f5f6fa;
+    min-height: 100vh;
+    padding: 40px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.modificar-hospital-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 50px 60px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    transition: max-width 0.3s ease;
+}
+
+.modificar-hospital-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+.modificar-hospital-card h1 {
+    text-align: center;
+    color: #384179;
+    margin-bottom: 25px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.modificar-hospital-card hr {
+    border: none;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 20px 0 30px 0;
+}
+
+fieldset.modificar-hospital-fieldset {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    background-color: #fafbff;
+}
+
+fieldset.modificar-hospital-fieldset legend {
+    font-weight: 600;
+    color: #384179;
+    font-size: 15px;
+    padding: 0 10px;
+}
+
+.modificar-hospital-field-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px 30px;
+    margin-top: 10px;
+}
+
+.modificar-hospital-field-group>div {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modificar-hospital-campo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modificar-hospital-campo label,
+.modificar-hospital-campo p {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.modificar-hospital-campo input[type="text"],
+.modificar-hospital-campo input[type="email"],
+.modificar-hospital-campo input[type="tel"],
+.modificar-hospital-campo select,
+.modificar-hospital-campo textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.3px solid #ccd2e0;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.modificar-hospital-campo input[type="text"]:focus,
+.modificar-hospital-campo input[type="email"]:focus,
+.modificar-hospital-campo input[type="tel"]:focus,
+.modificar-hospital-campo select:focus,
+.modificar-hospital-campo textarea:focus {
+    border-color: #384179;
+    outline: none;
+    box-shadow: 0 0 4px rgba(56, 65, 121, 0.3);
+}
+
+.modificar-hospital-campo input::placeholder,
+.modificar-hospital-campo textarea::placeholder {
+    color: #999999;
+    font-style: italic;
+}
+
+.modificar-hospital-guardar-btn {
+    width: 100%;
+    background-color: #384179;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(56, 65, 121, 0.25);
+    cursor: pointer;
+}
+
+.modificar-hospital-guardar-btn:hover {
+    background-color: #2e356b;
+    box-shadow: 0 6px 15px rgba(56, 65, 121, 0.4);
+}
+
+.modificar-hospital-guardar-btn:disabled {
+    background-color: #8fa4d3;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.modificar-hospital-guardar-btn:disabled:hover {
+    background-color: #8fa4d3;
+    box-shadow: none;
+}
+
+@media (max-width: 1024px) {
+    .modificar-hospital-card {
+        max-width: 90%;
+        padding: 40px;
+    }
+
+    .modificar-hospital-field-group {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .modificar-hospital-container {
+        padding: 20px;
+    }
+
+    .modificar-hospital-card {
+        padding: 25px;
+    }
+
+    .modificar-hospital-field-group {
+        flex-direction: column;
+    }
+
+    .modificar-hospital-campo>div {
+        min-width: unset;
+    }
+}
+
+/* ===== ESPECIALIDADES - DISEÑO DOS COLUMNAS ===== */
+.subtitle-especialidades {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.especialidades-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.especialidades-columna {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.columna-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #384179;
+    font-size: 14px;
+}
+
+.header-title i {
+    font-size: 16px;
+}
+
+.badge-count {
+    background-color: #e0e7ff;
+    color: #384179;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.especialidades-lista {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.especialidad-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f1f3f5;
+    transition: background-color 0.2s ease;
+}
+
+.especialidad-item:hover {
+    background-color: #f8f9fa;
+}
+
+.especialidad-item:last-child {
+    border-bottom: none;
+}
+
+.item-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dot-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.item-text {
+    font-size: 14px;
+    color: #334155;
+}
+
+.btn-eliminar {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s ease;
+    font-size: 14px;
+}
+
+.btn-eliminar:hover {
+    color: #ef4444;
+}
+
+.btn-agregar {
+    background-color: transparent;
+    border: none;
+    color: #384179;
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-agregar:hover {
+    color: #2d3460;
+}
+
+.btn-agregar i {
+    font-size: 12px;
+}
+
+/* ===== BOTONES DE ACCIÓN ===== */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    flex: 1;
+    background-color: #384179;
+    color: #fff;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(56, 65, 121, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background-color: #2e356b;
+    box-shadow: 0 6px 15px rgba(56, 65, 121, 0.4);
+}
+
+.btn-secondary {
+    flex: 1;
+    background-color: transparent;
+    color: #384179;
+    padding: 14px 20px;
+    border: 1px solid #384179;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-secondary:hover {
+    background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .especialidades-container {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}

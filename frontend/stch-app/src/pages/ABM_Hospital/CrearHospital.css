@@ -117,7 +117,7 @@ input::placeholder {
 
 /* Botones */
 .btn-primary {
-  width: 100%;
+  width: auto;
   padding: 1rem;
   font-size: 1.05rem;
   background-color: #384179;
@@ -126,7 +126,6 @@ input::placeholder {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  margin-bottom: 0.75rem;
 }
 
 .btn-primary:hover {
