@@ -15,6 +15,7 @@ export default function ModificarHospital() {
   const [telefono, setTelefono] = useState('');
   const [especialidades, setEspecialidades] = useState([]);
   const [especialidadesActuales, setEspecialidadesActuales] = useState([]);
+  const [especialidadesOriginales, setEspecialidadesOriginales] = useState([]);
   const [aAgregar, setAAgregar] = useState([]);
   const [aEliminar, setAEliminar] = useState([]);
 
@@ -38,6 +39,7 @@ export default function ModificarHospital() {
         .map(he => he.especialidad);
 
       setEspecialidadesActuales(actuales);
+      setEspecialidadesOriginales(actuales);
     } catch (error) {
       alert('Error al cargar hospital');
     }
@@ -60,15 +62,39 @@ export default function ModificarHospital() {
   }, []);
 
   const especialidadesDisponibles = especialidades.filter(
-    (esp) => !especialidadesActuales.some((e) => e.id === esp.id)
+    (esp) => !especialidadesActuales.some((e) => e.id === esp.id) && !aAgregar.includes(esp.id)
   );
 
   const toggleAgregar = (id) => {
-    setAAgregar(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    const especialidad = especialidades.find(esp => esp.id === id);
+    if (especialidad) {
+      // Agregar a la lista de actuales temporalmente
+      setEspecialidadesActuales(prev => [...prev, especialidad]);
+      // Agregar al array de IDs a agregar
+      setAAgregar(prev => [...prev, id]);
+    }
   };
 
   const toggleEliminar = (id) => {
-    setAEliminar(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    // Si está en la lista de "a agregar", solo quitarlo de allí
+    if (aAgregar.includes(id)) {
+      setAAgregar(prev => prev.filter(i => i !== id));
+      setEspecialidadesActuales(prev => prev.filter(e => e.id !== id));
+    } else {
+      // Si es una especialidad original
+      if (aEliminar.includes(id)) {
+        // Desmarcar y restaurar
+        setAEliminar(prev => prev.filter(i => i !== id));
+        const especialidad = especialidadesOriginales.find(e => e.id === id);
+        if (especialidad) {
+          setEspecialidadesActuales(prev => [...prev, especialidad]);
+        }
+      } else {
+        // Marcar para eliminar y remover de actuales
+        setAEliminar(prev => [...prev, id]);
+        setEspecialidadesActuales(prev => prev.filter(e => e.id !== id));
+      }
+    }
   };
 
   const handleModificar = async (e) => {
@@ -194,25 +220,29 @@ export default function ModificarHospital() {
                     <i className="fas fa-user-md"></i>
                     <span>Mis Especialidades</span>
                   </div>
-                  <span className="badge-count">{especialidadesActuales.length} Activas</span>
+                  <span className="badge-count">
+                    {especialidadesActuales.filter(esp => !aEliminar.includes(esp.id)).length} Activas
+                  </span>
                 </div>
                 <div className="especialidades-lista">
-                  {especialidadesActuales.map((esp) => (
-                    <div key={esp.id} className="especialidad-item">
-                      <div className="item-content">
-                        <span className="dot-indicator"></span>
-                        <span className="item-text">{esp.nombre}</span>
+                  {especialidadesActuales
+                    .filter(esp => !aEliminar.includes(esp.id))
+                    .map((esp) => (
+                      <div key={esp.id} className="especialidad-item">
+                        <div className="item-content">
+                          <span className="dot-indicator"></span>
+                          <span className="item-text">{esp.nombre}</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn-eliminar"
+                          onClick={() => toggleEliminar(esp.id)}
+                          title="Eliminar especialidad"
+                        >
+                          <i className="fas fa-trash-alt"></i>
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        className="btn-eliminar"
-                        onClick={() => toggleEliminar(esp.id)}
-                        title="Eliminar especialidad"
-                      >
-                        <i className="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
 
