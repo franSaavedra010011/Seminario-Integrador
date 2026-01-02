@@ -95,7 +95,7 @@ export default function ReportePaciente({ onVolver }) {
             <div className="reporte-paciente-container">
 
 
-                <div className="header-reportes-subpage">
+                <div className="header-principal-reportes">
                     <h1>Reporte de Paciente</h1>
                     <p>Consulte el historial de citas, diagnósticos y estadísticas de un paciente específico</p>
                 </div>

@@ -81,7 +81,7 @@ export default function ReporteAdministrativo({ onVolver }) {
 
             <div className="reporte-administrativo-container">
 
-                <div className="header-reportes-subpage">
+                <div className="header-principal-reportes">
                     <h1>Reporte Administrativo</h1>
                     <p>Visualice datos y métricas generales del sistema para la gestión y toma de decisiones</p>
                 </div>
@@ -107,7 +107,7 @@ export default function ReporteAdministrativo({ onVolver }) {
                             <option value="">Seleccione un hospital</option>
                             {hospitales.map(hospital => (
                                 <option key={hospital.id} value={hospital.id}>
-                                    {hospital.nombreHospital}
+                                    {hospital.nombre}
                                 </option>
                             ))}
                         </select>

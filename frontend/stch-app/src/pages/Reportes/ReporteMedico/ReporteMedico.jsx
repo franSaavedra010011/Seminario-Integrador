@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './ReporteMedico.css';
+import '../../../App.css';
 
 export default function ReporteMedico({ onVolver }) {
     const [medicoSeleccionado, setMedicoSeleccionado] = useState('');
@@ -74,7 +75,7 @@ export default function ReporteMedico({ onVolver }) {
             <div className="reporte-medico-container">
 
 
-                <div className="header-reportes-subpage">
+                <div className="header-principal-reportes">
                     <h1>Reporte de Médico</h1>
                     <p>Genere reportes detallados de productividad y horarios médicos</p>
                 </div>
