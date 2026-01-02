@@ -41,29 +41,30 @@ export class GenericRepositoryService {
 
     for (const criterio of criterios) {
       const { atributo, operacion, valor } = criterio;
+      const paramName = `valor_${atributo.replace(/\./g, '_')}_${Math.random().toString(36).substr(2, 9)}`;
 
       switch (operacion) {
         case '=':
-          query = query.andWhere(`${alias}.${atributo} = :valor`, { valor });
+          query = query.andWhere(`${alias}.${atributo} = :${paramName}`, { [paramName]: valor });
           break;
         case '<':
-          query = query.andWhere(`${alias}.${atributo} < :valor`, { valor });
+          query = query.andWhere(`${alias}.${atributo} < :${paramName}`, { [paramName]: valor });
           break;
         case '>':
-          query = query.andWhere(`${alias}.${atributo} > :valor`, { valor });
+          query = query.andWhere(`${alias}.${atributo} > :${paramName}`, { [paramName]: valor });
           break;
         case '<=':
-          query = query.andWhere(`${alias}.${atributo} <= :valor`, { valor });
+          query = query.andWhere(`${alias}.${atributo} <= :${paramName}`, { [paramName]: valor });
           break;
         case '>=':
-          query = query.andWhere(`${alias}.${atributo} >= :valor`, { valor });
+          query = query.andWhere(`${alias}.${atributo} >= :${paramName}`, { [paramName]: valor });
           break;
         case '<>':
-          query = query.andWhere(`${alias}.${atributo} != :valor`, { valor });
+          query = query.andWhere(`${alias}.${atributo} != :${paramName}`, { [paramName]: valor });
           break;
         case 'like':
-          query = query.andWhere(`${alias}.${atributo} ILIKE :valor`, {
-            valor: `%${valor}%`,
+          query = query.andWhere(`${alias}.${atributo} ILIKE :${paramName}`, {
+            [paramName]: `%${valor}%`,
           });
           break;
         case 'isNull':
@@ -75,7 +76,7 @@ export class GenericRepositoryService {
         case 'relacion':
           query = query
             .leftJoin(`${alias}.${atributo}`, 'relacion')
-            .andWhere(`relacion.id = :valor`, { valor });
+            .andWhere(`relacion.id = :${paramName}`, { [paramName]: valor });
           break;
         default:
           throw new Error(`Operación no soportada: ${operacion}`);

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenericRepositoryService } from 'src/shared/services/genericRepository.service';
 import { Repository } from 'typeorm';
@@ -8,17 +8,22 @@ import { EstadoTurnoEnum } from 'src/domain/enums/estado-turno.enum';
 import { AbmTurnoEstadoUseCase } from '../abm/turnoEstado/abm-turno-estado.use-case';
 import { CreateTurnoEstadoDto } from '../abm/turnoEstado/dto/create-turnoEstado.dto';
 import { TurnoEstado } from 'src/domain/entities/turno-estado.entity';
+import { RespuestasEstructuradasService } from 'src/shared/services/respuestas-estructuradas.service';
 
 @Injectable()
 export class RegistrarAsistenciaDePacienteUseCase {
+
   constructor(
     private readonly genericRepository: GenericRepositoryService,
     @InjectRepository(Turno)
     private turnoRepository: Repository<Turno>,
     @InjectRepository(EstadoTurno)
     private estadoTurnoRepository: Repository<EstadoTurno>,
+    @InjectRepository(RespuestasEstructuradasService)
+    private readonly respuestasEstructuradasService: RespuestasEstructuradasService,
     private readonly abmTurnoEstadoUseCase: AbmTurnoEstadoUseCase,
   ) { }
+
   async registrarAsistenciaDePaciente(idTurno: Number) {
     const turno = await this.turnoRepository
       .createQueryBuilder('turno') //hacerlo con usuario
@@ -28,17 +33,21 @@ export class RegistrarAsistenciaDePacienteUseCase {
         id: idTurno,
       })
       .getOne();
+
     if (!turno) {
       throw new BadRequestException(
         `El turno con id ${idTurno} no existe o ha sido dado de baja`,
       );
     }
+
     const estadoDelTurno = turno.estadoTurno;
+
     if (estadoDelTurno.nombre !== EstadoTurnoEnum.RESERVADO) {
       throw new BadRequestException(
         `El turno con id ${idTurno} se encuentra: ${estadoDelTurno.nombre}`,
       );
     }
+
     const estadoAsignar = await this.estadoTurnoRepository
       .createQueryBuilder('estadoTurno') //hacerlo con usuario
       .where(
@@ -48,21 +57,26 @@ export class RegistrarAsistenciaDePacienteUseCase {
         },
       )
       .getOne();
+
     if (!estadoAsignar) {
       throw new BadRequestException(
         `No ha sido posible registrar la asistencia`,
       );
     }
+
     const dtoCreate: CreateTurnoEstadoDto = {
       estadoTurno: estadoAsignar,
       turno: turno,
     };
-    const turnoEstadoCreado: TurnoEstado =
-      await this.abmTurnoEstadoUseCase.crear(dtoCreate);
+
+    const turnoEstadoCreado: TurnoEstado = await this.abmTurnoEstadoUseCase.crear(dtoCreate);
     console.log(turnoEstadoCreado);
     turno.turnosEstados.push(turnoEstadoCreado);
     turno.estadoTurno = estadoAsignar;
     turno.presentismo = true;
     this.turnoRepository.save(turno);
+
+    const response = this.respuestasEstructuradasService.respuestaExitosa(turno, 'Asistencia registrada con éxito');
+    return response;
   }
 }

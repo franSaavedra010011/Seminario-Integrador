@@ -6,6 +6,7 @@ import { ListarEntidadesService } from 'src/shared/services/listar-entidades.ser
 import { ListarEntidadesController } from 'src/infrastructure/controllers/shared/listar-entidades.controller';
 
 import { Hospital } from 'src/domain/entities/hospital.entity'; // ⬅ Asegurate que esta ruta sea correcta
+import { RespuestasEstructuradasService } from 'src/shared/services/respuestas-estructuradas.service';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { Hospital } from 'src/domain/entities/hospital.entity'; // ⬅ Asegurate
   providers: [
     GenericRepositoryService,
     ListarEntidadesService,
+    RespuestasEstructuradasService,
   ],
   controllers: [
     ListarEntidadesController,
@@ -21,6 +23,7 @@ import { Hospital } from 'src/domain/entities/hospital.entity'; // ⬅ Asegurate
   exports: [
     GenericRepositoryService,
     ListarEntidadesService,
+    RespuestasEstructuradasService,
   ],
 })
 export class SharedModule { }

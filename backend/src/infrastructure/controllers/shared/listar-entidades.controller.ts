@@ -33,6 +33,12 @@ export class ListarEntidadesController {
     return this.listarSvc.listarTurnos();
   }
 
+  @Get('turnosPorHospital')
+  turnosPorHospital(@Query('idHospital') idHospital: number) {
+    console.log('ID Hospital recibido:', idHospital);
+    return this.listarSvc.listarTurnosPorHospital(idHospital);
+  }
+
   @Get('usuarios')
   usuarios() {
     return this.listarSvc.listarUsuarios();

@@ -7,14 +7,6 @@ export default function RegistrarAsistencia() {
   const [turnos, setTurnos] = useState([]);
   const [mensaje, setMensaje] = useState('');
 
-  useEffect(() => {
-    // Simulación: reemplazar por llamada al backend
-    setTurnos([
-      { id: 1, paciente: 'Juan Pérez', especialidad: 'Cardiología', fecha: '2025-05-24', hora: '10:00', asistio: false },
-      { id: 2, paciente: 'Ana García', especialidad: 'Pediatría', fecha: '2025-05-24', hora: '11:00', asistio: true },
-    ]);
-  }, []);
-
   const registrarAsistencia = (id) => {
     setTurnos(prev =>
       prev.map(turno =>

@@ -188,4 +188,38 @@ export class ListarEntidadesService {
             [],
         );
     }
+
+    async listarTurnosPorHospital(idHospital: number) {
+        console.log('Listando turnos para el hospital con id:', idHospital);
+        const hospital = await this.genericRepository.buscarPorId(
+            Hospital,
+            idHospital,
+            [],
+        );
+        console.log('Hospital encontrado:', hospital);
+
+        if (!hospital) {
+            throw new Error(`No se encontró el hospital con id ${idHospital}`);
+        }
+
+        console.log('Buscando turnos asociados al hospital...');
+        const turnos = await this.genericRepository.buscar(
+            Turno,
+            'turno',
+            [
+                { atributo: 'fechaHoraBaja', operacion: 'isNull', valor: null },
+                { atributo: 'hospital.id', operacion: '=', valor: idHospital },
+                { atributo: 'presentismo', operacion: '=', valor: false },
+                { atributo: 'estadoTurno.id', operacion: '=', valor: 1 }, // Asumiendo que 1 es el ID para "Reservado"
+            ],
+            []
+        )
+        console.log(`Se encontraron ${turnos.length} turnos activos para el hospital con id ${idHospital}`);
+
+        if (turnos.length === 0) {
+            throw new Error(`No se encontraron turnos activos para el hospital con id ${idHospital}`);
+        }
+
+        return turnos;
+    }
 }
