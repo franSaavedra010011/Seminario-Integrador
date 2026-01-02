@@ -114,14 +114,16 @@ export default function ReporteMedico({ onVolver }) {
                         />
                         <small>Sugerido: 2025-12-31 (fin del mes)</small>
                     </div>
+                    <div className="btn-generar-container">
+                        <button
+                            className="btn-generar"
+                            onClick={generarReporte}
+                            disabled={cargando}
+                        >
+                            {cargando ? 'Generando...' : 'Generar Reporte'}
+                        </button>
+                    </div>
 
-                    <button
-                        className="btn-generar"
-                        onClick={generarReporte}
-                        disabled={cargando}
-                    >
-                        {cargando ? 'Generando...' : 'Generar Reporte'}
-                    </button>
                 </div>
 
                 {reporte && (

@@ -100,6 +100,13 @@ h1 {
     font-style: italic;
 }
 
+.btn-generar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0 30px 0;
+}
+
 .btn-generar {
     background: linear-gradient(135deg, #384179 0%, #2e376a 100%);
     color: white;

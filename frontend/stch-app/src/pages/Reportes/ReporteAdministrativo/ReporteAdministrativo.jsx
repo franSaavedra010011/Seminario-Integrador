@@ -137,13 +137,16 @@ export default function ReporteAdministrativo({ onVolver }) {
                         </>
                     )}
 
-                    <button
-                        className="btn-generar"
-                        onClick={generarReporte}
-                        disabled={cargando}
-                    >
-                        {cargando ? 'Generando...' : 'Generar Reporte'}
-                    </button>
+                    <div className="btn-generar-container">
+                        <button
+                            className="btn-generar"
+                            onClick={generarReporte}
+                            disabled={cargando}
+                        >
+                            {cargando ? 'Generando...' : 'Generar Reporte'}
+                        </button>
+                    </div>
+
                 </div>
 
                 {reporte && (
