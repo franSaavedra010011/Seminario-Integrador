@@ -17,9 +17,12 @@ import { AbmModule } from "./abm.module";
 import { AbmTurnoEstadoUseCase } from 'src/application/use-cases/abm/turnoEstado/abm-turno-estado.use-case';
 import { CrearAgendaSemanalUseCase } from 'src/application/use-cases/modulo-turnos/crear-agenda-semanal.use-case';
 import { VerificarAgendaVigenteUseCase } from 'src/application/use-cases/modulo-turnos/verificar-agenda-vigente.use-case';
+import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
+import { RespuestasEstructuradasService } from 'src/shared/services/respuestas-estructuradas.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([
+        Turno,
         Especialidad,
         Hospital,
         TurnoAgendaDia,
@@ -27,10 +30,20 @@ import { VerificarAgendaVigenteUseCase } from 'src/application/use-cases/modulo-
         Usuario,
         EstadoTurno,
         Paciente,
-        AgendaSemanal
+        AgendaSemanal,
     ]), SharedModule, AbmModule],
     controllers: [TurnoController],
-    providers: [SolicitarTurnoUseCase, CrearAgendaSemanalUseCase, VerificarAgendaVigenteUseCase],
-    exports: [SolicitarTurnoUseCase, CrearAgendaSemanalUseCase, VerificarAgendaVigenteUseCase],
+    providers: [
+        SolicitarTurnoUseCase,
+        CrearAgendaSemanalUseCase,
+        VerificarAgendaVigenteUseCase,
+        RegistrarAsistenciaDePacienteUseCase
+    ],
+    exports: [
+        SolicitarTurnoUseCase,
+        CrearAgendaSemanalUseCase,
+        VerificarAgendaVigenteUseCase,
+        RegistrarAsistenciaDePacienteUseCase
+    ],
 })
 export class TurnoModule { }

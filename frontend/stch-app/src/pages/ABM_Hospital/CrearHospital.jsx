@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import './CrearHospital.css';
+import '../../App.css';
 
 export default function CrearHospital() {
   const navigate = useNavigate();
@@ -36,6 +37,24 @@ export default function CrearHospital() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Especialidades disponibles (las que NO están seleccionadas)
+  const especialidadesDisponibles = especialidades.filter(
+    (esp) => !especialidadesSeleccionadas.includes(esp.id)
+  );
+
+  // Especialidades actuales (las que están seleccionadas) - convertir IDs a objetos completos
+  const especialidadesActuales = especialidades.filter(
+    (esp) => especialidadesSeleccionadas.includes(esp.id)
+  );
+
+  const toggleAgregar = (id) => {
+    setEspecialidadesSeleccionadas([...especialidadesSeleccionadas, id]);
+  };
+
+  const toggleEliminar = (id) => {
+    setEspecialidadesSeleccionadas(especialidadesSeleccionadas.filter(i => i !== id));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dto = {
@@ -67,15 +86,21 @@ export default function CrearHospital() {
   };
 
   return (
-    <div className="hospital-container">
-      <form className="hospital-form" onSubmit={handleSubmit}>
-        <h2>Crear nuevo hospital</h2>
+    <div className="patient-card">
+      <div className="header-principal-card">
+        <h1>Crear nuevo hospital</h1>
         <p>Completa la información para registrar un nuevo centro médico.</p>
+      </div>
+      <hr />
 
-        <div className="form-dual-grid">
-          <div>
-            <h3>Datos generales</h3>
-            <div className="form-grid">
+      <form className="modificar-hospital-form" onSubmit={handleSubmit}>
+        <fieldset className="modificar-hospital-fieldset">
+          <legend>Datos generales</legend>
+          <div className="modificar-hospital-field-group">
+            <div className="modificar-hospital-campo">
+              <label>
+                <strong>Nombre:</strong>
+              </label>
               <input
                 type="text"
                 name="nombre"
@@ -84,6 +109,12 @@ export default function CrearHospital() {
                 placeholder="Ej: Hospital Central"
                 required
               />
+            </div>
+
+            <div className="modificar-hospital-campo">
+              <label>
+                <strong>Dirección:</strong>
+              </label>
               <input
                 type="text"
                 name="direccion"
@@ -94,10 +125,15 @@ export default function CrearHospital() {
               />
             </div>
           </div>
+        </fieldset>
 
-          <div>
-            <h3>Contacto y Localidad</h3>
-            <div className="form-grid">
+        <fieldset className="modificar-hospital-fieldset">
+          <legend>Contacto y Localidad</legend>
+          <div className="modificar-hospital-field-group">
+            <div className="modificar-hospital-campo">
+              <label>
+                <strong>Email:</strong>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -106,6 +142,12 @@ export default function CrearHospital() {
                 placeholder="contacto@hospital.com"
                 required
               />
+            </div>
+
+            <div className="modificar-hospital-campo">
+              <label>
+                <strong>Teléfono</strong>
+              </label>
               <input
                 type="tel"
                 name="telefono"
@@ -114,6 +156,12 @@ export default function CrearHospital() {
                 placeholder="+54 9 261 1234567"
                 required
               />
+            </div>
+
+            <div className="modificar-hospital-campo">
+              <label>
+                <strong>Localidad</strong>
+              </label>
               <select
                 name="idLocalidad"
                 value={idLocalidad}
@@ -129,39 +177,92 @@ export default function CrearHospital() {
               </select>
             </div>
           </div>
-        </div>
+        </fieldset>
 
-        <div className="form-section">
-          <h3>Especialidades médicas</h3>
-          <div className="specialties-grid">
-            {especialidades.map((esp) => {
-              const selected = especialidadesSeleccionadas.includes(esp.id);
-              return (
-                <div
-                  key={esp.id}
-                  className={`specialty-tag ${selected ? 'selected' : ''}`}
-                  onClick={() => {
-                    const id = esp.id;
-                    if (selected) {
-                      setEspecialidadesSeleccionadas(especialidadesSeleccionadas.filter(e => e !== id));
-                    } else {
-                      setEspecialidadesSeleccionadas([...especialidadesSeleccionadas, id]);
-                    }
-                  }}
-                >
-                  {esp.nombre}
+        <fieldset className="modificar-hospital-fieldset">
+          <legend>Editor de Especialidades</legend>
+          <p className="subtitle-especialidades">
+            Administra las especialidades médicas moviendo elementos entre las listas.
+          </p>
+
+          <div className="especialidades-container">
+            {/* Columna Izquierda - Especialidades Seleccionadas */}
+            <div className="especialidades-columna">
+              <div className="columna-header">
+                <div className="header-title">
+                  <i className="fas fa-user-md"></i>
+                  <span>Mis Especialidades</span>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <span className="badge-count">
+                  {especialidadesActuales.length} Seleccionadas
+                </span>
+              </div>
+              <div className="especialidades-lista">
+                {especialidadesActuales.length === 0 ? (
+                  <div className="empty-message">
+                    No hay especialidades seleccionadas. Agrega algunas desde la lista de la derecha.
+                  </div>
+                ) : (
+                  especialidadesActuales.map((esp) => (
+                    <div key={esp.id} className="especialidad-item">
+                      <div className="item-content">
+                        <span className="dot-indicator"></span>
+                        <span className="item-text">{esp.nombre}</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-eliminar"
+                        onClick={() => toggleEliminar(esp.id)}
+                        title="Eliminar especialidad"
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
 
-        <button type="submit" className="btn-primary">
-          Guardar Hospital
-        </button>
-        <button type="button" className="btn-secondary" onClick={() => navigate('/hospitalTabla')}>
-          ← Volver a la tabla
-        </button>
+            {/* Columna Derecha - Especialidades Disponibles */}
+            <div className="especialidades-columna">
+              <div className="columna-header">
+                <div className="header-title">
+                  <i className="fas fa-plus-square"></i>
+                  <span>Todas las Especialidades</span>
+                </div>
+              </div>
+              <div className="especialidades-lista">
+                {especialidadesDisponibles.length === 0 ? (
+                  <div className="empty-message">
+                    Todas las especialidades han sido seleccionadas.
+                  </div>
+                ) : (
+                  especialidadesDisponibles.map((esp) => (
+                    <div key={esp.id} className="especialidad-item">
+                      <span className="item-text">{esp.nombre}</span>
+                      <button
+                        type="button"
+                        className="btn-agregar"
+                        onClick={() => toggleAgregar(esp.id)}
+                      >
+                        <i className="fas fa-plus"></i> Agregar
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div className="form-actions">
+          <button type="button" className="btn-secondary" onClick={() => navigate('/hospitalTabla')}>
+            <i className="fas fa-arrow-left"></i> Volver a la tabla
+          </button>
+          <button type="submit" className="btn-primary">
+            <i className="fas fa-save"></i> Guardar Hospital
+          </button>
+        </div>
       </form>
     </div>
   );

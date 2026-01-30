@@ -34,7 +34,7 @@
   justify-content: space-between;
 }
 
-#campos > div {
+#campos>div {
   flex: 1;
   min-width: 300px;
 }
@@ -84,7 +84,6 @@ p {
 .barra-busqueda {
   width: 250px;
   padding: 8px 12px;
-  margin-bottom: 20px;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -101,24 +100,176 @@ p {
 /* Separación respecto a la tabla */
 .barra-container {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+/* Selector de hospital para administrador */
+.selector-hospital-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.selector-label {
+  font-weight: 600;
+  color: #384179;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.selector-label i {
+  font-size: 16px;
+}
+
+.selector-hospital {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1.3px solid #ccd2e0;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.selector-hospital:focus {
+  border-color: #384179;
+  outline: none;
+  box-shadow: 0 0 4px rgba(56, 65, 121, 0.3);
+}
+
+.selector-hospital option {
+  padding: 10px;
+}
+
+.sin-seleccion {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #d1d5db;
+}
+
+.sin-seleccion i {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: #cbd5e0;
+}
+
+.sin-seleccion p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.btn-recargar {
+  background-color: #f0f3f8;
+  color: #384179;
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-recargar:hover {
+  background-color: #e5e9f2;
+  border-color: #384179;
+}
+
+.btn-recargar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-recargar i {
+  font-size: 13px;
 }
 
 .boton {
   background-color: #384179;
   color: white;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.boton:hover {
+  background-color: #2e3566;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(56, 65, 121, 0.3);
 }
 
 .asistencia-cell {
   display: flex;
   align-items: center;
-  justify-content: center; /* Opcional, para centrar también horizontalmente */
+  justify-content: center;
   height: 100%;
+}
+
+.badge-asistio {
+  background-color: #22c55e;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mensaje-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #fecaca;
+  font-size: 14px;
+}
+
+.mensaje-exito {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #a7f3d0;
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+  font-size: 16px;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+  font-style: italic;
 }

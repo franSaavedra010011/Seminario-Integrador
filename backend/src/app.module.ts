@@ -34,6 +34,10 @@ import { TurnoModule } from './infrastructure/modules/turno.module';
         path: 'shared',
         module: SharedModule,
       },
+      {
+        path: 'modulo-turnos',
+        module: TurnoModule,
+      },
     ]),
     AuthModule, AbmModule, RecomendacionModule, SharedModule, TurnoModule
   ],

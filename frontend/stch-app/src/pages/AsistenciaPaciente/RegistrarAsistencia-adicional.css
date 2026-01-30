@@ -1,0 +1,58 @@
+/* Estilos adicionales para mejorar el centrado y presentación */
+
+/* Estilos para columna de observaciones */
+.observaciones-cell {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+/* Badge de estado del turno */
+.badge-estado {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.badge-reservado {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-confirmado {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-cancelado {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-completado {
+    background-color: #e0e7ff;
+    color: #4338ca;
+}
+
+.badge-default {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Mejoras de centrado para la tabla */
+.tabla td {
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 12px 8px !important;
+}
+
+.tabla th {
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 12px 8px !important;
+}

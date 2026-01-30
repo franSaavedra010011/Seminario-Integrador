@@ -59,10 +59,11 @@ import { NotificarCancelacionDeTurnoUseCase } from 'src/application/use-cases/mo
 import { NotificarProximidadDeTurnoUseCase } from 'src/application/use-cases/modulo-turnos/notificar-proximidad-de-turno.use-case';
 import { RegistrarAsistenciaDePacienteUseCase } from 'src/application/use-cases/modulo-turnos/registrar-asistencia-de-paciente.use-case';
 import { SolicitarTurnoUseCase } from 'src/application/use-cases/modulo-turnos/solicitar-turno.use-case';
-import { RespuestasEstructuradasService } from 'src/shared/services/respuestas-estructuradas.service';
+import { SharedModule } from './shared.module';
 
 @Module({
   imports: [
+    SharedModule,
     TypeOrmModule.forFeature([
       AgendaDia,
       AgendaSemanal,
@@ -82,7 +83,6 @@ import { RespuestasEstructuradasService } from 'src/shared/services/respuestas-e
       Permiso,
       PersonalHospital,
       RolPermiso,
-      RespuestasEstructuradasService,
       Rol,
       TurnoAgendaDia,
       TurnoEstado,

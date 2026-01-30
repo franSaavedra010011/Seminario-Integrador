@@ -212,13 +212,9 @@ export class ListarEntidadesService {
                 { atributo: 'presentismo', operacion: '=', valor: false },
                 { atributo: 'estadoTurno.id', operacion: '=', valor: 1 }, // Asumiendo que 1 es el ID para "Reservado"
             ],
-            []
+            ['paciente', 'medico', 'especialidad', 'hospital', 'estadoTurno']
         )
         console.log(`Se encontraron ${turnos.length} turnos activos para el hospital con id ${idHospital}`);
-
-        if (turnos.length === 0) {
-            throw new Error(`No se encontraron turnos activos para el hospital con id ${idHospital}`);
-        }
 
         return turnos;
     }

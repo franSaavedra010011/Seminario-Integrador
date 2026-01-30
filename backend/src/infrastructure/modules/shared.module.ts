@@ -10,7 +10,7 @@ import { RespuestasEstructuradasService } from 'src/shared/services/respuestas-e
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Hospital]) // ⬅ Necesario para poder inyectar Repository<Hospital>
+    TypeOrmModule.forFeature([Hospital]),
   ],
   providers: [
     GenericRepositoryService,

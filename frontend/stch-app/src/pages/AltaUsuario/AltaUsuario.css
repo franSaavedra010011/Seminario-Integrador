@@ -83,7 +83,6 @@ select {
   font-size: 15px;
   background-color: #fff;
   transition: all 0.3s ease;
-  margin-bottom: 15px;
   /* Consistente con los inputs de password */
 }
 
