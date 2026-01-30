@@ -20,6 +20,7 @@ export default function AltaUsuario() {
     emailUsuario: '',
     usernameUsuario: '',
     passwordUsuario: '',
+    idHospital: null, // Agregar campo para hospital
   });
 
   // Paciente
@@ -59,7 +60,6 @@ export default function AltaUsuario() {
     idHospital: '',
     especialidades: [],
   });
-
 
   const navigate = useNavigate();
 
@@ -120,7 +120,7 @@ export default function AltaUsuario() {
 
   const handleMedicoChange = (e) => {
     const { name, value } = e.target;
-    const numericFields = ["tiempoConsultaMedico"];
+    const numericFields = ["tiempoConsultaMedico", "idHospital"];
     let newValue = numericFields.includes(name) ? Number(value) : value;
     setDtoMedico((prev) => ({ ...prev, [name]: newValue }));
   };
@@ -153,20 +153,27 @@ export default function AltaUsuario() {
       emailUsuario: dtoUsuario.emailUsuario,
       usernameUsuario: dtoUsuario.usernameUsuario,
       passwordUsuario: dtoUsuario.passwordUsuario,
-      idRoles: [rolSeleccionado], // ahora envía el ID correcto
-      idHospital: dtoUsuario.idHospital || null,
+      idRoles: [rolSeleccionado],
     };
 
     // Según el ID del rol asignar el bloque correspondiente
-    if (rolSeleccionado === 5) dto.datosPaciente = dtoPaciente;      // paciente
-    if (rolSeleccionado === 4) dto.datosMedico = dtoMedico;          // médico
-    if (rolSeleccionado === 3 || rolSeleccionado === 6) {            // recepcionista o adminHospital
-      dto.idHospital = dtoUsuario.idHospital;
+    if (rolSeleccionado === 5) {
+      // Paciente
+      dto.datosPaciente = dtoPaciente;
+    }
+
+    if (rolSeleccionado === 4) {
+      // Médico
+      dto.datosMedico = dtoMedico;
+    }
+
+    if (rolSeleccionado === 3 || rolSeleccionado === 6) {
+      // Recepcionista o adminHospital
+      dto.idHospital = Number(dtoUsuario.idHospital);
     }
 
     return dto;
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -178,22 +185,50 @@ export default function AltaUsuario() {
       return;
     }
 
+    // Validaciones adicionales según el rol
+    if (rolSeleccionado === 4) {
+      // Médico: validar especialidades
+      if (dtoMedico.especialidades.length === 0) {
+        alert('Error: Debe seleccionar al menos una especialidad para el médico');
+        return;
+      }
+    }
+
+    if (rolSeleccionado === 3 || rolSeleccionado === 6) {
+      // Recepcionista o Admin Hospital: validar hospital
+      if (!dtoUsuario.idHospital) {
+        alert('Error: Debe seleccionar un hospital');
+        return;
+      }
+    }
+
     // Limpiar error si las contraseñas coinciden
     setPasswordError('');
 
     const datosAEnviar = crearDtoFinal();
 
+    console.log('Datos a enviar:', datosAEnviar); // Para debug
+
     try {
       const response = await fetch('http://localhost:3000/abm/usuario/alta', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // Agregar token si es necesario
+        },
         body: JSON.stringify(datosAEnviar),
       });
 
-      if (!response.ok) throw new Error('Error en el servidor');
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Error en el servidor');
+      }
+
       alert('Usuario creado correctamente');
       navigate('/home');
     } catch (error) {
+      console.error('Error completo:', error);
       alert(`Error al crear usuario: ${error.message}`);
     }
   };
@@ -267,7 +302,6 @@ export default function AltaUsuario() {
                   required
                 />
               </div>
-
             </div>
 
             <div className="field-group single">
@@ -332,9 +366,7 @@ export default function AltaUsuario() {
                 )}
               </div>
             </div>
-
           </fieldset>
-
 
           {/* Si es paciente */}
           {rolSeleccionado === 5 && (
@@ -412,7 +444,6 @@ export default function AltaUsuario() {
                 </div>
 
                 <div className="field-group">
-
                   <div>
                     <label>Localidad</label>
                     <select
@@ -635,13 +666,12 @@ export default function AltaUsuario() {
                 </div>
 
                 <div className="field-group">
-
                   <div className="field-group single">
                     <div className="password-field">
                       <label>Teléfono</label>
                       <input
                         name="telefonoMedico"
-                        value={dtoMedico.telMedico}
+                        value={dtoMedico.telefonoMedico}
                         onChange={handleMedicoChange}
                         placeholder="600 123 456"
                         required
@@ -668,7 +698,6 @@ export default function AltaUsuario() {
                         required
                       />
                     </div>
-
                   </div>
                 </div>
 
@@ -719,7 +748,6 @@ export default function AltaUsuario() {
                     </div>
                   </div>
                 </div>
-
               </fieldset>
             </>
           )}
@@ -729,8 +757,6 @@ export default function AltaUsuario() {
             <>
               <fieldset>
                 <legend>Información del {rolSeleccionado === 3 ? 'Recepcionista' : 'Administrador del Hospital'}</legend>
-
-
 
                 <div className="field-group single">
                   <div className='password-field'>
@@ -759,7 +785,6 @@ export default function AltaUsuario() {
           <button type="submit">Dar de alta</button>
         </form>
       </div>
-
-    </div >
+    </div>
   );
 }
