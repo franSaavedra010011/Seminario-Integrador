@@ -4,6 +4,7 @@ import {
 } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import './CompararHospitales.css';
+import '../../App.css';
 
 export default function CompararHospitales() {
   const [localidadSeleccionadaId, setLocalidadSeleccionadaId] = useState('');
@@ -84,116 +85,122 @@ export default function CompararHospitales() {
   };
 
   return (
-    <div className="contenedor-comparacion">
-      <h1>Comparar Hospitales</h1>
+    <div className="main-content">
+      <div className="content">
+        <div className="contenedor-principal">
+          <div className="header-principal">
+            <h1>Comparar Hospitales</h1>
+            <p>Analizá y compará centros médicos según disponibilidad de turnos, especialidades y valoraciones de otros usuarios para elegir la mejor opción para vos.</p>
+          </div>
 
-      <label>Seleccione una localidad:</label>
-      <select value={localidadSeleccionadaId} onChange={(e) => {
-        setLocalidadSeleccionadaId(e.target.value);
-        setSeleccionados([]);
-        setResultado([]);
-      }}>
-        <option value="">-- Seleccione --</option>
-        {localidades.map((loc, i) => (
-          <option key={i} value={loc.id}>{loc.nombre}</option>
-        ))}
-      </select>
-
-
-      {hospitalesFiltrados.length > 0 && (
-        <table className="tabla-hospitales">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Dirección</th>
-              <th>Teléfono</th>
-              <th>Comparar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hospitalesFiltrados.map((h) => (
-              <tr key={h.id}>
-                <td>{h.nombre}</td>
-                <td>{h.direccion}</td>
-                <td>{h.telefono}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={seleccionados.some(sel => sel.id === h.id)}
-                    onChange={() => handleSeleccion(h)}
-                  />
-                </td>
-              </tr>
+          <select value={localidadSeleccionadaId} onChange={(e) => {
+            setLocalidadSeleccionadaId(e.target.value);
+            setSeleccionados([]);
+            setResultado([]);
+          }}>
+            <option value="">-- Seleccione --</option>
+            {localidades.map((loc, i) => (
+              <option key={i} value={loc.id}>{loc.nombre}</option>
             ))}
-          </tbody>
-        </table>
-      )}
+          </select>
 
-      {seleccionados.length === 2 && (
-        <button className="btn-primary" onClick={compararHospitales}>
-          Comparar Hospitales
-        </button>
-      )}
 
-      {resultado.length > 0 && (
-        <div className="resultados-comparacion">
-          <h2>Resultado de Comparación</h2>
-          <table className="tabla-comparacion">
-            <thead>
-              <tr>
-                <th>Hospital</th>
-                <th>Congestión</th>
-                <th>Porcentaje</th>
-                <th>Especialidades</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resultado.map((h, i) => (
-                <tr key={i}>
-                  <td>{h.nombre}</td>
-                  <td>{h.nivelDeCongestion}</td>
-                  <td>{h.porcentajeCongestion}%</td>
-                  <td>{h.especialidades.join(', ')}</td>
+          {hospitalesFiltrados.length > 0 && (
+            <table className="tabla-hospitales">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Dirección</th>
+                  <th>Teléfono</th>
+                  <th>Comparar</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {hospitalesFiltrados.map((h) => (
+                  <tr key={h.id}>
+                    <td>{h.nombre}</td>
+                    <td>{h.direccion}</td>
+                    <td>{h.telefono}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={seleccionados.some(sel => sel.id === h.id)}
+                        onChange={() => handleSeleccion(h)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
 
-          <div className="grafico-congestion">
-            <h3>Gráfico de Congestión</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart
-                data={resultado.map(h => ({
-                  nombre: h.nombre,
-                  porcentaje: h.porcentajeCongestion
-                }))}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="nombre" />
-                <YAxis unit="%" />
-                <Tooltip />
-                <Bar dataKey="porcentaje" label={{ position: 'top' }}>
-                  {resultado.map((h, index) => (
-                    <Cell key={index} fill={getColor(h.porcentajeCongestion)} />
+          {seleccionados.length === 2 && (
+            <button className="btn-primary" onClick={compararHospitales}>
+              Comparar Hospitales
+            </button>
+          )}
+
+          {resultado.length > 0 && (
+            <div className="resultados-comparacion">
+              <h2>Resultado de Comparación</h2>
+              <table className="tabla-comparacion">
+                <thead>
+                  <tr>
+                    <th>Hospital</th>
+                    <th>Congestión</th>
+                    <th>Porcentaje</th>
+                    <th>Especialidades</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {resultado.map((h, i) => (
+                    <tr key={i}>
+                      <td>{h.nombre}</td>
+                      <td>{h.nivelDeCongestion}</td>
+                      <td>{h.porcentajeCongestion}%</td>
+                      <td>{h.especialidades.join(', ')}</td>
+                    </tr>
                   ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+                </tbody>
+              </table>
 
-          <div className="leyenda-grafico">
-            <p><span className="color-box rojo" /> Alta más de 75%</p>
-            <p><span className="color-box amarillo" /> Media 25% - 75%</p>
-            <p><span className="color-box verde" /> Baja menos de 25%</p>
-          </div>
+              <div className="grafico-congestion">
+                <h3>Gráfico de Congestión</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={resultado.map(h => ({
+                      nombre: h.nombre,
+                      porcentaje: h.porcentajeCongestion
+                    }))}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="nombre" />
+                    <YAxis unit="%" />
+                    <Tooltip />
+                    <Bar dataKey="porcentaje" label={{ position: 'top' }}>
+                      {resultado.map((h, index) => (
+                        <Cell key={index} fill={getColor(h.porcentajeCongestion)} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="leyenda-grafico">
+                <p><span className="color-box rojo" /> Alta más de 75%</p>
+                <p><span className="color-box amarillo" /> Media 25% - 75%</p>
+                <p><span className="color-box verde" /> Baja menos de 25%</p>
+              </div>
+            </div>
+          )}
+
+          <hr />
+          <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
+            Volver al inicio
+          </button>
         </div>
-      )}
-
-      <hr />
-      <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
-        Volver al inicio
-      </button>
+      </div>
     </div>
   );
 }
