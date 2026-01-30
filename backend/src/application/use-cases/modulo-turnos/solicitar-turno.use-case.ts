@@ -235,8 +235,12 @@ export class SolicitarTurnoUseCase {
     return agendaSemanaProxima;
   }
 
+  // Método corregido para SolicitarTurnoUseCase
+
   async listarHorariosDisponiblesAgenda(idAgendaSemanal: number): Promise<{ horarios: HorarioAgenda[] }> {
     console.log(`Listando horarios disponibles para la agenda semanal ID ${idAgendaSemanal}`);
+
+    // Validación de entrada
     if (!idAgendaSemanal || idAgendaSemanal <= 0) {
       throw new BadRequestException(`El ID de la Agenda Semanal es inválido`);
     }
@@ -248,20 +252,37 @@ export class SolicitarTurnoUseCase {
       [
         'agendasDia',
         'agendasDia.turnosAgendaDia',
+        'agendasDia.turnosAgendaDia.turno', // ✅ Cargar turno para verificar
       ]
     );
+
+    if (!agendaSemanal || agendaSemanal.fechaHoraBaja) {
+      throw new BadRequestException(`La Agenda Semanal con ID ${idAgendaSemanal} no existe o está inactiva`);
+    }
 
     let horarios: HorarioAgenda[] = [];
 
     console.log(`Procesando días de la agenda semanal ID ${idAgendaSemanal}`);
+
     for (const agendaDia of agendaSemanal.agendasDia) {
+      // Verificar que el día de agenda esté activo
       if (!agendaDia.fechaHoraBaja) {
         for (const turnoAgendaDia of agendaDia.turnosAgendaDia) {
-          if (turnoAgendaDia.disponible && !turnoAgendaDia.fechaHoraBaja) {
+          // ✅ CORRECCIÓN: Verificar múltiples condiciones
+          const estaDisponible = (
+            turnoAgendaDia.disponible &&
+            !turnoAgendaDia.fechaHoraBaja &&
+            (
+              !turnoAgendaDia.turno || // No tiene turno asignado
+              turnoAgendaDia.turno.fechaHoraBaja !== null // O el turno está cancelado
+            )
+          );
+
+          if (estaDisponible) {
             const horario: HorarioAgenda = {
               idTurnoAgendaDia: turnoAgendaDia.id,
               idAgendaDia: agendaDia.id,
-              disponible: turnoAgendaDia.disponible,
+              disponible: true,
               fechaHoraAgendaDia: agendaDia.fechaAgendaDia,
               horaDesdeTurnoAgendaDia: turnoAgendaDia.horaDesde,
               horaHastaTurnoAgendaDia: turnoAgendaDia.horaHasta,
@@ -271,6 +292,8 @@ export class SolicitarTurnoUseCase {
         }
       }
     }
+
+    console.log(`✅ Se encontraron ${horarios.length} horarios disponibles`);
 
     if (horarios.length === 0) {
       throw new BadRequestException(`No hay horarios disponibles en la agenda seleccionada`);

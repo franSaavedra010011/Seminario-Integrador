@@ -14,12 +14,28 @@ export class ConsultarTurnosActivosUseCase {
     @InjectRepository(Paciente)
     private pacienteRepository: Repository<Paciente>,
   ) { }
+
   async consultarTurnosActivos(idUsuario: number) {
+    // Validación de entrada
+    if (!idUsuario || idUsuario <= 0) {
+      throw new BadRequestException(
+        `El ID del usuario debe ser mayor a 0`,
+      );
+    }
+
+    // Buscar usuario con todas las relaciones necesarias
     const usuario = await this.genericRepository.buscarPorId(
       Usuario,
       idUsuario,
-      ['paciente', 'paciente.turnos', 'paciente.turnos.medico', 'paciente.turnos.especialidad', 'paciente.turnos.hospital', 'paciente.turnos.estadoTurno'],
-    )
+      [
+        'paciente',
+        'paciente.turnos',
+        'paciente.turnos.medico',
+        'paciente.turnos.especialidad',
+        'paciente.turnos.hospital',
+        'paciente.turnos.estadoTurno'
+      ],
+    );
 
     if (!usuario) {
       throw new BadRequestException(
@@ -36,10 +52,20 @@ export class ConsultarTurnosActivosUseCase {
     }
 
     const dtoLista: ConsultarTurnosActivosDTO[] = [];
-
     const turnos = paciente.turnos;
+
+    if (!turnos || turnos.length === 0) {
+      console.log(`ℹ️ El paciente ID ${paciente.id} no tiene turnos registrados`);
+      return dtoLista;
+    }
+
     for (const turno of turnos) {
-      if (turno.estadoTurno.nombre === EstadoTurnoEnum.RESERVADO) {
+      // ✅ CORRECCIÓN: Verificar que el turno esté RESERVADO Y NO esté dado de baja
+      if (
+        turno.estadoTurno.nombre === EstadoTurnoEnum.RESERVADO &&
+        !turno.fechaHoraBaja &&
+        !turno.presentismo
+      ) {
         const dto: ConsultarTurnosActivosDTO = {
           idTurno: turno.id,
           hora: turno.hora,
@@ -53,6 +79,9 @@ export class ConsultarTurnosActivosUseCase {
         dtoLista.push(dto);
       }
     }
+
+    console.log(`✅ Se encontraron ${dtoLista.length} turnos activos para el paciente ID ${paciente.id}`);
+
     return dtoLista;
   }
 }
