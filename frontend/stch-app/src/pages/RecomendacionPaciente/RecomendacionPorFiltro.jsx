@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './RecomendacionPorFiltro.css';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import '../../App.css';
 
 export default function RecomendacionPorFiltro() {
   const [hospitalesRecomendados, setHospitalesRecomendados] = useState([]);
@@ -53,77 +54,85 @@ export default function RecomendacionPorFiltro() {
   const hospitalesFiltrados = hospitalesRecomendados;
 
   return (
-    <div className="contenedor-recomendacion">
-      <h1>Recomendación de Hospitales</h1>
+    <div className="main-content">
+      <div className="content">
+        <div className="contenedor-principal">
+          <div className="header-principal">
+            <h1>Recomendación de Hospitales</h1>
+            <p>Seleccioná un centro médico para ver detalles y disponibilidad.</p>
+          </div>
 
-      <div className="opciones">
-        <button
-          className={opcionSeleccionada === 'cercania' ? 'activo' : ''}
-          onClick={() => handleSeleccion('cercania')}
-        >
-          Por cercanía
-        </button>
-        <button
-          className={opcionSeleccionada === 'congestion' ? 'activo' : ''}
-          onClick={() => handleSeleccion('congestion')}
-        >
-          Por congestión
-        </button>
-      </div>
+          <div className="opciones">
+            <button
+              className={opcionSeleccionada === 'cercania' ? 'activo' : ''}
+              onClick={() => handleSeleccion('cercania')}
+            >
+              Por cercanía
+            </button>
+            <button
+              className={opcionSeleccionada === 'congestion' ? 'activo' : ''}
+              onClick={() => handleSeleccion('congestion')}
+            >
+              Por congestión
+            </button>
+          </div>
 
-      {cargando && <p className="cargando">Cargando hospitales...</p>}
+          {cargando && <p className="cargando">Cargando hospitales...</p>}
 
-      {opcionSeleccionada && (
-        <div className="tabla-hospitales">
-          <h2>
-            Resultados: {opcionSeleccionada === 'cercania'
-              ? 'Por cercanía'
-              : opcionSeleccionada === 'congestion'
-                ? 'Por congestión baja'
-                : 'Último hospital visitado'}
-          </h2>
+          {opcionSeleccionada && (
+            <div className="tabla-hospitales">
+              <h2>
+                Resultados: {opcionSeleccionada === 'cercania'
+                  ? 'Por cercanía'
+                  : opcionSeleccionada === 'congestion'
+                    ? 'Por congestión baja'
+                    : 'Último hospital visitado'}
+              </h2>
 
-          {hospitalesFiltrados.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Localidad</th>
-                  <th>Congestión</th>
-                  <th>Actualización</th>
-                  <th>Teléfono</th>
-                  <th>Dirección</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hospitalesFiltrados.map((h, index) => (
-                  <tr key={index}>
-                    <td>{h.nombre}</td>
-                    <td>{h.localidad?.nombre ?? '-'}</td>
-                    <td>{h.nivelCongestion ?? 'No informado'}</td>
-                    <td>{h.fechaActualizacionCongestion ?? '-'}</td>
-                    <td>{h.telefono}</td>
-                    <td>{h.direccion}</td>
-                    <td>{h.email}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            !cargando && (
-              <p className="sin-resultados">
-                No se encontraron hospitales para esta opción.
-              </p>
-            )
+              {hospitalesFiltrados.length > 0 ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Localidad</th>
+                      <th>Congestión</th>
+                      <th>Actualización</th>
+                      <th>Teléfono</th>
+                      <th>Dirección</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {hospitalesFiltrados.map((h, index) => (
+                      <tr key={index}>
+                        <td>{h.nombre}</td>
+                        <td>{h.localidad?.nombre ?? '-'}</td>
+                        <td>{h.nivelCongestion ?? 'No informado'}</td>
+                        <td>{h.fechaActualizacionCongestion ?? '-'}</td>
+                        <td>{h.telefono}</td>
+                        <td>{h.direccion}</td>
+                        <td>{h.email}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                !cargando && (
+                  <p className="sin-resultados">
+                    No se encontraron hospitales para esta opción.
+                  </p>
+                )
+              )}
+            </div>
           )}
-        </div>
-      )}
 
-      <hr />
-      <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
-        Volver al inicio
-      </button>
+          <hr />
+          <button className="boton-volver" onClick={() => navigate('/recomendacionPaciente')}>
+            Volver al inicio
+          </button>
+        </div>
+      </div>
     </div>
+
   );
 }
