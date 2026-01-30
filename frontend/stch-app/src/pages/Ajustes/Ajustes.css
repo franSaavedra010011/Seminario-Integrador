@@ -112,38 +112,71 @@ fieldset.ajustes-fieldset legend {
   font-style: italic;
 }
 
-.ajustes-guardar-btn {
-  width: 100%;
-  background-color: #384179;
-  color: #fff;
-  padding: 15px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 16px;
-  margin-top: 15px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(56, 65, 121, 0.25);
-  cursor: pointer;
-}
-
-.ajustes-guardar-btn:hover {
-  background-color: #2e356b;
-  box-shadow: 0 6px 15px rgba(56, 65, 121, 0.4);
-}
-
-.ajustes-guardar-btn:disabled {
-  background-color: #8fa4d3;
+/* ===== ESTILOS PARA CAMPOS DE SOLO LECTURA ===== */
+.ajustes-campo input[readonly] {
+  background-color: #f0f0f0;
+  color: #666666;
   cursor: not-allowed;
+  border-color: #ddd;
+}
+
+.ajustes-campo input[readonly]:focus {
+  border-color: #ddd;
   box-shadow: none;
 }
 
-.ajustes-guardar-btn:disabled:hover {
-  background-color: #8fa4d3;
-  box-shadow: none;
+/* Nota informativa para campos readonly */
+.info-readonly {
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #1565c0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Estilos específicos para campos de contraseña */
+.info-readonly i {
+  font-size: 16px;
+}
+
+.info-security {
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #e65100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-security i {
+  font-size: 16px;
+}
+
+/* Nota para el email */
+.email-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+  font-size: 13px;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.email-note i {
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== ESTILOS PARA CAMPOS DE CONTRASEÑA ===== */
 .ajustes-campo.password-field {
   background-color: #f8f9fa;
   padding: 15px;
@@ -151,6 +184,130 @@ fieldset.ajustes-fieldset legend {
   border-left: 4px solid #384179;
 }
 
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 16px;
+  padding: 8px;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.toggle-password-btn:hover {
+  color: #384179;
+}
+
+.password-hint {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Mensajes de validación de contraseña */
+.password-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.password-success {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #28a745;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.password-error i,
+.password-success i {
+  font-size: 12px;
+}
+
+/* ===== BOTONES ===== */
+.ajustes-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ajustes-guardar-btn {
+  width: auto;
+  min-width: 250px;
+  background-color: #384179;
+  color: #fff;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(56, 65, 121, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ajustes-guardar-btn:hover:not(:disabled) {
+  background-color: #2e356b;
+  box-shadow: 0 6px 15px rgba(56, 65, 121, 0.4);
+  transform: translateY(-2px);
+}
+
+.ajustes-guardar-btn:disabled {
+  background-color: #8fa4d3;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.ajustes-guardar-btn i {
+  font-size: 14px;
+}
+
+.ajustes-guardar-btn .fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .ajustes-card {
     max-width: 90%;
@@ -178,4 +335,39 @@ fieldset.ajustes-fieldset legend {
   .ajustes-campo>div {
     min-width: unset;
   }
+
+  .ajustes-guardar-btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .info-readonly,
+  .info-security {
+    font-size: 13px;
+  }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+.ajustes-campo input:focus-visible {
+  outline: 2px solid #384179;
+  outline-offset: 2px;
+}
+
+.toggle-password-btn:focus-visible {
+  outline: 2px solid #384179;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ===== ANIMACIONES SUTILES ===== */
+.ajustes-campo {
+  transition: transform 0.2s ease;
+}
+
+.ajustes-campo:focus-within {
+  transform: translateX(2px);
+}
+
+input[readonly]:hover {
+  background-color: #e8e8e8;
 }
