@@ -543,14 +543,136 @@ export default function NuevoTurno() {
 
             {agendas && agendas.length > 0 ? (
               agendas.map((semana, index) => {
-                // Obtener todas las horas únicas de la semana
-                const horas = Array.from(
+                // Filtrar días para excluir sábados y domingos
+                const diasFiltrados = semana.dias.filter(dia =>
+                  dia.nombreDia !== 'Sábado' && dia.nombreDia !== 'Domingo'
+                );
+
+                // Obtener todas las horas únicas de la semana y filtrar por intervalos de 60 minutos
+                const horasUnicas = Array.from(
                   new Set(
-                    semana.dias.flatMap(dia =>
+                    diasFiltrados.flatMap(dia =>
                       dia.turnos.map(turno => turno.horaDesde)
                     )
                   )
                 ).sort();
+
+                // Filtrar horarios en intervalos de 60 minutos (horas en punto)
+                const horasFiltradas = horasUnicas.filter(hora => {
+                  const minutos = hora.split(':')[1];
+                  return minutos === '00';
+                });
+
+                // Segmentar en bloques Mañana y Tarde
+                const horasMañana = horasFiltradas.filter(hora => {
+                  const [h] = hora.split(':').map(Number);
+                  return h >= 8 && h < 12;
+                });
+
+                const horasTarde = horasFiltradas.filter(hora => {
+                  const [h] = hora.split(':').map(Number);
+                  return h >= 14 && h < 18;
+                });
+
+                // Función helper para renderizar un bloque de horarios
+                const renderizarBloque = (horas, nombreBloque) => {
+                  if (horas.length === 0) return null;
+
+                  return (
+                    <div key={nombreBloque} className="bloque-horario">
+                      <h4 className="titulo-bloque">{nombreBloque}</h4>
+                      <div className="calendario-semanal">
+                        {/* Encabezado */}
+                        <div className="header-calendario">
+                          <div>Hora</div>
+                          {diasFiltrados.map((dia, indexDia) => {
+                            // Función para extraer el día del mes de diferentes formatos de fecha
+                            const obtenerNumeroDia = (fecha, indexDia, semana) => {
+                              // Primero intentar con la fecha del día
+                              if (fecha) {
+                                try {
+                                  const fechaObj = typeof fecha === 'string' ? new Date(fecha) : fecha;
+                                  if (!isNaN(fechaObj.getTime())) {
+                                    return fechaObj.getDate();
+                                  }
+                                } catch {
+                                  console.warn('Error al parsear fecha del día:', fecha);
+                                }
+                              }
+
+                              // Estrategia alternativa: calcular basándose en fechaDesde + indexDia
+                              try {
+                                const fechaInicio = new Date(semana.fechaDesde);
+                                const fechaCalculada = new Date(fechaInicio);
+                                fechaCalculada.setDate(fechaInicio.getDate() + indexDia);
+                                return fechaCalculada.getDate();
+                              } catch {
+                                console.warn('Error al calcular fecha basándose en semana');
+                                return '';
+                              }
+                            };
+
+                            return (
+                              <div key={dia.idDia} className="header-dia">
+                                <div className="nombre-dia">{dia.nombreDia}</div>
+                                <div className="numero-dia">
+                                  {obtenerNumeroDia(dia.fecha, indexDia, semana)}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Filas por cada hora */}
+                        {horas.map((hora, idx) => (
+                          <div key={idx} className="body-calendario">
+                            <div className="columna-dia hora-label">{hora}</div>
+                            {diasFiltrados.map((dia) => {
+                              const turno = dia.turnos.find(t => t.horaDesde === hora);
+
+                              // Si no hay turno, no renderizar nada (omitir celda vacía)
+                              if (!turno) {
+                                return (
+                                  <div
+                                    key={dia.idDia + hora}
+                                    className="columna-dia"
+                                  ></div>
+                                );
+                              }
+
+                              // Si el turno está ocupado, renderizar como antes
+                              if (!turno.disponible) {
+                                return (
+                                  <div
+                                    key={turno.idTurno}
+                                    className="columna-dia bloque-turno turno-ocupado"
+                                  >
+                                    Ocupado
+                                  </div>
+                                );
+                              }
+
+                              // Si el turno está libre, renderizar como botón interactivo
+                              return (
+                                <div key={turno.idTurno} className="columna-dia">
+                                  <button
+                                    className={`boton-turno-libre ${turnoSeleccionado === turno.idTurno
+                                        ? 'turno-seleccionado'
+                                        : ''
+                                      }`}
+                                    onClick={() => setTurnoSeleccionado(turno.idTurno)}
+                                  >
+                                    {turnoSeleccionado === turno.idTurno ? '✓ Seleccionado' : 'Disponible'}
+                                  </button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                };
 
                 return (
                   <div key={index} className="semana-container">
@@ -562,82 +684,12 @@ export default function NuevoTurno() {
                       </small>
                     </h3>
 
-                    <div className="calendario-semanal">
-                      {/* Encabezado */}
-                      <div className="header-calendario">
-                        <div>Hora</div>
-                        {semana.dias.map((dia, indexDia) => {
-                          // Función para extraer el día del mes de diferentes formatos de fecha
-                          const obtenerNumeroDia = (fecha, indexDia, semana) => {
-                            // Primero intentar con la fecha del día
-                            if (fecha) {
-                              try {
-                                const fechaObj = typeof fecha === 'string' ? new Date(fecha) : fecha;
-                                if (!isNaN(fechaObj.getTime())) {
-                                  return fechaObj.getDate();
-                                }
-                              } catch {
-                                console.warn('Error al parsear fecha del día:', fecha);
-                              }
-                            }
+                    {renderizarBloque(horasMañana, 'Mañana')}
+                    {renderizarBloque(horasTarde, 'Tarde')}
 
-                            // Estrategia alternativa: calcular basándose en fechaDesde + indexDia
-                            try {
-                              const fechaInicio = new Date(semana.fechaDesde);
-                              const fechaCalculada = new Date(fechaInicio);
-                              fechaCalculada.setDate(fechaInicio.getDate() + indexDia);
-                              return fechaCalculada.getDate();
-                            } catch {
-                              console.warn('Error al calcular fecha basándose en semana');
-                              return '';
-                            }
-                          };
-
-                          return (
-                            <div key={dia.idDia} className="header-dia">
-                              <div className="nombre-dia">{dia.nombreDia}</div>
-                              <div className="numero-dia">
-                                {obtenerNumeroDia(dia.fecha, indexDia, semana)}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* Filas por cada hora */}
-                      {horas.map((hora, idx) => (
-                        <div key={idx} className="body-calendario">
-                          <div className="columna-dia hora-label">{hora}</div>
-                          {semana.dias.map((dia) => {
-                            const turno = dia.turnos.find(t => t.horaDesde === hora);
-                            if (!turno)
-                              return (
-                                <div
-                                  key={dia.idDia + hora}
-                                  className="columna-dia"
-                                ></div>
-                              );
-
-                            return (
-                              <div
-                                key={turno.idTurno}
-                                className={`columna-dia bloque-turno ${turno.disponible
-                                  ? turnoSeleccionado === turno.idTurno
-                                    ? 'turno-seleccionado'
-                                    : ''
-                                  : 'turno-ocupado'
-                                  }`}
-                                onClick={() =>
-                                  turno.disponible && setTurnoSeleccionado(turno.idTurno)
-                                }
-                              >
-                                {turno.disponible ? 'Libre' : 'Ocupado'}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ))}
-                    </div>
+                    {horasMañana.length === 0 && horasTarde.length === 0 && (
+                      <p className="sin-horarios">No hay horarios disponibles en esta semana.</p>
+                    )}
                   </div>
                 );
               })
